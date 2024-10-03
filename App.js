@@ -52,7 +52,7 @@ export default function App({ navigation }) {
         headerTitleStyle: {
           fontWeight: 'bold',
         },
-        headerBackTitleVisible: false, // Hide the default back button label
+        headerBackTitleVisible: false,
         headerLeftContainerStyle: {
           paddingLeft: 10,
         },
