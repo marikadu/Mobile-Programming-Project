@@ -3,12 +3,17 @@ import { View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity, Text
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Stack = createNativeStackNavigator();
+// Import the components
+import NavButtons from './components/NavButtons.js';
+// import PepperoniPalsView from './components/PepperoniPals.js';
+
+const Stack = createNativeStackNavigator(); 
 
 const App=()=>{
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Details">
+      <Stack.Navigator initialRouteName="PepperoniPals">
+        <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Image" component={ImageScreen} />
@@ -87,21 +92,38 @@ const ImageScreen=(props)=>{
   );
 }
 
-const NavButton=(par)=>{
-  if (par.name!=par.active){
-    return <Button onPress={()=>par.params.navigation.navigate(par.name)} title={par.name}/>;
-  }
-  return null;
-}
-const NavButtons=({params})=>{
-  return(
-    <View style={styles.navbuttonstyle}>
-      <NavButton params={params} name="Home" active={params.route.name}/>
-      <NavButton params={params} name="Details" active={params.route.name}/>
-      <NavButton params={params} name="Image" active={params.route.name}/>
+const PepperoniPalsView=(props)=>{
+  return (
+    <View style={{flex:1}}>
+      <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={styles.imageContainer}>
+        <Image source={require('./assets/pizza_pngs/everything_pizza.png')}
+            style={styles.image} resizeMode='cover'/>
+        </View> 
+      </View>
+      <NavButtons params={props}/>
     </View>
   );
 }
+
+// Moved to the NavButtons.js component file
+
+// const NavButton=(par)=>{
+//   if (par.name!=par.active){
+//     return <Button onPress={()=>par.params.navigation.navigate(par.name)} title={par.name}/>;
+//   }
+//   return null;
+// }
+// const NavButtons=({params})=>{
+//   return(
+//     <View style={styles.navbuttonstyle}>
+//       <NavButton params={params} name="PepperoniPals" active={params.route.name}/>
+//       <NavButton params={params} name="Home" active={params.route.name}/>
+//       <NavButton params={params} name="Details" active={params.route.name}/>
+//       <NavButton params={params} name="Image" active={params.route.name}/>
+//     </View>
+//   );
+// }
 
 const styles=StyleSheet.create({
   navbuttonstyle:{
