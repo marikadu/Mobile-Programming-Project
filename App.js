@@ -9,23 +9,25 @@ import PepperoniPalsView from './components/PepperoniPals.js';
 import { HomeScreen } from './components/HomeSreen.js';
 import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
+import { LogoTitle } from './components/LogoTitle.js';
 
 const Stack = createNativeStackNavigator();  // Create the stack object
 
 const App=()=>{
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="PepperoniPals">
-        <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} />
-        {/* // Take note of how the options have been added. This allows us to set the Title and headerstyle, etc*/}
-        <Stack.Screen name="Home" component={HomeScreen} options={{title: "Home_Page", headerStyle: {
+      <Stack.Navigator initialRouteName="PepperoniPals" screenOptions={{headerStyle: {
             backgroundColor: '#f4511e',
           },
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold',
-          },}} />  
-        <Stack.Screen name="Details" component={DetailsScreen} />
+          },}}>
+        <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} />
+        {/* // Take note of how the options have been added. This allows us to set the Title and headerstyle, etc*/}
+        <Stack.Screen name="Home" component={HomeScreen} options={{title: "Home_Page", }} />  
+         {/* Notice how the DETAILS PAGE has the logo of the elephant from ./assets/misc.png */}
+        <Stack.Screen name="Details" component={DetailsScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
         <Stack.Screen name="Image" component={ImageScreen} />
       </Stack.Navigator>
     </NavigationContainer>
