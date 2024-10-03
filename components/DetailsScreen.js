@@ -5,23 +5,24 @@ import { View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity, Text
 import NavButtons from './NavButtons.js';
 
 export const DetailsScreen=(props)=>{
-    const [newFish, setFish]=useState(props.route.params==undefined ? "" : props.route.params.fish.breed);
+    const [newPizza, setPizza]=useState(props.route.params==undefined ? "" : props.route.params.pizza.type);
     useEffect(()=>{
-        setFish(props.route.params==undefined ? "" : props.route.params.fish.breed);
+        setPizza(props.route.params==undefined ? "" : props.route.params.pizza.type);
   
       },[props.route.params]
     );
-    const fishInputHandler=(enteredText)=>{
-      setFish(enteredText);
+    const pizzaInputHandler=(enteredText)=>{
+      setPizza(enteredText);
     }
   
     return (
       <View style={{flex:1}}>
         <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
           <TextInput style={styles.inputStyle} placeholder="Pizza Type..." 
-          onChangeText={fishInputHandler}
-          value={newFish} />
-        {props.route.params ? <Text>{props.route.params.fish.id}) {props.route.params.fish.breed} {props.route.params.fish.weight}</Text> : null}
+          onChangeText={pizzaInputHandler}
+          value={newPizza} />
+        {props.route.params ? <Text>{props.route.params.pizza.id}) {props.route.params.pizza.type} {props.route.params.pizza.price}€</Text> : null}
+        {props.route.params ? <Image source={props.route.params.pizza.image} style={styles.pizzaImage}/> : null}
         </View>
         <NavButtons params={props}/>
       </View>
@@ -68,4 +69,10 @@ const styles=StyleSheet.create({
       width:'80%',
       backgroundColor:'blue',
     },
+    pizzaImage: {
+        width: 50,
+        height: 50,
+        marginRight: 10, // Space between image and text
+        borderRadius: 25, // Rounded images
+      },
   });

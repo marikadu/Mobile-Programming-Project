@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer'; //  import the drawer navigator
 
 // Import the components
 // import NavButtons from './components/NavButtons.js';   // No need to import this here
@@ -10,12 +11,14 @@ import { HomeScreen } from './components/HomeSreen.js';
 import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
 import { LogoTitle } from './components/LogoTitle.js';
+import { MenuScreen } from './components/MenuScreen.js';
 
 const Stack = createNativeStackNavigator();  // Create the stack object
 
 const App=()=>{
   return (
     <NavigationContainer>
+      {/* Notice the SCREENOPTIONS parameter. It is placed here to allow all the header styles to be the same.  */}
       <Stack.Navigator initialRouteName="PepperoniPals" screenOptions={{headerStyle: {
             backgroundColor: '#f4511e',
           },
@@ -26,9 +29,10 @@ const App=()=>{
         <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} />
         {/* // Take note of how the options have been added. This allows us to set the Title and headerstyle, etc*/}
         <Stack.Screen name="Home" component={HomeScreen} options={{title: "Home_Page", }} />  
-         {/* Notice how the DETAILS PAGE has the logo of the elephant from ./assets/misc.png */}
-        <Stack.Screen name="Details" component={DetailsScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
-        <Stack.Screen name="Image" component={ImageScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen}  />
+        {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
+        <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
+        <Stack.Screen name="Menu" component={MenuScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
