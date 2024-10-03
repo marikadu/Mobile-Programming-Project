@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 
-const NavButton=(par)=>{
+const NavButton = (par) =>{
     if (par.name!=par.active){
       return <Button onPress={()=>par.params.navigation.navigate(par.name)} title={par.name}/>;
     }

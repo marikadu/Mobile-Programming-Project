@@ -5,9 +5,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Import the components
 import NavButtons from './components/NavButtons.js';
-// import PepperoniPalsView from './components/PepperoniPals.js';
+import PepperoniPalsView from './components/PepperoniPals.js';
 
-const Stack = createNativeStackNavigator(); 
+const Stack = createNativeStackNavigator();  // Create the stack object
 
 const App=()=>{
   return (
@@ -92,19 +92,19 @@ const ImageScreen=(props)=>{
   );
 }
 
-const PepperoniPalsView=(props)=>{
-  return (
-    <View style={{flex:1}}>
-      <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
-        <View style={styles.imageContainer}>
-        <Image source={require('./assets/pizza_pngs/everything_pizza.png')}
-            style={styles.image} resizeMode='cover'/>
-        </View> 
-      </View>
-      <NavButtons params={props}/>
-    </View>
-  );
-}
+// const PepperoniPalsView=(props)=>{
+//   return (
+//     <View style={{flex:1}}>
+//       <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
+//         <View style={styles.imageContainer}>
+//         <Image source={require('./assets/pizza_pngs/everything_pizza.png')}
+//             style={styles.image} resizeMode='cover'/>
+//         </View> 
+//       </View>
+//       <NavButtons params={props}/>
+//     </View>
+//   );
+// }
 
 // Moved to the NavButtons.js component file
 
