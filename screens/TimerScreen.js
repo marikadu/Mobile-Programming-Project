@@ -51,6 +51,12 @@ export default function TimerScreen({ route, navigation }) {
     };
   });
 
+  // skipping the timer to 3 seconds for faster testing
+  // so no need to wait for 30 minutes all the time
+  const skipToThreeSeconds = () => {
+    setTimeLeft(3);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.backgroundBackgroundContainer}>
@@ -97,6 +103,8 @@ export default function TimerScreen({ route, navigation }) {
         {/* timer text */}
         <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
       </View>
+      {/* skip to 00:03 button for testing */}
+      <Button title="Skip to 00:03" onPress={skipToThreeSeconds} />
     </View>
   );
 }
@@ -134,10 +142,10 @@ const styles = StyleSheet.create({
   timerWrapper: {
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative', // Ensures absolute positioning works inside this view
+    position: 'relative',
   },
   timerText: {
-    position: 'absolute', // Overlay the text on top of the circle
+    position: 'absolute',  // timer numbers are top of the circle
     fontSize: 48,
     fontWeight: 'bold',
     color: '#CD6524',
