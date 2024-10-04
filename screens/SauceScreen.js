@@ -26,7 +26,7 @@ export default function SauceScreen({ route, navigation }) {
                         buttonColor={'#E04A2B'}
                         labelColor={'#E04A2B'}
                         selectedButtonColor={'#E04A2B'}
-                        buttonSize={20}
+                        buttonSize={15}
                         labelStyle={styles.itemText}
                     />
                 </View>
