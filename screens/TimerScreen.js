@@ -53,11 +53,11 @@ export default function TimerScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.backgroundBackgroundContainer}>
         <Text style={styles.backgroundContainer}>Thank you for your order!</Text>
       </View>
       <View>
-        <Text style={styles.textMessage}>Your pizza will arrive soon!</Text>
+        <Text style={styles.textMessage}>Your pizza will arrive soon</Text>
       </View>
       <View style={styles.timerWrapper}>
         <Svg
@@ -106,14 +106,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
+  },
+  backgroundBackgroundContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFE8D8',
+    borderRadius: 20,
+    width: 300,
+    height: 100,
   },
   backgroundContainer: {
     justifyContent: 'center',
+    alignItems: 'center',
     fontSize: 24,
     fontWeight: 'bold',
     color: '#CD6524',
-    backgroundColor: 'FFE8D8',
   },
   textMessage: {
     justifyContent: 'center',
@@ -121,6 +129,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#CD6524',
     backgroundColor: 'FFE8D8',
+    margin: 40,
   },
   timerWrapper: {
     justifyContent: 'center',
