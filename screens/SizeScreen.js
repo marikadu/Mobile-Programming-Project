@@ -2,10 +2,11 @@ import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet } from 'reac
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
 
-export default function SauceScreen({ route, navigation }) {
+export default function SizeScreen() {
     const options = [
-        {label: 'Add sauce', value: 0 },
-        {label: 'No sauce', value: 1 }
+        {label: 'Small (d~15)', value: 0 },
+        {label: 'Medium (d~22)', value: 1 },
+        {label: 'Large (d~30)', value: 2 }
       ];
 
     const [chosenOption, setChosenOption] = useState('0');
@@ -17,7 +18,7 @@ export default function SauceScreen({ route, navigation }) {
     
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Choose the sauce</Text>
+            <Text style={styles.title}>Choose the size</Text>
                 <View style={styles.listStyle}>
                     <RadioForm
                         radio_props={options}

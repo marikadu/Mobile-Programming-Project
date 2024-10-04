@@ -7,11 +7,13 @@ import HomeScreen from './screens/HomeScreen';
 import DoughScreen from './screens/DoughScreen';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
+import SizeScreen from './screens/SizeScreen';
 import PepperoniPalsView from './components/PepperoniPals.js';
 import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
 import { LogoTitle } from './components/LogoTitle.js';
 import { MenuScreen } from './components/MenuScreen.js';
+
 const Stack = createNativeStackNavigator();
 
 const HeaderRightButton = ({ navigation }) => {
@@ -23,6 +25,8 @@ const HeaderRightButton = ({ navigation }) => {
           navigation.navigate('Sauce');
         } else if (navigation.getState().routes[navigation.getState().index].name === "Sauce") {
           navigation.navigate('Toppings');
+        } else if (navigation.getState().routes[navigation.getState().index].name === "Toppings") {
+          navigation.navigate('Size');
         } 
         // Add more screens here as needed
       }}
@@ -67,7 +71,8 @@ export default function App({ navigation }) {
         <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} />
         <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>  
+        <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
+        <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Details" component={DetailsScreen}  />
         {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
         <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
