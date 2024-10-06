@@ -20,6 +20,7 @@ const Stack = createNativeStackNavigator();
 const HeaderRightButton = ({ navigation }) => {
   const currentRoute = navigation.getState().routes[navigation.getState().index].name;
 
+  // Fetching the current selected options for the pizza
   const getCurrentSauce = () => {
     const sauceRoute = navigation.getState().routes.find(route => route.name === 'Sauce');
     return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add'; // Default sauce if not found
