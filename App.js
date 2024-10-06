@@ -13,20 +13,37 @@ import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
 import { LogoTitle } from './components/LogoTitle.js';
 import { MenuScreen } from './components/MenuScreen.js';
+import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/db';
 
 const Stack = createNativeStackNavigator();
 
 const HeaderRightButton = ({ navigation }) => {
+  const currentRoute = navigation.getState().routes[navigation.getState().index].name;
+
+  const getCurrentSauce = () => {
+    const sauceRoute = navigation.getState().routes.find(route => route.name === 'Sauce');
+    return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add'; // Default sauce if not found
+  };
+  const getCurrentToppings = () => {
+    const sauceRoute = navigation.getState().routes.find(route => route.name === 'Toppings');
+    return sauceRoute ? sauceRoute.params?.selectedSauce : 'null';
+  };
+  const getCurrentSize = () => {
+    const sauceRoute = navigation.getState().routes.find(route => route.name === 'Size');
+    return sauceRoute ? sauceRoute.params?.selectedSauce : 'Small';
+  };
+
   return (
     <TouchableOpacity
       onPress={() => {
-        // Navigate to the next screen based on the current screen
-        if (navigation.getState().routes[navigation.getState().index].name === "Dough") {
+        if (currentRoute === "Dough") {
           navigation.navigate('Sauce');
-        } else if (navigation.getState().routes[navigation.getState().index].name === "Sauce") {
-          navigation.navigate('Toppings');
-        } else if (navigation.getState().routes[navigation.getState().index].name === "Toppings") {
-          navigation.navigate('Size');
+        } else if (currentRoute === "Sauce") {
+          const selectedSauce = getCurrentSauce(); // Get current selected sauce
+          navigation.navigate('Toppings', { selectedSauce }); // Pass selectedSauce
+        } else if (currentRoute === "Toppings") {
+          const selectedToppings = getCurrentToppings(); // Get current selected toppings
+          navigation.navigate('Size', { selectedSauce, selectedToppings }); // Pass selected sauce and toppings
         } 
         // Add more screens here as needed
       }}
@@ -48,6 +65,16 @@ const HeaderLeftButton = ({ navigation }) => {
 };
 
 export default function App({ navigation }) {
+  useEffect(() => {
+    // Initialize database and create tables
+    getDBConnection()
+        .then(() => {
+            return createTables(); // Wait for the tables to be created
+        })
+        .then(() => console.log('Tables created successfully'))
+        .catch((error) => console.error('Error creating tables:', error));
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator

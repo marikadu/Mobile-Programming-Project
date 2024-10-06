@@ -1,22 +1,45 @@
 import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CheckBox from '@react-native-community/checkbox';
+import { saveOrder } from '../database/db';
 
-const originalToppings = [
-  { id: '1', title: 'Cheese' },
-  { id: '2', title: 'Tomato' },
-  { id: '3', title: 'Basil' },
-  { id: '4', title: 'Pepperoni' },
-  { id: '5', title: 'Mushrooms' },
-  { id: '6', title: 'Custom: ' }, // Custom option stays here
-];
+export default function Toppings({ route, navigation }) {
+    const originalToppings = [
+      { id: '1', title: 'Cheese' },
+      { id: '2', title: 'Tomato' },
+      { id: '3', title: 'Basil' },
+      { id: '4', title: 'Pepperoni' },
+      { id: '5', title: 'Mushrooms' },
+      { id: '6', title: 'Custom: ' }, // Custom option stays here
+    ];
+    
+    const { selectedSauce } = route.params; 
 
-export default function Toppings() {
-    const [isChecked, setChecked]=useState([]); // Tracks the selection
-    const [toppingList, setToppingList]=useState(originalToppings); // Original topping list
-    const [newTopping, setTopping]=useState(); // Custom topping
+    const [selectedToppings, setSelectedToppings] = useState([]); // Tracks the selection
+    const [toppingList, setToppingList] = useState(originalToppings); // Original topping list
+    const [newTopping, setTopping] = useState(); // Custom topping
 
-    const toppingInputHandler=(enteredText)=>{
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+          const orderData = {
+              sauce: selectedSauce,
+              toppings: selectedToppings,
+              size: null // This will be updated in SizeScreen
+          };
+
+          saveOrder(orderData)
+              .then(() => {
+                  console.log('Toppings saved:', orderData);
+              })
+              .catch((error) => {
+                  console.error('Error saving toppings:', error);
+              });
+      });
+
+      return unsubscribe; // Cleanup the listener
+    }, [navigation, selectedToppings]); // Run effect if selectedToppings change
+
+    const toppingInputHandler = (enteredText) => {
       setTopping(enteredText);
     };
 
@@ -26,7 +49,7 @@ export default function Toppings() {
           ...currentToppingList,
           { id: Math.random().toString(), title: newTopping},
         ]);
-        setChecked((prev) => [...prev, newTopping]); // Pre-select custom topping
+        setSelectedToppings((prev) => [...prev, newTopping]); // Pre-select custom topping
         setTopping('');
       }
     };
@@ -35,7 +58,7 @@ export default function Toppings() {
       return (
         <View style={styles.toppingItem}>
             <CheckBox
-                value={isChecked.includes(item.title)}
+                value={selectedToppings.includes(item.title)}
                 onValueChange={() => setSelection(item.title)}
                 tintColors={{ true: '#E04A2B', false: '#E04A2B' }} // Checkbox colors
             />
@@ -46,7 +69,7 @@ export default function Toppings() {
   
     // Handles selection
     const setSelection = (topping) => {
-      setChecked((prevSelectedTopping) => {
+      setSelectedToppings((prevSelectedTopping) => {
           if (prevSelectedTopping.includes(topping)) {
               // Remove from selected if already selected
               return prevSelectedTopping.filter((t) => t !== topping);
@@ -55,20 +78,6 @@ export default function Toppings() {
           }
       });
     };
-
-    // Function to handle final submission of selected toppings
-    const submitToppings = () => {
-      let selectedToppings = [...isChecked];
-
-      // If custom topping is filled, add it to the selected toppings
-      if (newTopping) {
-          selectedToppings.push(newTopping);
-      }
-
-      console.log('Selected Toppings:', selectedToppings); // Log for now, but send to backend
-      // Send to database using fetch or axios
-  };
-
 
     return (
         <View style={styles.container}>
@@ -89,8 +98,6 @@ export default function Toppings() {
                     onChangeText={toppingInputHandler}
                 />
             </View>
-
-            <Button title="Finish" onPress={submitToppings} />
         </View>
     );
 }

@@ -1,19 +1,43 @@
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
+import { saveOrder } from '../database/db';
 
 export default function SauceScreen({ route, navigation }) {
     const options = [
-        {label: 'Add sauce', value: 0 },
-        {label: 'No sauce', value: 1 }
+        {label: 'Add sauce', value: 'Add' },
+        {label: 'No sauce', value: 'None' }
       ];
 
-    const [chosenOption, setChosenOption] = useState('0');
+    const [selectedSauce, setSelectedSauce] = useState('Add');
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            const orderData = {
+                sauce: selectedSauce,
+                toppings: null,
+                size: null // This will be updated in SizeScreen
+            };
+
+            saveOrder(orderData)
+                .then(() => {
+                    console.log('Sauce saved:', orderData);
+                })
+                .catch((error) => {
+                    console.error('Error saving sauce:', error);
+                });
+        });
+
+        return unsubscribe; // Cleanup the listener
+    }, [navigation, selectedSauce]); // Re-run effect if selectedSauce changes
     
     setSelected=(value)=>{
         console.log(value);
-        setChosenOption(value);
+        setSelectedSauce(value);
     }
+    
+    // This function is needed to retrieve the selected sauce when navigating
+    const getSelectedSauce = () => selectedSauce;
     
     return (
         <View style={styles.container}>
