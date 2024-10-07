@@ -11,7 +11,7 @@ const NavButton = (par) =>{
 const NavButtons=({params})=>{
   return(
     <View style={styles.navbuttonstyle}>
-      <NavButton params={params} name="PepperoniPals" active={params.route.name}/>
+      <NavButton params={params} name="Home" active={params.route.name}/>
       <NavButton params={params} name="Menu" active={params.route.name}/>
       {/* <NavButton params={params} name="Home" active={params.route.name}/> */}
       <NavButton params={params} name="Details" active={params.route.name}/>

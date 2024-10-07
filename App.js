@@ -3,16 +3,17 @@ import { View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity, Text
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Custom icon for header
-import HomeScreen from './screens/HomeScreen';
+// import HomeScreen from './screens/HomeScreen';
 import DoughScreen from './screens/DoughScreen';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
 import TimerScreen from './screens/TimerScreen';
-import PepperoniPalsView from './components/PepperoniPals.js';
+import HomeScreen from './components/HomeScreen.js';
 import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
 import { LogoTitle } from './components/LogoTitle.js';
 import { MenuScreen } from './components/MenuScreen.js';
+import { SettingsScreen } from './components/SettingsScreen.js';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -52,7 +53,7 @@ const HomeStackScreen = () => {
   return (
 
     <Stack.Navigator
-      initialRouteName="PepperoniPals"
+      initialRouteName="Home"
       // initialRouteName="Dough"
       screenOptions={({ navigation }) => ({
         headerStyle: {
@@ -71,7 +72,7 @@ const HomeStackScreen = () => {
         headerLeft: () => <HeaderLeftButton navigation={navigation} />, // Left arrow component
       })}>
         {/* <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} /> */}
-        <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} />
+        <Stack.Screen name="Home" component={HomeScreen} options={({route}) => ({title: route.params?.name ? route.params.name : "Home"})} />
         <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>  
@@ -80,6 +81,7 @@ const HomeStackScreen = () => {
         {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
         <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
         <Stack.Screen name="Menu" component={MenuScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen}  />
       </Stack.Navigator>
     // <Stack.Navigator>
       
@@ -92,7 +94,7 @@ export default function App({ navigation }) {
   return (
 <NavigationContainer>
   <Tab.Navigator>
-    <Tab.Screen name="Settings" component={DoughScreen} />
+    <Tab.Screen name="Settings" component={SettingsScreen} />
     <Tab.Screen name="Home" component={HomeStackScreen} />
     <Tab.Screen name="Timer" component={TimerScreen} />
   </Tab.Navigator>
