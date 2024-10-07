@@ -66,7 +66,7 @@ export default function App({ navigation }) {
         headerLeft: () => <HeaderLeftButton navigation={navigation} />, // Left arrow component
       })}>
         <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} />
-        <Stack.Screen name="Dough" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>
+        <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>  
         <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  
