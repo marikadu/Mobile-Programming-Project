@@ -12,7 +12,7 @@ export default function TimerScreen({ route, navigation }) {
   const strokeWidth = 10;
   const circumference = 2 * Math.PI * radius; // C=2πR
 
-  const progress = useSharedValue(1); // progress falue, starts at 100%
+  const progress = useSharedValue(1); // progress value, starts at 100%
 
   useEffect(() => {
     let timer;
@@ -37,19 +37,13 @@ export default function TimerScreen({ route, navigation }) {
     });
   }, [timeLeft]);
 
-  // time format "MM:SS" minutes:seconds
   const formatTime = (seconds) => {
+    // rounding a number down to the nearest integer
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
+    // shows 0 when less than 10, example: 7 is 07
     return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
-
-  // shrinking circle
-  const animatedProps = useAnimatedProps(() => {
-    return {
-      strokeDashoffset: circumference * (1 - progress.value),
-    };
-  });
 
   // skipping the timer to 3 seconds for faster testing
   // so no need to wait for 30 minutes all the time
@@ -60,35 +54,17 @@ export default function TimerScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.backgroundBackgroundContainer}>
-        <Text style={styles.backgroundContainer}>Thank you for your order!</Text>
-      </View>
-      <View>
-        <Text style={styles.textMessage}>Your pizza will arrive soon</Text>
+        <Text style={styles.backgroundContainer}>Timer</Text>
       </View>
       <View style={styles.timerWrapper}>
-        <Svg
+        <Svg // circumference created in SVG format for better quality
           height={radius * 2 + strokeWidth * 2}
           width={radius * 2 + strokeWidth * 2}
+          // defining the circumference
           viewBox={`0 0 ${radius * 2 + strokeWidth * 2} ${radius * 2 + strokeWidth * 2}`}
           fill="#FFE8D8"
         >
-          {/* background circle */}
-          <Circle
-            cx={radius + strokeWidth}
-            cy={radius + strokeWidth}
-            r={radius - strokeWidth / 2} // slightly smaller to avoid overlapping with stroke
-          />
-
-          {/* background circle that is behind the animated circle */}
-          <Circle
-            cx={radius + strokeWidth}
-            cy={radius + strokeWidth}
-            r={radius}
-            stroke="#FFE8D8"
-            strokeWidth={strokeWidth}
-          />
-
-          {/* animated circle */}
+          {/* border circle */}
           <AnimatedCircle
             cx={radius + strokeWidth}
             cy={radius + strokeWidth}
@@ -96,13 +72,13 @@ export default function TimerScreen({ route, navigation }) {
             stroke="#E58C4B"
             strokeWidth={strokeWidth}
             strokeDasharray={circumference}
-            animatedProps={animatedProps}
             strokeLinecap="round"
           />
         </Svg>
         {/* timer text */}
         <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
       </View>
+      
       {/* skip to 00:03 button for testing */}
       <Button title="Skip to 00:03" onPress={skipToThreeSeconds} />
     </View>
@@ -130,14 +106,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#CD6524',
-  },
-  textMessage: {
-    justifyContent: 'center',
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#CD6524',
-    backgroundColor: 'FFE8D8',
-    margin: 40,
   },
   timerWrapper: {
     justifyContent: 'center',

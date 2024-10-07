@@ -8,6 +8,7 @@ import DoughScreen from './screens/DoughScreen';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
 import TimerScreen from './screens/TimerScreen';
+import TimerScreenLesson from './screens/TimerScreenLesson';
 import PepperoniPalsView from './components/PepperoniPals.js';
 import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
@@ -66,7 +67,7 @@ export default function App({ navigation }) {
         headerLeft: () => <HeaderLeftButton navigation={navigation} />, // Left arrow component
       })}>
         <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} />
-        <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
+        <Stack.Screen name="Dough" component={TimerScreenLesson} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>  
         <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  

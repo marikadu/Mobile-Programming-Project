@@ -12,7 +12,7 @@ export default function TimerScreen({ route, navigation }) {
   const strokeWidth = 10;
   const circumference = 2 * Math.PI * radius; // C=2πR
 
-  const progress = useSharedValue(1); // progress falue, starts at 100%
+  const progress = useSharedValue(1); // progress value, starts at 100%
 
   useEffect(() => {
     let timer;
