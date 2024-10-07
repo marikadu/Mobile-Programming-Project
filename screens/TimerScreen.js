@@ -11,7 +11,6 @@ export default function TimerScreen({ route, navigation }) {
   const radius = 100;
   const strokeWidth = 10;
   const circumference = 2 * Math.PI * radius; // C=2πR
-
   const progress = useSharedValue(1); // progress value, starts at 100%
 
   useEffect(() => {
@@ -37,10 +36,11 @@ export default function TimerScreen({ route, navigation }) {
     });
   }, [timeLeft]);
 
-  // time format "MM:SS" minutes:seconds
   const formatTime = (seconds) => {
+    // rounding a number down to the nearest integer
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
+    // shows 0 when less than 10, example: 7 is 07
     return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
