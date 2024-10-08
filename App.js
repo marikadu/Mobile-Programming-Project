@@ -93,7 +93,31 @@ const HomeStackScreen = () => {
 export default function App({ navigation }) {
   return (
 <NavigationContainer>
-  <Tab.Navigator>
+  <Tab.Navigator
+  // shortcut for the documentation, I'll delete it later - Marika
+  // https://reactnavigation.org/docs/tab-based-navigation/
+
+  // icons list
+  // https://icons.expo.fyi/Index
+  // filter by "Ionicons"
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+
+        if (route.name === 'Home') {
+          iconName = focused ? 'home' : 'home-outline';
+        } else if (route.name === 'Settings') {
+          iconName = focused ? 'settings' : 'settings-outline';
+        } else if (route.name === 'Timer') {
+          iconName = focused ? 'timer' : 'timer-outline';
+        }
+
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: '#E04A2B',
+      tabBarInactiveTintColor: 'gray',
+    })}
+  >
     <Tab.Screen name="Settings" component={SettingsScreen} />
     <Tab.Screen name="Home" component={HomeStackScreen} />
     <Tab.Screen name="Timer" component={TimerScreen} />

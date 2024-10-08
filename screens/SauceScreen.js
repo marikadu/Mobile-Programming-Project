@@ -9,12 +9,12 @@ export default function SauceScreen({ route, navigation }) {
         {label: 'No sauce', value: 1 }
       ];
 
-    const [chosenOption, setChosenOption] = useState('0');
+    const [chosenOption, setChosenOption] = useState(0);
     
-    setSelected=(value)=>{
+const setSelected = (value) => {
         console.log(value);
         setChosenOption(value);
-    }
+    };
     
     return (
         <View style={styles.container}>
@@ -33,7 +33,9 @@ export default function SauceScreen({ route, navigation }) {
                 </View>
                 <View style={styles.pizzaContainer}>
                     {/* render the image when the sauce is selected */}
-                    {chosenOption === 0 && (<Image source={sauceImg} style={styles.sauceImage} />)}
+                    {chosenOption === 0 && (
+                    <Image source={sauceImg} style={styles.sauceImage} />
+                )}
                 </View>
                 
     </View>
