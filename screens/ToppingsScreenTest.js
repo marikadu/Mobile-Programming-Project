@@ -72,7 +72,7 @@ export default function Toppings({ route, navigation }) {
           <Image
             key={item.id}
             source={item.image}
-            style={[styles.toppingImage, { zIndex: item.order }]} // Ensure proper layering
+            style={[styles.toppingImage, { zIndex: item.order }]} // ensure proper layer based on the order
           />
         ))
     );
