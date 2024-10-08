@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, addListener } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import Animated, { useSharedValue, useAnimatedProps, withTiming, Easing } from 'react-native-reanimated';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-export default function TimerScreen({ route, navigation }) {
+export default function TimerScreen({ route, navigation, onTimerEnd, onTabPress }) {
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutes in seconds
 
   const radius = 100;
@@ -22,6 +22,7 @@ export default function TimerScreen({ route, navigation }) {
     // when timer runs out, the timer stops
     } else if (timeLeft <= 0) {
       clearInterval(timer);
+      onTimerEnd();
     }
 
     // https://medium.com/@garethdavisrogers/using-setinterval-and-clearinterval-with-react-hooks-7fcf26dc8fdb
@@ -50,6 +51,17 @@ export default function TimerScreen({ route, navigation }) {
       strokeDashoffset: circumference * (1 - progress.value),
     };
   });
+
+// creating a listener for the badge to disappear when the user pressed to go to Timer Screen
+// doesnt work
+// useEffect(() => {
+//   const unsubscribe = navigation.addListener('focus', () => {
+// when pressed, the icon removes
+//     onTabPress();
+//   });
+
+//   return unsubscribe;
+// }, [navigation]);
 
   // skipping the timer to 3 seconds for faster testing
   // so no need to wait for 30 minutes all the time

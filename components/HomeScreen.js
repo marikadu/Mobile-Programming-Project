@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Text, View, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import {Button, Text, View, FlatList, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
 
 // Import the components
 import NavButtons from './NavButtons.js';
@@ -12,45 +12,70 @@ import NavButtons from './NavButtons.js';
     const [newPizza, setPizza]=useState("");
     const [updateId, setUpdateId]=useState(0);
     const [pizzaList, addFish]=useState([
-      {"id":1, "type":"Pepperoni", "price":100, image: require('../assets/misc.png') },
-      {"id":2, "type":"Mozzarella", "price":40, image: require('../assets/pizza_pngs/everything_pizza.png') },
-      {"id":3, "type":"Four Cheeses", "price":90, image: require('../assets/pizza_pngs/topping_pepperoni.png') }]);
+      {"id":1, "type":"Pepperoni", "price":"12.90", description: "Original dough, With sauce, Cheese, Pepperoni", image: require('../assets/pizza_pngs/menu/pepperoni.png') },
+      {"id":3, "type":"Mushrooms", "price":"11.90", description: "Original dough, With sauce, Cheese, Mushrooms",image: require('../assets/pizza_pngs/menu/mushrooms.png') }]);
     
     const selectItemToUpdate=(id)=>{
       setUpdateId(id);
       setPizza(pizzaList[id].type);
       props.navigation.navigate("Details", {pizza:pizzaList[id]});
     }
-    const renderPizza=(item)=>{
-      return(
-        <TouchableOpacity activeOpacity={0.8} onPress={()=>selectItemToUpdate(item.index)}>
+    const renderPizza = (item) => {
+      return (
+        <TouchableOpacity activeOpacity={0.8} onPress={() => selectItemToUpdate(item.index)}>
           <View style={styles.listItemStyle}>
-            {/* Below is the Image for the menu  */}
-            <Image source={item.item.image} style={styles.pizzaImage}/>
-            <Text>{item.index}) {item.item.id} {item.item.type} {item.item.price}€</Text>
+          <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
+            <View style={styles.itemContainer}>
+              <Image source={item.item.image} style={styles.pizzaImage} />
+              <View style={styles.textContainer}>
+                <Text style={styles.descriptionText}>{item.item.description}</Text>
+              </View>
+            </View>
           </View>
         </TouchableOpacity>
       );
     
     }
-
     /// ////////////////END OF THE IMPLEMENTATION HERE ///////////////////
 
     return (
       <View style={{flex:1}}>
         
         <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
-        <Button onPress={()=> props.navigation.navigate("Dough")} title="Create your Pizza"/> 
-        <Button onPress={()=> props.navigation.navigate("Menu")} title="See Menu"/> 
-          <View style={styles.imageContainer}>
+
+        {/* button had to go because it cannot be customised everyone say bye bye button */}
+        {/* <Button color="#F58C41"
+          borderRadius='50'
+          onPress={()=> props.navigation.navigate("Dough")} 
+          title="Create your Pizza"/>  */}
+
+        <TouchableHighlight
+          style={styles.button}
+          onPress={() => props.navigation.navigate("Dough")} 
+          underlayColor='#EC863D' // colour when pressed the "button"
+          >
+          <Text style={[styles.buttonText]}>Create Your Pizza</Text>
+        </TouchableHighlight>
+
+        {/* <Button onPress={()=> props.navigation.navigate("Menu")} title="See Menu"/>  */}
+
+        <TouchableHighlight
+          style={styles.button}
+          onPress={() => props.navigation.navigate("Menu")} 
+          underlayColor='#EC863D' // colour when pressed the "button"
+          >
+          <Text style={[styles.buttonText]}>See Menu</Text>
+        </TouchableHighlight>
+        
+          {/* <View style={styles.imageContainer}>
           <Image source={require('../assets/pizza_pngs/everything_pizza.png')}
               style={styles.image} resizeMode='cover'/>
-          </View> 
+          </View>  */}
 
+          <Text style={[styles.text]}>Your Favourites</Text>
           {/* /////// DATABASE FLATLIST HERE /////// */}
-          <View style={{flex:1}}>
+          <View style={{flex:4}}>
           <View style={styles.listStyle}>
-          <Text>Your Favourites</Text>
             <FlatList style={styles.flatliststyle}
               data={pizzaList}
               renderItem={renderPizza}
@@ -86,30 +111,75 @@ import NavButtons from './NavButtons.js';
       justifyContent:"space-around",    
     },
     listItemStyle:{
-      borderWidth:1,
-      borderColor:"blue",
+      borderWidth: 2,
+      borderColor:"#CD6524",
       padding:5,
-      backgroundColor:"#abc",
-      width:"80%",
+      backgroundColor:"#FFF9F2",
+      borderRadius: 20,
+      margin: 10,
+      width:"100%",
       alignSelf:"center",
     },
     listStyle:{
       flex:8,
       alignItems:"center",
-      backgroundColor:"#eee",
-      borderColor:"red",
-      borderWidth:2,
-      width:"100%",
+      width:260,
     },
     flatliststyle:{
-      width:'80%',
-      backgroundColor:'blue',
+      width:'100%',
+      backgroundColor:'#FFFFFF',
+    },
+    itemContainer: {
+      padding: 5,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    textContainer: {
+      marginLeft: 20,
+      flex: 1,
+    },
+    itemText: {
+      color: "#8A4012",
+      fontSize: 18,
+      paddingLeft: 5,
+      margin: 2,
+    },
+    descriptionText: {
+      flex: 1,
+      color: "#CD6524",
+      fontSize: 16,
     },
     pizzaImage: {
-      width: 50,
-      height: 50,
-      marginRight: 10, // Space between image and text
-      borderRadius: 25, // Rounded images
+      width: 80,
+      height: 80,
+      borderRadius: 25
+    },
+    button: {
+      margin: 20,
+      paddingTop: 10,
+      width: 250,
+      height: 56,
+      backgroundColor: '#F58C41',
+      borderRadius: 40,
+    },
+    buttonText: {
+      flex:1,
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: '#fff',
+      textAlign: 'center',
+      alignItems: 'center',
+    },
+    text: {
+      flex:1,
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: '#000',
+      right: 100,
+      paddingTop: 30,
+      // textAlign: 'center',
+      // alignItems: 'left',
+      justifyContent: 'flex-end',
     },
   });
 

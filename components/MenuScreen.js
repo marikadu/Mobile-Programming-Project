@@ -33,7 +33,7 @@ const renderPizza = (item) => {
     </TouchableOpacity>
   );
     
-    }
+}
     return (
       <View style={{flex:1}}>
           <View style={styles.listStyle}>
@@ -114,6 +114,6 @@ const renderPizza = (item) => {
     pizzaImage: {
       width: 80,
       height: 80,
-      borderRadius: 25, // Rounded images
+      borderRadius: 25
     },
   });
