@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'; // Custom icon for he
 // import HomeScreen from './screens/HomeScreen';
 import DoughScreen from './screens/DoughScreen';
 import SauceScreen from './screens/SauceScreen';
-import ToppingsScreen from './screens/ToppingsScreen';
+import ToppingsScreen from './screens/ToppingsScreenTest';
 import TimerScreen from './screens/TimerScreen';
 import HomeScreen from './components/HomeScreen.js';
 import { DetailsScreen } from './components/DetailsScreen.js';
