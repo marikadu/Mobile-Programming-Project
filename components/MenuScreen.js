@@ -8,31 +8,35 @@ export const MenuScreen=(props)=>{
     const [newPizza, setPizza]=useState("");
     const [updateId, setUpdateId]=useState(0);
     const [pizzaList, addFish]=useState([
-      {"id":1, "type":"Pepperoni", "price":100, image: require('../assets/misc.png') },
-      {"id":2, "type":"Mozzarella", "price":40, image: require('../assets/pizza_pngs/everything_pizza.png') },
-      {"id":3, "type":"Four Cheeses", "price":90, image: require('../assets/pizza_pngs/topping_pepperoni.png') }]);
+      {"id":1, "type":"Pepperoni", "price":"12.90", description: "Original dough, With sauce, Cheese, Pepperoni", image: require('../assets/pizza_pngs/menu/pepperoni.png') },
+      {"id":2, "type":"Bianca", "price":"10.90", description: "Original dough, No sauce, Cheese",image: require('../assets/pizza_pngs/menu/bianca.png') },
+      {"id":3, "type":"Mushrooms", "price":"11.90", description: "Original dough, With sauce, Cheese, Mushrooms",image: require('../assets/pizza_pngs/menu/mushrooms.png') }]);
     
     const selectItemToUpdate=(id)=>{
       setUpdateId(id);
       setPizza(pizzaList[id].type);
       props.navigation.navigate("Details", {pizza:pizzaList[id]});
     }
-    const renderPizza=(item)=>{
-      return(
-        <TouchableOpacity activeOpacity={0.8} onPress={()=>selectItemToUpdate(item.index)}>
-          <View style={styles.listItemStyle}>
-            {/* Below is the Image for the menu  */}
-            <Image source={item.item.image} style={styles.pizzaImage}/>
-            <Text>{item.index}) {item.item.id} {item.item.type} {item.item.price}€</Text>
+
+const renderPizza = (item) => {
+  return (
+    <TouchableOpacity activeOpacity={0.8} onPress={() => selectItemToUpdate(item.index)}>
+      <View style={styles.listItemStyle}>
+      <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
+        <View style={styles.itemContainer}>
+          <Image source={item.item.image} style={styles.pizzaImage} />
+          <View style={styles.textContainer}>
+            <Text style={styles.descriptionText}>{item.item.description}</Text>
           </View>
-        </TouchableOpacity>
-      );
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
     
     }
     return (
       <View style={{flex:1}}>
           <View style={styles.listStyle}>
-          <Text>Menu Screen</Text>
             <FlatList style={styles.flatliststyle}
               data={pizzaList}
               renderItem={renderPizza}
@@ -47,7 +51,7 @@ export const MenuScreen=(props)=>{
     navbuttonstyle:{
       flex:2,
       flexDirection:"row",
-      backgroundColor:"#def",
+      backgroundColor:"#FFFFFF",
       alignItems:"center",
       justifyContent:"space-around",    
     },
@@ -64,29 +68,52 @@ export const MenuScreen=(props)=>{
       width:'100%'
     },
     listItemStyle:{
-      borderWidth:1,
-      borderColor:"blue",
+      borderWidth: 2,
+      borderColor:"#CD6524",
       padding:5,
-      backgroundColor:"#abc",
+      backgroundColor:"#FFF9F2",
+      borderRadius: 20,
+      margin: 10,
       width:"80%",
       alignSelf:"center",
     },
     listStyle:{
       flex:8,
       alignItems:"center",
-      backgroundColor:"#eee",
-      borderColor:"red",
-      borderWidth:2,
       width:"100%",
+    },
+    itemText: {
+      color: "#131313",
+      fontSize: 16,
+      margin: 2,
     },
     flatliststyle:{
       width:'80%',
-      backgroundColor:'blue',
+      backgroundColor:'#FFFFFF',
+    },
+    itemContainer: {
+      padding: 5,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    textContainer: {
+      marginLeft: 20,
+      flex: 1,
+    },
+    itemText: {
+      color: "#8A4012",
+      fontSize: 18,
+      paddingLeft: 5,
+      margin: 2,
+    },
+    descriptionText: {
+      flex: 1,
+      color: "#CD6524",
+      fontSize: 16,
     },
     pizzaImage: {
-      width: 50,
-      height: 50,
-      marginRight: 10, // Space between image and text
+      width: 80,
+      height: 80,
       borderRadius: 25, // Rounded images
     },
   });
