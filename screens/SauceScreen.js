@@ -1,6 +1,7 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
+import sauceImg from '../assets/pizza_pngs/sauce.png';
 
 export default function SauceScreen({ route, navigation }) {
     const options = [
@@ -30,7 +31,12 @@ export default function SauceScreen({ route, navigation }) {
                         labelStyle={styles.itemText}
                     />
                 </View>
-        </View>
+                <View style={styles.pizzaContainer}>
+                    {/* render the image when the sauce is selected */}
+                    {chosenOption === 0 && (<Image source={sauceImg} style={styles.sauceImage} />)}
+                </View>
+                
+    </View>
     );
 }
 
@@ -70,6 +76,16 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#E04A2B',
         marginLeft: 10,
-    }
+    },
+    pizzaContainer: {
+        width: 200,
+        height: 200,
+        position: 'relative', // for the absolute position for the toppings
+    },
+    sauceImage: {
+        position: 'absolute', // absolute position to allow stacking of the toppings
+        width: '100%',
+        height: '100%',
+    },
 });
 

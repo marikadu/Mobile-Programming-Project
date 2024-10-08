@@ -67,7 +67,7 @@ export default function Toppings({ route, navigation }) {
   const renderSelectedImages = () => {
     return (
       DATA.filter((item) => isChecked.includes(item.title))
-        .sort((a, b) => a.order - b.order) // Sort toppings based on the predefined order
+        .sort((a, b) => a.order - b.order) // sort toppings based on the predefined order
         .map((item) => (
           <Image
             key={item.id}
