@@ -26,12 +26,12 @@ const HeaderRightButton = ({ navigation }) => {
     return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add'; // Default sauce if not found
   };
   const getCurrentToppings = () => {
-    const sauceRoute = navigation.getState().routes.find(route => route.name === 'Toppings');
-    return sauceRoute ? sauceRoute.params?.selectedSauce : 'null';
+    const toppingsRoute = navigation.getState().routes.find(route => route.name === 'Toppings');
+    return toppingsRoute ? toppingsRoute.params?.selectedToppings : [];
   };
   const getCurrentSize = () => {
-    const sauceRoute = navigation.getState().routes.find(route => route.name === 'Size');
-    return sauceRoute ? sauceRoute.params?.selectedSauce : 'Small';
+    const sizeRoute = navigation.getState().routes.find(route => route.name === 'Size');
+    return sizeRoute ? sizeRoute.params?.selectedSize : 'Small';
   };
 
   return (
@@ -41,11 +41,19 @@ const HeaderRightButton = ({ navigation }) => {
           navigation.navigate('Sauce');
         } else if (currentRoute === "Sauce") {
           const selectedSauce = getCurrentSauce(); // Get current selected sauce
-          navigation.navigate('Toppings', { selectedSauce }); // Pass selectedSauce
+          navigation.navigate('Toppings', { selectedSauce: selectedSauce }); // Pass selectedSauce
         } else if (currentRoute === "Toppings") {
-          const selectedToppings = getCurrentToppings(); // Get current selected toppings
-          navigation.navigate('Size', { selectedSauce, selectedToppings }); // Pass selected sauce and toppings
-        } 
+          const selectedSauce = getCurrentSauce();
+          const selectedToppings = getCurrentToppings();
+          console.log('Selected Toppings:', selectedToppings);
+          navigation.navigate('Size', { selectedSauce: selectedSauce, selectedToppings: selectedToppings }); // Pass selected sauce and toppings
+        } else if (currentRoute === "Size") {
+          const selectedSauce = getCurrentSauce();
+          const selectedToppings = getCurrentToppings();
+          const selectedSize = getCurrentSize();
+          
+          console.log('Order Summary:', { selectedSauce, selectedToppings, selectedSize });
+        }
         // Add more screens here as needed
       }}
       style={{ paddingRight: 15 }}
@@ -65,15 +73,13 @@ const HeaderLeftButton = ({ navigation }) => {
   );
 };
 
-export default function App({ navigation }) {
+export default function App() {
   useEffect(() => {
     // Initialize database and create tables
     getDBConnection()
-        .then(() => {
-            return createTables(); // Wait for the tables to be created
-        })
-        .then(() => console.log('Tables created successfully'))
-        .catch((error) => console.error('Error creating tables:', error));
+      .then(() => createTables()) // Wait for the tables to be created
+      .then(() => console.log('Tables created successfully'))
+      .catch((error) => console.error('Error creating tables:', error));
   }, []);
 
   return (

@@ -4,79 +4,82 @@ import CheckBox from '@react-native-community/checkbox';
 import { saveOrder } from '../database/db';
 
 export default function Toppings({ route, navigation }) {
-    const originalToppings = [
-      { id: '1', title: 'Cheese' },
-      { id: '2', title: 'Tomato' },
-      { id: '3', title: 'Basil' },
-      { id: '4', title: 'Pepperoni' },
-      { id: '5', title: 'Mushrooms' },
-      { id: '6', title: 'Custom: ' }, // Custom option stays here
-    ];
+    const [toppingsList, setToppingsList] = useState([
+      { id: 1, selected: false, title: 'Cheese' },
+      { id: 2, selected: false, title: 'Tomato' },
+      { id: 3, selected: false, title: 'Basil' },
+      { id: 4, selected: false, title: 'Pepperoni' },
+      { id: 5, selected: false, title: 'Mushrooms' },
+    ]);
     
     const { selectedSauce } = route.params; 
-
-    const [selectedToppings, setSelectedToppings] = useState([]); // Tracks the selection
-    const [toppingList, setToppingList] = useState(originalToppings); // Original topping list
-    const [newTopping, setTopping] = useState(); // Custom topping
+    const [selectedToppings, setSelectedToppings] = useState([]);
+    // const [newTopping, setTopping] = useState(); // Custom topping
 
     useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
-          const orderData = {
-              sauce: selectedSauce,
-              toppings: selectedToppings,
-              size: null // This will be updated in SizeScreen
-          };
+      const orderData = {
+          sauce: selectedSauce,
+          toppings: {
+            cheese: toppingsList.find(t => t.title === 'Cheese').selected,
+            tomato: toppingsList.find(t => t.title === 'Tomato').selected,
+            basil: toppingsList.find(t => t.title === 'Basil').selected,
+            pepperoni: toppingsList.find(t => t.title === 'Pepperoni').selected,
+            mushrooms: toppingsList.find(t => t.title === 'Mushrooms').selected
+          },
+          size: null // This will be updated in SizeScreen
+      };
+  
+      // Pass the updated selected toppings to navigation params so it's accessible in the next screen
+      const selectedToppings = toppingsList.filter(t => t.selected).map(t => t.title);
+      navigation.setParams({ selectedToppings }); // Pass selected toppings to params
 
-          saveOrder(orderData)
-              .then(() => {
-                  console.log('Toppings saved:', orderData);
-              })
-              .catch((error) => {
-                  console.error('Error saving toppings:', error);
-              });
-      });
-
-      return unsubscribe; // Cleanup the listener
-    }, [navigation, selectedToppings]); // Run effect if selectedToppings change
-
-    const toppingInputHandler = (enteredText) => {
-      setTopping(enteredText);
-    };
-
-    const addCustomTopping = () => {
-      if (newTopping) {
-        setToppingList((currentToppingList) => [
-          ...currentToppingList,
-          { id: Math.random().toString(), title: newTopping},
-        ]);
-        setSelectedToppings((prev) => [...prev, newTopping]); // Pre-select custom topping
-        setTopping('');
+      // Save the orderData object to the database whenever selectedToppings changes
+      if (selectedToppings.length > 0) {
+        saveOrder(orderData)
+          .then(() => console.log('Order saved with sauce and toppings:', orderData))
+          .catch((error) => console.error('Error saving order:', error));
       }
-    };
+    }, [navigation, toppingsList]); // Run effect if toppingsList changes (includes selection changes)
 
-    const renderTopping=({item, index})=>{
+    // const toppingInputHandler = (enteredText) => {
+    //   setTopping(enteredText);
+    // };
+
+    // const addCustomTopping = () => {
+    //   if (newTopping) {
+    //     setToppingList((currentToppingList) => [
+    //       ...currentToppingList,
+    //       { id: Math.random().toString(), title: newTopping},
+    //     ]);
+    //     setSelectedToppings((prev) => [...prev, newTopping]); // Pre-select custom topping
+    //     setTopping('');
+    //   }
+    // };
+
+    const renderTopping=({ item })=>{
       return (
         <View style={styles.toppingItem}>
             <CheckBox
-                value={selectedToppings.includes(item.title)}
-                onValueChange={() => setSelection(item.title)}
+                value={item.selected}
+                onValueChange={() => setSelection(item.id)}
                 tintColors={{ true: '#E04A2B', false: '#E04A2B' }} // Checkbox colors
             />
-            <Text style={styles.itemText} key={index}>{item.title}</Text>
+            <Text style={styles.itemText}>{item.title}</Text>
         </View>
       );
     };
   
     // Handles selection
-    const setSelection = (topping) => {
-      setSelectedToppings((prevSelectedTopping) => {
-          if (prevSelectedTopping.includes(topping)) {
-              // Remove from selected if already selected
-              return prevSelectedTopping.filter((t) => t !== topping);
-          } else {
-              return [...prevSelectedTopping, topping];
-          }
-      });
+    const setSelection = (id) => {
+      setToppingsList(prevToppings =>
+          prevToppings.map(t => {
+              if (t.id === id) {
+                  const newSelectedState = !t.selected;
+                  return { ...t, selected: newSelectedState };
+              }
+              return t;
+          })
+      );
     };
 
     return (
@@ -84,20 +87,20 @@ export default function Toppings({ route, navigation }) {
             <Text style={styles.title}>Toppings</Text>
             <View style={styles.listStyle}>
               <FlatList
-                data={toppingList}
-                keyExtractor={(item) => item.id}
+                data={toppingsList}
+                keyExtractor={(item) => item.id.toString()}
                 renderItem={renderTopping}
               />
             </View>
             
-            <View style={styles.formView}>
+            {/* <View style={styles.formView}>
                 <TextInput
                     style={styles.inputStyle}
                     placeholder="Enter custom topping..."
                     value={newTopping}
                     onChangeText={toppingInputHandler}
                 />
-            </View>
+            </View> */}
         </View>
     );
 }

@@ -15,7 +15,7 @@ export default function SauceScreen({ route, navigation }) {
         const unsubscribe = navigation.addListener('focus', () => {
             const orderData = {
                 sauce: selectedSauce,
-                toppings: null,
+                toppings: null, // This will be updated in ToppingsScreen
                 size: null // This will be updated in SizeScreen
             };
 
@@ -31,13 +31,11 @@ export default function SauceScreen({ route, navigation }) {
         return unsubscribe; // Cleanup the listener
     }, [navigation, selectedSauce]); // Re-run effect if selectedSauce changes
     
-    setSelected=(value)=>{
-        console.log(value);
+    setSelected= ( value ) => {
         setSelectedSauce(value);
+        console.log('Sauce selected:', value);
+        navigation.setParams({ selectedSauce: value }); // Update navigation params with selectedSauce
     }
-    
-    // This function is needed to retrieve the selected sauce when navigating
-    const getSelectedSauce = () => selectedSauce;
     
     return (
         <View style={styles.container}>

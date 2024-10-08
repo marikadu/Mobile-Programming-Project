@@ -12,7 +12,6 @@ export default function SizeScreen({ route, navigation }) {
 
     // Receive the sauce, toppings, and dough data from previous screens
     const { selectedSauce, selectedToppings } = route.params; 
-
     const [selectedSize, setSelectedSize] = useState('Small');
 
     useEffect(() => {
@@ -49,6 +48,10 @@ export default function SizeScreen({ route, navigation }) {
             toppings: selectedToppings,
             size: selectedSize,
         };
+
+        // Log the order data to verify what's being sent
+        console.log('Order Data:', orderData);
+        console.log('Selected Toppings:', selectedToppings);
 
         // Save the order to SQLite
         saveOrder(orderData)
