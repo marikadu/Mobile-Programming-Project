@@ -66,6 +66,14 @@ import NavButtons from './NavButtons.js';
           >
           <Text style={[styles.buttonText]}>See Menu</Text>
         </TouchableHighlight>
+
+        <TouchableHighlight
+          style={styles.button}
+          onPress={() => props.navigation.navigate("ModalScreen")} 
+          underlayColor='#EC863D' // colour when pressed the "button"
+          >
+          <Text style={[styles.buttonText]}>Create Pizza Modal</Text>
+        </TouchableHighlight>
         
           {/* <View style={styles.imageContainer}>
           <Image source={require('../assets/pizza_pngs/everything_pizza.png')}
