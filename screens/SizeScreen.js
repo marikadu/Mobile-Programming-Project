@@ -11,12 +11,13 @@ export default function SizeScreen({ route, navigation }) {
       ];
 
     // Receive the sauce, toppings, and dough data from previous screens
-    const { selectedSauce, selectedToppings } = route.params; 
+    const { selectedDough, selectedSauce, selectedToppings } = route.params; 
     const [selectedSize, setSelectedSize] = useState('Small');
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             const orderData = {
+                dough: selectedDough,
                 sauce: selectedSauce,
                 toppings: selectedToppings,
                 size: selectedSize,
@@ -43,7 +44,7 @@ export default function SizeScreen({ route, navigation }) {
     const submitOrder = () => {
         // Construct the order object
         const orderData = {
-            //dough: selectedDough,
+            dough: selectedDough,
             sauce: selectedSauce,
             toppings: selectedToppings,
             size: selectedSize,

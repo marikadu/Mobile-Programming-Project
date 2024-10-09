@@ -12,12 +12,13 @@ export default function Toppings({ route, navigation }) {
       { id: 5, selected: false, title: 'Mushrooms' },
     ]);
     
-    const { selectedSauce } = route.params; 
+    const { selectedDough, selectedSauce } = route.params; 
     const [selectedToppings, setSelectedToppings] = useState([]);
     // const [newTopping, setTopping] = useState(); // Custom topping
 
     useEffect(() => {
       const orderData = {
+          dough: selectedDough,
           sauce: selectedSauce,
           toppings: {
             cheese: toppingsList.find(t => t.title === 'Cheese').selected,

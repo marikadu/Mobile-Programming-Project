@@ -10,11 +10,13 @@ export default function SauceScreen({ route, navigation }) {
         {label: 'No sauce', value: 'None' }
       ];
 
+    const { selectedDough } = route.params; 
     const [selectedSauce, setSelectedSauce] = useState('Add');
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             const orderData = {
+                dough: selectedDough,
                 sauce: selectedSauce,
                 toppings: null, // This will be updated in ToppingsScreen
                 size: null // This will be updated in SizeScreen

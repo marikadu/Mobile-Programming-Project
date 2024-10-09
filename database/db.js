@@ -39,6 +39,7 @@ export const createTables = async () => {
                     tx.executeSql(
                         `CREATE TABLE IF NOT EXISTS pizza_orders (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            dough TEXT,
                             sauce TEXT,
                             cheese INTEGER,
                             tomato INTEGER,
@@ -52,32 +53,6 @@ export const createTables = async () => {
                         () => console.log('Table pizza_orders created!'),
                         (_, error) => console.log('Error creating table', error)
                     );
-
-                    // // Create the toppings table
-                    // tx.executeSql(
-                    //     `CREATE TABLE IF NOT EXISTS toppings (
-                    //         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    //         name TEXT
-                    //     )`,
-                    //     [],
-                    //     () => console.log('Table toppings created!'),
-                    //     (_, error) => console.log('Error creating toppings table', error)
-                    // );
-
-                    // // Create the order_toppings table
-                    // tx.executeSql(
-                    //     `CREATE TABLE IF NOT EXISTS order_toppings (
-                    //         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    //         order_id INTEGER,
-                    //         topping_id INTEGER,
-                    //         selected BOOLEAN,
-                    //         FOREIGN KEY (order_id) REFERENCES pizza_orders(id),
-                    //         FOREIGN KEY (topping_id) REFERENCES toppings(id)
-                    //     )`,
-                    //     [],
-                    //     () => console.log('Table order_toppings created!'),
-                    //     (_, error) => console.log('Error creating order_toppings table', error)
-                    // );
                 },
                 (_, error) => console.log('Error dropping table', error)
             );
@@ -88,7 +63,7 @@ export const createTables = async () => {
 // Save order to SQLite
 export const saveOrder = async (order) => {
     const db = await getDBConnection();
-    const { sauce, size, toppings } = order; // Ensure you use the correct key here
+    const { dough, sauce, size, toppings } = order; // Ensure you use the correct key here
     const orderDate = new Date().toISOString(); // Automatically set the current date
 
     return new Promise((resolve, reject) => {
@@ -96,9 +71,10 @@ export const saveOrder = async (order) => {
             // Insert the order first
             tx.executeSql(
                 `INSERT INTO pizza_orders 
-                    (sauce, cheese, tomato, basil, pepperoni, mushrooms, size, order_date) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+                    (dough, sauce, cheese, tomato, basil, pepperoni, mushrooms, size, order_date) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
                 [
+                    dough,
                     sauce,
                     toppings.cheese ? 1 : 0,  // Convert to integer (1 or 0)
                     toppings.tomato ? 1 : 0,
@@ -126,7 +102,7 @@ export const fetchOrdersWithToppings = async () => {
         db.transaction(tx => {
             tx.executeSql(
                 // Select everything from the pizza_orders table
-                `SELECT id, sauce, cheese, tomato, basil, pepperoni, mushrooms, size, order_date 
+                `SELECT id, dough, sauce, cheese, tomato, basil, pepperoni, mushrooms, size, order_date 
                  FROM pizza_orders;`,
                 [],
                 (_, result) => {
@@ -144,6 +120,7 @@ export const fetchOrdersWithToppings = async () => {
 
                         const order = {
                             id: row.id,
+                            dough: row.dough,
                             sauce: row.sauce,
                             size: row.size,
                             order_date: row.order_date,

@@ -1,39 +1,72 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { saveOrder } from '../database/db';
 import originalDough from '../assets/pizza_pngs/dough_og.png';
 import glutenFreeDough from '../assets/pizza_pngs/dough_gluten_free.png';
 import wholeWheatDough from '../assets/pizza_pngs/dough_whole_wheat.png';
 
 // dough options array with the images
 const doughOptions = [
-  { label: '    Original Dough    ', image: originalDough }, // big spaces are needed for better placing
-  { label: 'Gluten-Free Dough', image: glutenFreeDough },
-  { label: 'Wholewheat Dough', image: wholeWheatDough },
+  { label: 'Original Dough', value:'Original', image: originalDough },
+  { label: 'Gluten-Free Dough', value:'Gluten-free', image: glutenFreeDough },
+  { label: 'Wholewheat Dough', value:'Wholewheat', image: wholeWheatDough },
 ];
 
 export default function DoughScreen({ route, navigation }) {
-  // tracking the current dough visible, the starting index of 0 for the Original Dough
-  const [currentDoughIndex, setCurrentDoughIndex] = useState(0);
+    // tracking the current dough visible, the starting index of 0 for the Original Dough
+    const [selectedDough, setSelectedDough] = useState(0);
+    const [doughIndex, setDoughIndex] = useState(0); // Store the index for navigation
 
-//   function for the left arrow -> array goes backward 
-//   (from Original to Wholewheat)
-//   (from Wholewheat to Gluten-free)
-//   (from Gluten-free to Original)
-  const handleLeftPress = () => {
-    setCurrentDoughIndex((prevIndex) =>
-      prevIndex === 0 ? doughOptions.length - 1 : prevIndex - 1
-    );
-  };
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            const orderData = {
+                dough: selectedDough,
+                sauce: null, // This will be updated in SauceCreen
+                toppings: null, // This will be updated in ToppingsScreen
+                size: null // This will be updated in SizeScreen
+            };
 
-  // function for the right arrow -> array goes forward
-  // (from the Original to Gluten-free)
-  // (from Gluten-free to Wholewheat)
-  // (from Wholewheat to Original)
-  const handleRightPress = () => {
-    setCurrentDoughIndex((prevIndex) =>
-      prevIndex === doughOptions.length - 1 ? 0 : prevIndex + 1
-    );
-  };
+            saveOrder(orderData)
+                .then(() => {
+                    console.log('Dough saved:', orderData);
+                })
+                .catch((error) => {
+                    console.error('Error saving dough:', error);
+                });
+        });
+
+        return unsubscribe; // Cleanup the listener
+    }, [navigation, selectedDough]); // Re-run effect if selectedSauce changes
+
+    useEffect(() => {
+        navigation.setParams({ selectedDough });
+    }, [selectedDough, navigation]);
+
+    //   function for the left arrow -> array goes backward 
+    //   (from Original to Wholewheat)
+    //   (from Wholewheat to Gluten-free)
+    //   (from Gluten-free to Original)
+    const handleLeftPress = () => {
+      setDoughIndex((prevIndex) => {
+        const newIndex = prevIndex === 0 ? doughOptions.length - 1 : prevIndex - 1;
+        setSelectedDough(doughOptions[newIndex].value); // Update the selected dough value
+        console.log('Dough selected:', doughOptions[newIndex].value); // Log after calculating the new index
+        return newIndex;
+      });
+    };
+
+    // function for the right arrow -> array goes forward
+    // (from the Original to Gluten-free)
+    // (from Gluten-free to Wholewheat)
+    // (from Wholewheat to Original)
+    const handleRightPress = () => {
+      setDoughIndex((prevIndex) => {
+        const newIndex = prevIndex === doughOptions.length - 1 ? 0 : prevIndex + 1;
+        setSelectedDough(doughOptions[newIndex].value); // Update the selected dough value
+        console.log('Dough selected:', doughOptions[newIndex].value); // Log after calculating the new index
+        return newIndex;
+      });
+    };
 
   return (
     <View style={styles.container}>
@@ -47,7 +80,7 @@ export default function DoughScreen({ route, navigation }) {
 
             {/* dough label */}
             <Text style={styles.doughLabel}>
-                {doughOptions[currentDoughIndex].label}
+                {doughOptions[doughIndex].label}
             </Text>
 
             {/* right arrow */}
@@ -60,7 +93,7 @@ export default function DoughScreen({ route, navigation }) {
         {/* dough image */}
         <View style={styles.doughImage}>
           <Image
-            source={doughOptions[currentDoughIndex].image}
+            source={doughOptions[doughIndex].image}
             style={styles.doughImage}/>
         </View>
       </View>

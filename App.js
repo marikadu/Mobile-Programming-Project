@@ -25,9 +25,13 @@ const HeaderRightButton = ({ navigation }) => {
   const currentRoute = navigation.getState().routes[navigation.getState().index].name;
 
   // Fetching the current selected options for the pizza
+  const getCurrentDough = () => {
+    const doughRoute = navigation.getState().routes.find(route => route.name === 'Dough');
+    return doughRoute ? doughRoute.params?.selectedDough : '0';
+  };
   const getCurrentSauce = () => {
     const sauceRoute = navigation.getState().routes.find(route => route.name === 'Sauce');
-    return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add'; // Default sauce if not found
+    return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add';
   };
   const getCurrentToppings = () => {
     const toppingsRoute = navigation.getState().routes.find(route => route.name === 'Toppings');
@@ -42,21 +46,25 @@ const HeaderRightButton = ({ navigation }) => {
     <TouchableOpacity
       onPress={() => {
         if (currentRoute === "Dough") {
-          navigation.navigate('Sauce');
+          const selectedDough = getCurrentDough();
+          navigation.navigate('Sauce', { selectedDough: selectedDough }); // Pass selected dough
         } else if (currentRoute === "Sauce") {
+          const selectedDough = getCurrentDough();
           const selectedSauce = getCurrentSauce(); // Get current selected sauce
-          navigation.navigate('Toppings', { selectedSauce: selectedSauce }); // Pass selectedSauce
+          navigation.navigate('Toppings', { selectedDough: selectedDough, selectedSauce: selectedSauce }); // Pass selected dough and sauce
         } else if (currentRoute === "Toppings") {
+          const selectedDough = getCurrentDough();
           const selectedSauce = getCurrentSauce();
           const selectedToppings = getCurrentToppings();
           console.log('Selected Toppings:', selectedToppings);
-          navigation.navigate('Size', { selectedSauce: selectedSauce, selectedToppings: selectedToppings }); // Pass selected sauce and toppings
+          navigation.navigate('Size', { selectedDough: selectedDough, selectedSauce: selectedSauce, selectedToppings: selectedToppings }); // Pass selected sauce, dough and toppings
         } else if (currentRoute === "Size") {
+          const selectedDough = getCurrentDough();
           const selectedSauce = getCurrentSauce();
           const selectedToppings = getCurrentToppings();
           const selectedSize = getCurrentSize();
           
-          console.log('Order Summary:', { selectedSauce, selectedToppings, selectedSize });
+          console.log('Order Summary:', { selectedDough, selectedSauce, selectedToppings, selectedSize });
         }
         // Add more screens here as needed
       }}
