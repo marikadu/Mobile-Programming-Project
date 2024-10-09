@@ -6,7 +6,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'; // Custom icon for he
 // import HomeScreen from './screens/HomeScreen';
 import DoughScreen from './screens/DoughScreen';
 import SauceScreen from './screens/SauceScreen';
-import ToppingsScreen from './screens/ToppingsScreenTest';
+import ToppingsScreen from './screens/ToppingsScreen';
+import SizeScreen from './screens/SizeScreen';
 import TimerScreen from './screens/TimerScreen';
 import HomeScreen from './components/HomeScreen.js';
 import { DetailsScreen } from './components/DetailsScreen.js';
@@ -14,22 +15,49 @@ import { ImageScreen } from './components/ImageScreen.js';
 import { LogoTitle } from './components/LogoTitle.js';
 import { MenuScreen } from './components/MenuScreen.js';
 import { SettingsScreen } from './components/SettingsScreen.js';
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/db';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const HeaderRightButton = ({ navigation }) => {
+  const currentRoute = navigation.getState().routes[navigation.getState().index].name;
+
+  // Fetching the current selected options for the pizza
+  const getCurrentSauce = () => {
+    const sauceRoute = navigation.getState().routes.find(route => route.name === 'Sauce');
+    return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add'; // Default sauce if not found
+  };
+  const getCurrentToppings = () => {
+    const toppingsRoute = navigation.getState().routes.find(route => route.name === 'Toppings');
+    return toppingsRoute ? toppingsRoute.params?.selectedToppings : [];
+  };
+  const getCurrentSize = () => {
+    const sizeRoute = navigation.getState().routes.find(route => route.name === 'Size');
+    return sizeRoute ? sizeRoute.params?.selectedSize : 'Small';
+  };
+
   return (
     <TouchableOpacity
       onPress={() => {
-        // Navigate to the next screen based on the current screen
-        if (navigation.getState().routes[navigation.getState().index].name === "Dough") {
+        if (currentRoute === "Dough") {
           navigation.navigate('Sauce');
-        } else if (navigation.getState().routes[navigation.getState().index].name === "Sauce") {
-          navigation.navigate('Toppings');
-        } 
+        } else if (currentRoute === "Sauce") {
+          const selectedSauce = getCurrentSauce(); // Get current selected sauce
+          navigation.navigate('Toppings', { selectedSauce: selectedSauce }); // Pass selectedSauce
+        } else if (currentRoute === "Toppings") {
+          const selectedSauce = getCurrentSauce();
+          const selectedToppings = getCurrentToppings();
+          console.log('Selected Toppings:', selectedToppings);
+          navigation.navigate('Size', { selectedSauce: selectedSauce, selectedToppings: selectedToppings }); // Pass selected sauce and toppings
+        } else if (currentRoute === "Size") {
+          const selectedSauce = getCurrentSauce();
+          const selectedToppings = getCurrentToppings();
+          const selectedSize = getCurrentSize();
+          
+          console.log('Order Summary:', { selectedSauce, selectedToppings, selectedSize });
+        }
         // Add more screens here as needed
       }}
       style={{ paddingRight: 15 }}
@@ -75,7 +103,8 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Home" component={HomeScreen} options={({route}) => ({title: route.params?.name ? route.params.name : "Home"})} />
         <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>  
+        <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
+        <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  
         <Stack.Screen name="Details" component={DetailsScreen}  />
         {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
@@ -91,6 +120,14 @@ const HomeStackScreen = () => {
 }
 
 export default function App({ navigation }) {
+  useEffect(() => {
+    // Initialize database and create tables
+    getDBConnection()
+      .then(() => createTables()) // Wait for the tables to be created
+      .then(() => console.log('Tables created successfully'))
+      .catch((error) => console.error('Error creating tables:', error));
+  }, []);
+
   // tracking the end of the timer
   const [timerExpired, setTimerExpired] = useState(false);
 
