@@ -63,66 +63,10 @@ const HeaderRightButton = ({ navigation }) => {
     }
   };
 
-  // // Fetching the current selected options and images for the pizza
-  // const getCurrentDough = () => {
-  //   const doughRoute = navigation.getState().routes.find(route => route.name === 'Dough');
-  //   return doughRoute ? doughRoute.params?.selectedDough : '0';
-  // };
-  // const getCurrentDoughImage = () => {
-  //   const doughRoute = navigation.getState().routes.find(route => route.name === 'Dough');
-  //   return doughRoute ? doughRoute.params?.selectedDoughImage : '0';
-  // };
-  // const getCurrentSauce = () => {
-  //   const sauceRoute = navigation.getState().routes.find(route => route.name === 'Sauce');
-  //   return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add';
-  // };
-  // const getCurrentToppings = () => {
-  //   const toppingsRoute = navigation.getState().routes.find(route => route.name === 'Toppings');
-  //   return toppingsRoute ? toppingsRoute.params?.selectedToppings : [];
-  // };
-  // const getCurrentSize = () => {
-  //   const sizeRoute = navigation.getState().routes.find(route => route.name === 'Size');
-  //   return sizeRoute ? sizeRoute.params?.selectedSize : 'Small';
-  // };
-
   return (
     <TouchableOpacity onPress={handleNavigation} style={{ paddingRight: 15 }}>
       <Ionicons name="chevron-forward" size={24} color="#E04A2B" />
     </TouchableOpacity>
-
-    // <TouchableOpacity
-    //   onPress={() => {
-    //     if (currentRoute === "Dough") {
-    //       const selectedDough = getCurrentDough();
-    //       const selectedDoughImage = getCurrentDoughImage();
-    //       navigation.navigate('Sauce', { selectedDough: selectedDough, selectedDoughImage: selectedDoughImage }); // Pass selected dough
-    //     } else if (currentRoute === "Sauce") {
-    //       const selectedDough = getCurrentDough();
-    //       const selectedDoughImage = getCurrentDoughImage();
-    //       const selectedSauce = getCurrentSauce(); // Get current selected sauce
-    //       navigation.navigate('Toppings', { selectedDough: selectedDough, selectedDoughImage: selectedDoughImage, selectedSauce: selectedSauce }); // Pass selected dough and sauce
-    //     } else if (currentRoute === "Toppings") {
-    //       const selectedDough = getCurrentDough();
-    //       const selectedDoughImage = getCurrentDoughImage();
-    //       const selectedSauce = getCurrentSauce();
-    //       const selectedToppings = getCurrentToppings();
-    //       console.log('Selected Toppings:', selectedToppings);
-    //       navigation.navigate('Size', { selectedDough: selectedDough, selectedDoughImage: selectedDoughImage, selectedSauce: selectedSauce, selectedToppings: selectedToppings }); // Pass selected sauce, dough and toppings
-    //     } else if (currentRoute === "Size") {
-    //       const selectedDough = getCurrentDough();
-    //       const selectedDoughImage = getCurrentDoughImage();
-    //       const selectedSauce = getCurrentSauce();
-    //       const selectedToppings = getCurrentToppings();
-    //       const selectedSize = getCurrentSize();
-          
-    //       console.log('Order Summary:', { selectedDough, selectedSauce, selectedToppings, selectedSize });
-    //     }
-    //     // Add more screens here as needed
-    //   }}
-    //   style={{ paddingRight: 15 }}
-    // >
-    //   <Ionicons name="chevron-forward" size={24} color="#E04A2B" />
-    // </TouchableOpacity>
   );
 };
 
