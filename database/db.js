@@ -1,163 +1,155 @@
-import SQLite from 'react-native-sqlite-storage';
+import React from 'react';
 
-SQLite.DEBUG(true);
-SQLite.enablePromise(true);
+import {openDatabase} from 'react-native-sqlite-storage';
 
-const database_name = "PizzaOrders.db";
-const database_version = "1.0";
-const database_displayname = "Pizza Orders Database";
-const database_size = 200000;
+var db = openDatabase({name: 'pizza.db'}); // Database Name
+var tableName = 'pizza';
 
-var db;
+// Predefined pizza samples (RETRIEVE LATER FROM MONGODB)
+const samplePizza = [
+  {dough: 'Original', sauce: "Tomato", toppings: ['Cheese', "tomatoes"], size: "Small"},
+  {dough: 'Gluten-Free', sauce: "Tomato", toppings: ['Cheese', "Basil"], size: "Medium"},
+  {dough: 'Whole-wheat', sauce: "Chili", toppings: ['Cheese', "tomatoes"], size: "Small"},
+  {dough: 'Gluten-Free ', sauce: "Tomato", toppings: ['Cheese', "Mushrooms"], size: "Large"},
+  {dough: 'Original', sauce: "Tomato", toppings: ['Cheese', "tomatoes", "Pepperoni"], size: "Small"},
 
-export const getDBConnection = async () => {
-    if (!db) {
-        db = await SQLite.openDatabase(
-            database_name,
-            database_version,
-            database_displayname,
-            database_size
-        );
-    }
-    return db;
+];
+
+
+//method returns a Promise - in the calling side .then(...).then(...)....catch(...) can be used
+export const init = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Create table if not exists
+      tx.executeSql(
+        `CREATE TABLE IF NOT EXISTS ${tableName} 
+        (id INTEGER PRIMARY KEY NOT NULL,
+        dough TEXT NOT NULL,
+        sauce REAL NOT NULL,
+        toppings TEXT NOT NULL,
+        size TEXT NOT NULL);`,
+        [],
+        () => {
+          // Insert predefined pizza only if the table is empty (Most likely from MONGODB)
+          tx.executeSql(
+            `SELECT COUNT(*) AS count FROM ${tableName}`,
+            [],
+            (tx, result) => {
+              if (result.rows.item(0).count === 0) {
+                // Insert predefined pizza
+                samplePizza.forEach(pizza => {
+                  tx.executeSql(
+                    `INSERT INTO ${tableName} (dough, sauce, toppings, size) VALUES (?, ?, ?, ?)`,
+                    [pizza.dough, pizza.sauce, JSON.stringify(pizza.toppings), pizza.size],  // Store toppings as JSON string
+                  );
+                });
+              }
+              resolve();
+            },
+          );
+        },
+        (_, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
 };
 
-export const createTables = async () => {
-    const db = await getDBConnection(); // Ensure you get the db connection
-
-    return new Promise((resolve, reject) => {
-        // Create tables for storing pizza orders and toppings
-        db.transaction((tx) => {
-            tx.executeSql(
-                // Drop existing tables when the app is restarted
-                `DROP TABLE IF EXISTS pizza_orders;`,
-                [],
-                () => {
-                    console.log(`Table pizza_orders dropped!`);
-
-                    // Create the pizza_orders table
-                    tx.executeSql(
-                        `CREATE TABLE IF NOT EXISTS pizza_orders (
-                            id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            sauce TEXT,
-                            cheese INTEGER,
-                            tomato INTEGER,
-                            basil INTEGER,
-                            pepperoni INTEGER,
-                            mushrooms INTEGER,
-                            size TEXT,
-                            order_date TEXT
-                        )`,
-                        [],
-                        () => console.log('Table pizza_orders created!'),
-                        (_, error) => console.log('Error creating table', error)
-                    );
-
-                    // // Create the toppings table
-                    // tx.executeSql(
-                    //     `CREATE TABLE IF NOT EXISTS toppings (
-                    //         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    //         name TEXT
-                    //     )`,
-                    //     [],
-                    //     () => console.log('Table toppings created!'),
-                    //     (_, error) => console.log('Error creating toppings table', error)
-                    // );
-
-                    // // Create the order_toppings table
-                    // tx.executeSql(
-                    //     `CREATE TABLE IF NOT EXISTS order_toppings (
-                    //         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    //         order_id INTEGER,
-                    //         topping_id INTEGER,
-                    //         selected BOOLEAN,
-                    //         FOREIGN KEY (order_id) REFERENCES pizza_orders(id),
-                    //         FOREIGN KEY (topping_id) REFERENCES toppings(id)
-                    //     )`,
-                    //     [],
-                    //     () => console.log('Table order_toppings created!'),
-                    //     (_, error) => console.log('Error creating order_toppings table', error)
-                    // );
-                },
-                (_, error) => console.log('Error dropping table', error)
-            );
-        });
+export const addPizza = pizza => {
+  console.log(pizza);
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      //Here we use the Prepared statement, just putting placeholders to the values to be inserted
+      tx.executeSql(
+        'insert into ' + tableName + '(dough, sauce, toppings, size) VALUES (?, ?, ?, ?);',
+        //And the values come here
+        [pizza.dough, pizza.sauce, JSON.stringify(pizza.toppings), pizza.size], 
+        //If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        //If the transaction fails, this is called
+        (_, err) => {
+          reject(err);
+        },
+      );
     });
+  });
+  return promise;
 };
 
-// Save order to SQLite
-export const saveOrder = async (order) => {
-    const db = await getDBConnection();
-    const { sauce, size, toppings } = order; // Ensure you use the correct key here
-    const orderDate = new Date().toISOString(); // Automatically set the current date
-
-    return new Promise((resolve, reject) => {
-        db.transaction(async tx => {
-            // Insert the order first
-            tx.executeSql(
-                `INSERT INTO pizza_orders 
-                    (sauce, cheese, tomato, basil, pepperoni, mushrooms, size, order_date) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-                [
-                    sauce,
-                    toppings.cheese ? 1 : 0,  // Convert to integer (1 or 0)
-                    toppings.tomato ? 1 : 0,
-                    toppings.basil ? 1 : 0,
-                    toppings.pepperoni ? 1 : 0,
-                    toppings.mushrooms ? 1 : 0,
-                    size,
-                    orderDate
-                ], 
-                async (_, result) => {
-                    const orderId = result.insertId;
-                    resolve(result);
-                },
-                (_, error) => reject(error)
-            );
-        });
+export const updatePizza = (id, dough, sauce, toppings, size) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      //Here we use the Prepared statement, just putting placeholders to the values to be inserted
+      tx.executeSql(
+        'update ' + tableName + ' set dough=?, sauce=?, toppings=?, size=? where id=?;',
+        //And the values come here
+        [dough, sauce, JSON.stringify(toppings), size, id],
+        //If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        //If the transaction fails, this is called
+        (_, err) => {
+          reject(err);
+        },
+      );
     });
+  });
+  return promise;
+};
+export const deletePizza = id => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      //Here we use the Prepared statement, just putting placeholders to the values to be inserted
+      tx.executeSql(
+        'delete from ' + tableName + ' where id=?;',
+        //And the values come here
+        [id],
+        //If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        //If the transaction fails, this is called
+        (_, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
 };
 
-// Fetch all orders (for viewing previous orders)
-export const fetchOrdersWithToppings = async () => {
-    const db = await getDBConnection();
+export const fetchAllPizza = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      //Here we select all from the table pizza
+      tx.executeSql(
+        'select * from ' + tableName,
+        [],
+        (tx, result) => {
+          let items = []; //Create a new empty Javascript array
+          //And add all the items of the result (database rows/records) into that table
+          for (let i = 0; i < result.rows.length; i++) {
+            items.push(result.rows.item(i)); //The form of an item is {dough: 'Original', sauce: "Tomato", toppings: ['Cheese', "tomatoes"], size: "Small"},
+            console.log(result.rows.item(i)); //For debugging purposes to see the data in console window
+            const row = result.rows.item(i);
 
-    return new Promise((resolve, reject) => {
-        db.transaction(tx => {
-            tx.executeSql(
-                // Select everything from the pizza_orders table
-                `SELECT id, sauce, cheese, tomato, basil, pepperoni, mushrooms, size, order_date 
-                 FROM pizza_orders;`,
-                [],
-                (_, result) => {
-                    const orders = [];
-                    for (let i = 0; i < result.rows.length; i++) {
-                        const row = result.rows.item(i);
-                        
-                        // Map the topping flags into a human-readable list
-                        const toppings = [];
-                        if (row.cheese) toppings.push('Cheese');
-                        if (row.tomato) toppings.push('Tomato');
-                        if (row.basil) toppings.push('Basil');
-                        if (row.pepperoni) toppings.push('Pepperoni');
-                        if (row.mushrooms) toppings.push('Mushrooms');
-
-                        const order = {
-                            id: row.id,
-                            sauce: row.sauce,
-                            size: row.size,
-                            order_date: row.order_date,
-                            toppings: toppings // Add the toppings list
-                        };
-
-                        orders.push(order); // Add the order to the array
-                    }
-                    resolve(orders); // Resolve with the orders array
-                },
-                (_, error) => {
-                    reject(error); // Handle any error that occurs during the query
-                }
-            );
-        });
+            items.push({...row, toppings: (JSON.parse(row.toppings))}); // Convert/ Parse toppings from a JSON string to an array
+          }
+          console.log(items); //For debugging purposes to see the data in console window
+          resolve(items); //The data the Promise will have when returned
+        },
+        (tx, err) => {
+          console.log('Err');
+          console.log(err);
+          reject(err);
+        },
+      );
     });
+  });
+  return promise;
 };

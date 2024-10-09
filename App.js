@@ -16,7 +16,7 @@ import { LogoTitle } from './components/LogoTitle.js';
 import { MenuScreen } from './components/MenuScreen.js';
 import { SettingsScreen } from './components/SettingsScreen.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/db';
+import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

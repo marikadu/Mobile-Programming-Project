@@ -1,7 +1,7 @@
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
-import { saveOrder } from '../database/db';
+import { saveOrder } from '../database/Old_db';
 
 export default function SizeScreen({ route, navigation }) {
     const options = [
