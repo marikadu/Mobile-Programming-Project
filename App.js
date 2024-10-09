@@ -77,15 +77,7 @@ const HeaderLeftButton = ({ navigation }) => {
   );
 };
 
-export default function App() {
-  useEffect(() => {
-    // Initialize database and create tables
-    getDBConnection()
-      .then(() => createTables()) // Wait for the tables to be created
-      .then(() => console.log('Tables created successfully'))
-      .catch((error) => console.error('Error creating tables:', error));
-  }, []);
-
+const HomeStackScreen = () => {
   return (
 
     <Stack.Navigator
@@ -128,6 +120,14 @@ export default function App() {
 }
 
 export default function App({ navigation }) {
+  useEffect(() => {
+    // Initialize database and create tables
+    getDBConnection()
+      .then(() => createTables()) // Wait for the tables to be created
+      .then(() => console.log('Tables created successfully'))
+      .catch((error) => console.error('Error creating tables:', error));
+  }, []);
+
   // tracking the end of the timer
   const [timerExpired, setTimerExpired] = useState(false);
 

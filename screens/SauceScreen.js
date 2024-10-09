@@ -55,7 +55,7 @@ export default function SauceScreen({ route, navigation }) {
                 </View>
                 <View style={styles.pizzaContainer}>
                     {/* render the image when the sauce is selected */}
-                    {chosenOption === 0 && (
+                    {selectedSauce === "Add" && (
                     <Image source={sauceImg} style={styles.sauceImage} />
                 )}
                 </View>
