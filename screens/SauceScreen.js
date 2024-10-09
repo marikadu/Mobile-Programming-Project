@@ -1,20 +1,42 @@
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
+import { saveOrder } from '../database/db';
 import sauceImg from '../assets/pizza_pngs/sauce.png';
 
 export default function SauceScreen({ route, navigation }) {
     const options = [
-        {label: 'Add sauce', value: 0 },
-        {label: 'No sauce', value: 1 }
+        {label: 'Add sauce', value: 'Add' },
+        {label: 'No sauce', value: 'None' }
       ];
 
-    const [chosenOption, setChosenOption] = useState(0);
+    const [selectedSauce, setSelectedSauce] = useState('Add');
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            const orderData = {
+                sauce: selectedSauce,
+                toppings: null, // This will be updated in ToppingsScreen
+                size: null // This will be updated in SizeScreen
+            };
+
+            saveOrder(orderData)
+                .then(() => {
+                    console.log('Sauce saved:', orderData);
+                })
+                .catch((error) => {
+                    console.error('Error saving sauce:', error);
+                });
+        });
+
+        return unsubscribe; // Cleanup the listener
+    }, [navigation, selectedSauce]); // Re-run effect if selectedSauce changes
     
-const setSelected = (value) => {
-        console.log(value);
-        setChosenOption(value);
-    };
+    setSelected= ( value ) => {
+        setSelectedSauce(value);
+        console.log('Sauce selected:', value);
+        navigation.setParams({ selectedSauce: value }); // Update navigation params with selectedSauce
+    }
     
     return (
         <View style={styles.container}>
@@ -52,7 +74,7 @@ const styles = StyleSheet.create({
     title: {
         flex: 1,
         fontSize: 24,
-        color: '#E04A2B',
+        color: '#ba3d23',
         fontWeight: 'bold',
         marginTop: 20,
     },
