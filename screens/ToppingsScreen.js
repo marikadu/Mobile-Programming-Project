@@ -1,15 +1,22 @@
-import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CheckBox from '@react-native-community/checkbox';
 import { saveOrder } from '../database/db';
 
+// importing images for the pizza creation
+import cheeseImg from '../assets/pizza_pngs/topping_cheese.png';
+import tomatoImg from '../assets/pizza_pngs/topping_tomato.png';
+import basilImg from '../assets/pizza_pngs/topping_basil.png';
+import pepperoniImg from '../assets/pizza_pngs/topping_pepperoni.png';
+import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
+
 export default function Toppings({ route, navigation }) {
     const [toppingsList, setToppingsList] = useState([
-      { id: 1, selected: false, title: 'Cheese' },
-      { id: 2, selected: false, title: 'Tomato' },
-      { id: 3, selected: false, title: 'Basil' },
-      { id: 4, selected: false, title: 'Pepperoni' },
-      { id: 5, selected: false, title: 'Mushrooms' },
+      { id: 1, selected: false, title: 'Cheese', image: cheeseImg, order: 1 },
+      { id: 2, selected: false, title: 'Tomato', image: tomatoImg, order: 3 },
+      { id: 3, selected: false, title: 'Basil', image: basilImg, order: 5 },
+      { id: 4, selected: false, title: 'Pepperoni', image: pepperoniImg, order: 2 },
+      { id: 5, selected: false, title: 'Mushrooms', image: mushroomsImg, order: 4 },
     ]);
     
     const { selectedSauce } = route.params; 
@@ -82,6 +89,20 @@ export default function Toppings({ route, navigation }) {
       );
     };
 
+  // rendering the images based on the selection from the user in a layered order
+  const renderSelectedImages = () => {
+    return toppingsList
+      .filter((topping) => topping.selected) // Only show selected toppings
+      .sort((a, b) => a.order - b.order) // Sort based on order for layering
+      .map((topping) => (
+        <Image
+          key={topping.id}
+          source={topping.image}
+          style={[styles.toppingImage, { zIndex: topping.order }]} // Ensure correct layering
+        />
+  ));
+};
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Toppings</Text>
@@ -101,62 +122,58 @@ export default function Toppings({ route, navigation }) {
                     onChangeText={toppingInputHandler}
                 />
             </View> */}
+            {/* render the images of selected toppings, toppings are layered in a specified order */}
+            <View style={styles.pizzaContainer}>{renderSelectedImages()}</View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+  container: {
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'white',
-    },
-    title: {
+  },
+  title: {
       flex: 1,
       fontSize: 24,
-      color: '#ba3d23',
+      color: '#E04A2B',
       fontWeight: 'bold',
       marginTop: 20,
-    },
-    listItemStyle: {
+  },
+  listItemStyle: {
       borderWidth: 1,
       borderColor: "blue",
       padding: 5,
       backgroundColor: "#abc",
       width: "80%",
       alignSelf: "center",
-    },
-    listStyle: {
+  },
+  listStyle: {
       flex: 10,
       width: '100%',
       marginLeft: 40,
-    },
-    toppingItem: {
+  },
+  toppingItem: {
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: 5,
-    },
-    itemText: {
+  },
+  itemText: {
       fontSize: 18,
       color: '#E04A2B',
       marginLeft: 10,
-    },
-    inputStyle:{
-      borderColor: "#E04A2B",
-      borderWidth: 3,
-      borderRadius: 6,
-      margin: 2,
-      padding: 5,
-      width: "50%",
-    },
-    formView:{
-      flex:1,
-      flexDirection:"column",
-      backgroundColor:"white",
-      alignItems:"center",
-      justifyContent:"space-around",
-      marginTop:20,
-      width:"100%",
-    },
+  },
+  pizzaContainer: {
+    width: 200,
+    height: 200,
+    position: 'relative', // for the absolute position for the toppings
+  },
+  toppingImage: {
+    position: 'absolute', // absolute position to allow stacking of the toppings
+    width: '100%',
+    height: '100%',
+  },
 });
+
