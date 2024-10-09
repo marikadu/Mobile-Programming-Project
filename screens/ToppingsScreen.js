@@ -19,9 +19,8 @@ export default function Toppings({ route, navigation }) {
       { id: 5, selected: false, title: 'Mushrooms', image: mushroomsImg, order: 4 },
     ]);
     
-    const { selectedDough, selectedSauce } = route.params; 
+    const { selectedDough, selectedDoughImage, selectedSauce, selectedSauceImage } = route.params; 
     const [selectedToppings, setSelectedToppings] = useState([]);
-    // const [newTopping, setTopping] = useState(); // Custom topping
 
     useEffect(() => {
       const orderData = {
@@ -37,9 +36,11 @@ export default function Toppings({ route, navigation }) {
           size: null // This will be updated in SizeScreen
       };
   
-      // Pass the updated selected toppings to navigation params so it's accessible in the next screen
-      const selectedToppings = toppingsList.filter(t => t.selected).map(t => t.title);
-      navigation.setParams({ selectedToppings }); // Pass selected toppings to params
+      // / Collect selected toppings and their images, and through nav params get the information to next screens
+      const selectedToppings = toppingsList.filter(t => t.selected);
+      const selectedToppingTitles = selectedToppings.map(t => t.title);
+      const selectedToppingImages = selectedToppings.map(t => t.image);
+      navigation.setParams({ selectedToppings: selectedToppingTitles, selectedToppingImages: selectedToppingImages }); // Pass selected toppings to params
 
       // Save the orderData object to the database whenever selectedToppings changes
       if (selectedToppings.length > 0) {
@@ -48,21 +49,6 @@ export default function Toppings({ route, navigation }) {
           .catch((error) => console.error('Error saving order:', error));
       }
     }, [navigation, toppingsList]); // Run effect if toppingsList changes (includes selection changes)
-
-    // const toppingInputHandler = (enteredText) => {
-    //   setTopping(enteredText);
-    // };
-
-    // const addCustomTopping = () => {
-    //   if (newTopping) {
-    //     setToppingList((currentToppingList) => [
-    //       ...currentToppingList,
-    //       { id: Math.random().toString(), title: newTopping},
-    //     ]);
-    //     setSelectedToppings((prev) => [...prev, newTopping]); // Pre-select custom topping
-    //     setTopping('');
-    //   }
-    // };
 
     const renderTopping=({ item })=>{
       return (
@@ -115,16 +101,12 @@ export default function Toppings({ route, navigation }) {
               />
             </View>
             
-            {/* <View style={styles.formView}>
-                <TextInput
-                    style={styles.inputStyle}
-                    placeholder="Enter custom topping..."
-                    value={newTopping}
-                    onChangeText={toppingInputHandler}
-                />
-            </View> */}
             {/* render the images of selected toppings, toppings are layered in a specified order */}
-            <View style={styles.pizzaContainer}>{renderSelectedImages()}</View>
+            <View style={styles.pizzaContainer}>
+                <Image source={selectedDoughImage} style={styles.doughImage} />
+                <Image source={selectedSauceImage} style={styles.sauceImage} />
+                {renderSelectedImages()}
+            </View>
         </View>
     );
 }
@@ -170,6 +152,16 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     position: 'relative', // for the absolute position for the toppings
+  },
+  doughImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  sauceImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
   toppingImage: {
     position: 'absolute', // absolute position to allow stacking of the toppings

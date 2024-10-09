@@ -21,62 +21,108 @@ import { getDBConnection, createTables, saveOrder, fetchOrders } from './databas
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+// Gets the default parameters of each object
+const defaultParams = {
+  Dough: { selectedDough: '0', selectedDoughImage: '0' },
+  Sauce: { selectedSauce: 'Add', selectedSauceImage: '0' },
+  Toppings: { selectedToppings: [] },
+  Size: { selectedSize: 'Small' },
+};
+
+// General function for finding the route for each object
+const getRouteParams = (navigation, routeName) => {
+  const route = navigation.getState().routes.find(r => r.name === routeName);
+  return route ? route.params || defaultParams[routeName] : defaultParams[routeName];
+};
+
 const HeaderRightButton = ({ navigation }) => {
   const currentRoute = navigation.getState().routes[navigation.getState().index].name;
 
-  // Fetching the current selected options for the pizza
-  const getCurrentDough = () => {
-    const doughRoute = navigation.getState().routes.find(route => route.name === 'Dough');
-    return doughRoute ? doughRoute.params?.selectedDough : '0';
-  };
-  const getCurrentDoughImage = () => {
-    const doughRoute = navigation.getState().routes.find(route => route.name === 'Dough');
-    return doughRoute ? doughRoute.params?.selectedDoughImage : '0';
-  };
-  const getCurrentSauce = () => {
-    const sauceRoute = navigation.getState().routes.find(route => route.name === 'Sauce');
-    return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add';
-  };
-  const getCurrentToppings = () => {
-    const toppingsRoute = navigation.getState().routes.find(route => route.name === 'Toppings');
-    return toppingsRoute ? toppingsRoute.params?.selectedToppings : [];
-  };
-  const getCurrentSize = () => {
-    const sizeRoute = navigation.getState().routes.find(route => route.name === 'Size');
-    return sizeRoute ? sizeRoute.params?.selectedSize : 'Small';
+  const selectedDough = getRouteParams(navigation, 'Dough', { selectedDough: '0', selectedDoughImage: '0' });
+  const selectedSauce = getRouteParams(navigation, 'Sauce', { selectedSauce: 'Add', selectedSauceImage: '0' });
+  const selectedToppings = getRouteParams(navigation, 'Toppings', { selectedToppings: [] , selectedToppingImages: '0'});
+  const selectedSize = getRouteParams(navigation, 'Size', { selectedSize: 'Small' });
+
+  // Handles navigation
+  const handleNavigation = () => {
+    switch (currentRoute) {
+      case "Dough":
+        navigation.navigate('Sauce', selectedDough);
+        break;
+      case "Sauce":
+        navigation.navigate('Toppings', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage });
+        break;
+      case "Toppings":
+        navigation.navigate('Size', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages:selectedToppings.selectedToppingImages });
+        break;
+      case "Size":
+        console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
+        break;
+      default:
+        break;
+    }
   };
 
+  // // Fetching the current selected options and images for the pizza
+  // const getCurrentDough = () => {
+  //   const doughRoute = navigation.getState().routes.find(route => route.name === 'Dough');
+  //   return doughRoute ? doughRoute.params?.selectedDough : '0';
+  // };
+  // const getCurrentDoughImage = () => {
+  //   const doughRoute = navigation.getState().routes.find(route => route.name === 'Dough');
+  //   return doughRoute ? doughRoute.params?.selectedDoughImage : '0';
+  // };
+  // const getCurrentSauce = () => {
+  //   const sauceRoute = navigation.getState().routes.find(route => route.name === 'Sauce');
+  //   return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add';
+  // };
+  // const getCurrentToppings = () => {
+  //   const toppingsRoute = navigation.getState().routes.find(route => route.name === 'Toppings');
+  //   return toppingsRoute ? toppingsRoute.params?.selectedToppings : [];
+  // };
+  // const getCurrentSize = () => {
+  //   const sizeRoute = navigation.getState().routes.find(route => route.name === 'Size');
+  //   return sizeRoute ? sizeRoute.params?.selectedSize : 'Small';
+  // };
+
   return (
-    <TouchableOpacity
-      onPress={() => {
-        if (currentRoute === "Dough") {
-          const selectedDough = getCurrentDough();
-          const selectedDoughImage = getCurrentDoughImage();
-          navigation.navigate('Sauce', { selectedDough: selectedDough, selectedDoughImage: selectedDoughImage }); // Pass selected dough
-        } else if (currentRoute === "Sauce") {
-          const selectedDough = getCurrentDough();
-          const selectedSauce = getCurrentSauce(); // Get current selected sauce
-          navigation.navigate('Toppings', { selectedDough: selectedDough, selectedSauce: selectedSauce }); // Pass selected dough and sauce
-        } else if (currentRoute === "Toppings") {
-          const selectedDough = getCurrentDough();
-          const selectedSauce = getCurrentSauce();
-          const selectedToppings = getCurrentToppings();
-          console.log('Selected Toppings:', selectedToppings);
-          navigation.navigate('Size', { selectedDough: selectedDough, selectedSauce: selectedSauce, selectedToppings: selectedToppings }); // Pass selected sauce, dough and toppings
-        } else if (currentRoute === "Size") {
-          const selectedDough = getCurrentDough();
-          const selectedSauce = getCurrentSauce();
-          const selectedToppings = getCurrentToppings();
-          const selectedSize = getCurrentSize();
-          
-          console.log('Order Summary:', { selectedDough, selectedSauce, selectedToppings, selectedSize });
-        }
-        // Add more screens here as needed
-      }}
-      style={{ paddingRight: 15 }}
-    >
+    <TouchableOpacity onPress={handleNavigation} style={{ paddingRight: 15 }}>
       <Ionicons name="chevron-forward" size={24} color="#E04A2B" />
     </TouchableOpacity>
+
+    // <TouchableOpacity
+    //   onPress={() => {
+    //     if (currentRoute === "Dough") {
+    //       const selectedDough = getCurrentDough();
+    //       const selectedDoughImage = getCurrentDoughImage();
+    //       navigation.navigate('Sauce', { selectedDough: selectedDough, selectedDoughImage: selectedDoughImage }); // Pass selected dough
+    //     } else if (currentRoute === "Sauce") {
+    //       const selectedDough = getCurrentDough();
+    //       const selectedDoughImage = getCurrentDoughImage();
+    //       const selectedSauce = getCurrentSauce(); // Get current selected sauce
+    //       navigation.navigate('Toppings', { selectedDough: selectedDough, selectedDoughImage: selectedDoughImage, selectedSauce: selectedSauce }); // Pass selected dough and sauce
+    //     } else if (currentRoute === "Toppings") {
+    //       const selectedDough = getCurrentDough();
+    //       const selectedDoughImage = getCurrentDoughImage();
+    //       const selectedSauce = getCurrentSauce();
+    //       const selectedToppings = getCurrentToppings();
+    //       console.log('Selected Toppings:', selectedToppings);
+    //       navigation.navigate('Size', { selectedDough: selectedDough, selectedDoughImage: selectedDoughImage, selectedSauce: selectedSauce, selectedToppings: selectedToppings }); // Pass selected sauce, dough and toppings
+    //     } else if (currentRoute === "Size") {
+    //       const selectedDough = getCurrentDough();
+    //       const selectedDoughImage = getCurrentDoughImage();
+    //       const selectedSauce = getCurrentSauce();
+    //       const selectedToppings = getCurrentToppings();
+    //       const selectedSize = getCurrentSize();
+          
+    //       console.log('Order Summary:', { selectedDough, selectedSauce, selectedToppings, selectedSize });
+    //     }
+    //     // Add more screens here as needed
+    //   }}
+    //   style={{ paddingRight: 15 }}
+    // >
+    //   <Ionicons name="chevron-forward" size={24} color="#E04A2B" />
+    // </TouchableOpacity>
   );
 };
 

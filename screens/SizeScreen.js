@@ -1,4 +1,4 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
 import { saveOrder } from '../database/db';
@@ -11,7 +11,7 @@ export default function SizeScreen({ route, navigation }) {
       ];
 
     // Receive the sauce, toppings, and dough data from previous screens
-    const { selectedDough, selectedSauce, selectedToppings } = route.params; 
+    const { selectedDough, selectedDoughImage, selectedSauce, selectedSauceImage, selectedToppings, selectedToppingImages } = route.params; 
     const [selectedSize, setSelectedSize] = useState('Small');
 
     useEffect(() => {
@@ -90,6 +90,15 @@ export default function SizeScreen({ route, navigation }) {
                         onPress={submitOrder} // Call submitOrder function on click
                         color="#E04A2B"
                     />
+
+                    <View style={styles.pizzaContainer}>
+                        <Image source={selectedDoughImage} style={styles.doughImage} />
+                        <Image source={selectedSauceImage} style={styles.sauceImage} />
+                        {/* Render each selected topping image */}
+                        {selectedToppingImages.map((image, index) => (
+                            <Image key={index} source={image} style={styles.toppingImage} />
+                        ))}
+                    </View>
                 </View>
         </View>
     );
@@ -131,6 +140,26 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#E04A2B',
         marginLeft: 10,
-    }
+    },
+    pizzaContainer: {
+        width: 200,
+        height: 200,
+        position: 'relative', // for the absolute position for the toppings
+    },
+    doughImage: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+    },
+    sauceImage: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+    },
+    toppingImage: {
+        position: 'absolute', // absolute position to allow stacking of the toppings
+        width: '100%',
+        height: '100%',
+    },
 });
 
