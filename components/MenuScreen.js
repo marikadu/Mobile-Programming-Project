@@ -7,7 +7,7 @@ import NavButtons from './NavButtons.js';
 export const MenuScreen=(props)=>{
     const [newPizza, setPizza]=useState("");
     const [updateId, setUpdateId]=useState(0);
-    const [pizzaList, addFish]=useState([
+    const [pizzaList, addPizza]=useState([
       {"id":1, "type":"Pepperoni", "price":"12.90", description: "Original dough, With sauce, Cheese, Pepperoni", image: require('../assets/pizza_pngs/menu/pepperoni.png') },
       {"id":2, "type":"Bianca", "price":"10.90", description: "Original dough, No sauce, Cheese",image: require('../assets/pizza_pngs/menu/bianca.png') },
       {"id":3, "type":"Mushrooms", "price":"11.90", description: "Original dough, With sauce, Cheese, Mushrooms",image: require('../assets/pizza_pngs/menu/mushrooms.png') }]);
