@@ -8,6 +8,7 @@ import DoughScreen from './screens/DoughScreen';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
 import SizeScreen from './screens/SizeScreen';
+import OrderScreen from './screens/OrderScreen';
 import TimerScreen from './screens/TimerScreen';
 import HomeScreen from './components/HomeScreen.js';
 import { DetailsScreen } from './components/DetailsScreen.js';
@@ -105,6 +106,7 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
+        <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  
         <Stack.Screen name="Details" component={DetailsScreen}  />
         {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}

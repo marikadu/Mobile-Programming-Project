@@ -11,83 +11,83 @@ import pepperoniImg from '../assets/pizza_pngs/topping_pepperoni.png';
 import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
 
 export default function Toppings({ route, navigation }) {
-    const [toppingsList, setToppingsList] = useState([
-      { id: 1, selected: false, title: 'Cheese', image: cheeseImg, order: 1 },
-      { id: 2, selected: false, title: 'Tomato', image: tomatoImg, order: 3 },
-      { id: 3, selected: false, title: 'Basil', image: basilImg, order: 5 },
-      { id: 4, selected: false, title: 'Pepperoni', image: pepperoniImg, order: 2 },
-      { id: 5, selected: false, title: 'Mushrooms', image: mushroomsImg, order: 4 },
-    ]);
-    
-    const { selectedSauce } = route.params; 
-    const [selectedToppings, setSelectedToppings] = useState([]);
-    // const [newTopping, setTopping] = useState(); // Custom topping
+  const [toppingsList, setToppingsList] = useState([
+    { id: 1, selected: false, title: 'Cheese', image: cheeseImg, order: 1 },
+    { id: 2, selected: false, title: 'Tomato', image: tomatoImg, order: 3 },
+    { id: 3, selected: false, title: 'Basil', image: basilImg, order: 5 },
+    { id: 4, selected: false, title: 'Pepperoni', image: pepperoniImg, order: 2 },
+    { id: 5, selected: false, title: 'Mushrooms', image: mushroomsImg, order: 4 },
+  ]);
 
-    useEffect(() => {
-      const orderData = {
-          sauce: selectedSauce,
-          toppings: {
-            cheese: toppingsList.find(t => t.title === 'Cheese').selected,
-            tomato: toppingsList.find(t => t.title === 'Tomato').selected,
-            basil: toppingsList.find(t => t.title === 'Basil').selected,
-            pepperoni: toppingsList.find(t => t.title === 'Pepperoni').selected,
-            mushrooms: toppingsList.find(t => t.title === 'Mushrooms').selected
-          },
-          size: null // This will be updated in SizeScreen
-      };
-  
-      // Pass the updated selected toppings to navigation params so it's accessible in the next screen
-      const selectedToppings = toppingsList.filter(t => t.selected).map(t => t.title);
-      navigation.setParams({ selectedToppings }); // Pass selected toppings to params
+  const { selectedSauce } = route.params;
+  const [selectedToppings, setSelectedToppings] = useState([]);
+  // const [newTopping, setTopping] = useState(); // Custom topping
 
-      // Save the orderData object to the database whenever selectedToppings changes
-      if (selectedToppings.length > 0) {
-        saveOrder(orderData)
-          .then(() => console.log('Order saved with sauce and toppings:', orderData))
-          .catch((error) => console.error('Error saving order:', error));
-      }
-    }, [navigation, toppingsList]); // Run effect if toppingsList changes (includes selection changes)
-
-    // const toppingInputHandler = (enteredText) => {
-    //   setTopping(enteredText);
-    // };
-
-    // const addCustomTopping = () => {
-    //   if (newTopping) {
-    //     setToppingList((currentToppingList) => [
-    //       ...currentToppingList,
-    //       { id: Math.random().toString(), title: newTopping},
-    //     ]);
-    //     setSelectedToppings((prev) => [...prev, newTopping]); // Pre-select custom topping
-    //     setTopping('');
-    //   }
-    // };
-
-    const renderTopping=({ item })=>{
-      return (
-        <View style={styles.toppingItem}>
-            <CheckBox
-                value={item.selected}
-                onValueChange={() => setSelection(item.id)}
-                tintColors={{ true: '#E04A2B', false: '#E04A2B' }} // Checkbox colors
-            />
-            <Text style={styles.itemText}>{item.title}</Text>
-        </View>
-      );
+  useEffect(() => {
+    const orderData = {
+      sauce: selectedSauce,
+      toppings: {
+        cheese: toppingsList.find(t => t.title === 'Cheese').selected,
+        tomato: toppingsList.find(t => t.title === 'Tomato').selected,
+        basil: toppingsList.find(t => t.title === 'Basil').selected,
+        pepperoni: toppingsList.find(t => t.title === 'Pepperoni').selected,
+        mushrooms: toppingsList.find(t => t.title === 'Mushrooms').selected
+      },
+      size: null // This will be updated in SizeScreen
     };
-  
-    // Handles selection
-    const setSelection = (id) => {
-      setToppingsList(prevToppings =>
-          prevToppings.map(t => {
-              if (t.id === id) {
-                  const newSelectedState = !t.selected;
-                  return { ...t, selected: newSelectedState };
-              }
-              return t;
-          })
-      );
-    };
+
+    // Pass the updated selected toppings to navigation params so it's accessible in the next screen
+    const selectedToppings = toppingsList.filter(t => t.selected).map(t => t.title);
+    navigation.setParams({ selectedToppings }); // Pass selected toppings to params
+
+    // Save the orderData object to the database whenever selectedToppings changes
+    if (selectedToppings.length > 0) {
+      saveOrder(orderData)
+        .then(() => console.log('Order saved with sauce and toppings:', orderData))
+        .catch((error) => console.error('Error saving order:', error));
+    }
+  }, [navigation, toppingsList]); // Run effect if toppingsList changes (includes selection changes)
+
+  // const toppingInputHandler = (enteredText) => {
+  //   setTopping(enteredText);
+  // };
+
+  // const addCustomTopping = () => {
+  //   if (newTopping) {
+  //     setToppingList((currentToppingList) => [
+  //       ...currentToppingList,
+  //       { id: Math.random().toString(), title: newTopping},
+  //     ]);
+  //     setSelectedToppings((prev) => [...prev, newTopping]); // Pre-select custom topping
+  //     setTopping('');
+  //   }
+  // };
+
+  const renderTopping = ({ item }) => {
+    return (
+      <View style={styles.toppingItem}>
+        <CheckBox
+          value={item.selected}
+          onValueChange={() => setSelection(item.id)}
+          tintColors={{ true: '#E04A2B', false: '#E04A2B' }} // Checkbox colors
+        />
+        <Text style={styles.itemText}>{item.title}</Text>
+      </View>
+    );
+  };
+
+  // Handles selection
+  const setSelection = (id) => {
+    setToppingsList(prevToppings =>
+      prevToppings.map(t => {
+        if (t.id === id) {
+          const newSelectedState = !t.selected;
+          return { ...t, selected: newSelectedState };
+        }
+        return t;
+      })
+    );
+  };
 
   // rendering the images based on the selection from the user in a layered order
   const renderSelectedImages = () => {
@@ -100,70 +100,86 @@ export default function Toppings({ route, navigation }) {
           source={topping.image}
           style={[styles.toppingImage, { zIndex: topping.order }]} // Ensure correct layering
         />
-  ));
-};
+      ));
+  };
 
+  const renderPizza = (item) => {
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Toppings</Text>
-            <View style={styles.listStyle}>
-              <FlatList
-                data={toppingsList}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={renderTopping}
-              />
+      <TouchableOpacity activeOpacity={0.8} onPress={() => selectItemToUpdate(item.index)}>
+        <View style={styles.listItemStyle}>
+          <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
+          <View style={styles.itemContainer}>
+            <Image source={item.item.image} style={styles.pizzaImage} />
+            <View style={styles.textContainer}>
+              <Text style={styles.descriptionText}>{item.item.description}</Text>
             </View>
-            
-            {/* <View style={styles.formView}>
-                <TextInput
-                    style={styles.inputStyle}
-                    placeholder="Enter custom topping..."
-                    value={newTopping}
-                    onChangeText={toppingInputHandler}
-                />
-            </View> */}
-            {/* render the images of selected toppings, toppings are layered in a specified order */}
-            <View style={styles.pizzaContainer}>{renderSelectedImages()}</View>
+          </View>
         </View>
+      </TouchableOpacity>
     );
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Toppings</Text>
+      <View style={styles.listStyle}>
+        <FlatList
+          data={toppingsList}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderTopping}
+        />
+      </View>
+
+      {/* <View style={styles.formView}>
+              <TextInput
+                  style={styles.inputStyle}
+                  placeholder="Enter custom topping..."
+                  value={newTopping}
+                  onChangeText={toppingInputHandler}
+              />
+          </View> */}
+      {/* render the images of selected toppings, toppings are layered in a specified order */}
+      <View style={styles.pizzaContainer}>{renderSelectedImages()}</View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'white',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
   },
   title: {
-      flex: 1,
-      fontSize: 24,
-      color: '#E04A2B',
-      fontWeight: 'bold',
-      marginTop: 20,
+    flex: 1,
+    fontSize: 24,
+    color: '#E04A2B',
+    fontWeight: 'bold',
+    marginTop: 20,
   },
   listItemStyle: {
-      borderWidth: 1,
-      borderColor: "blue",
-      padding: 5,
-      backgroundColor: "#abc",
-      width: "80%",
-      alignSelf: "center",
+    borderWidth: 1,
+    borderColor: "blue",
+    padding: 5,
+    backgroundColor: "#abc",
+    width: "80%",
+    alignSelf: "center",
   },
   listStyle: {
-      flex: 10,
-      width: '100%',
-      marginLeft: 40,
+    flex: 10,
+    width: '100%',
+    marginLeft: 40,
   },
   toppingItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
   },
   itemText: {
-      fontSize: 18,
-      color: '#E04A2B',
-      marginLeft: 10,
+    fontSize: 18,
+    color: '#E04A2B',
+    marginLeft: 10,
   },
   pizzaContainer: {
     width: 200,
