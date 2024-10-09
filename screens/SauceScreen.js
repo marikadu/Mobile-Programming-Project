@@ -10,7 +10,7 @@ export default function SauceScreen({ route, navigation }) {
         {label: 'No sauce', value: 'None' }
       ];
 
-    const { selectedDough } = route.params; 
+    const { selectedDough, selectedDoughImage } = route.params; 
     const [selectedSauce, setSelectedSauce] = useState('Add');
 
     useEffect(() => {
@@ -56,6 +56,7 @@ export default function SauceScreen({ route, navigation }) {
                     />
                 </View>
                 <View style={styles.pizzaContainer}>
+                    <Image source={selectedDoughImage} style={styles.doughImage} />
                     {/* render the image when the sauce is selected */}
                     {selectedSauce === "Add" && (
                     <Image source={sauceImg} style={styles.sauceImage} />
@@ -107,6 +108,11 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         position: 'relative', // for the absolute position for the toppings
+    },
+    doughImage: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
     },
     sauceImage: {
         position: 'absolute', // absolute position to allow stacking of the toppings

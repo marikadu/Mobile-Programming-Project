@@ -29,6 +29,10 @@ const HeaderRightButton = ({ navigation }) => {
     const doughRoute = navigation.getState().routes.find(route => route.name === 'Dough');
     return doughRoute ? doughRoute.params?.selectedDough : '0';
   };
+  const getCurrentDoughImage = () => {
+    const doughRoute = navigation.getState().routes.find(route => route.name === 'Dough');
+    return doughRoute ? doughRoute.params?.selectedDoughImage : '0';
+  };
   const getCurrentSauce = () => {
     const sauceRoute = navigation.getState().routes.find(route => route.name === 'Sauce');
     return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add';
@@ -47,7 +51,8 @@ const HeaderRightButton = ({ navigation }) => {
       onPress={() => {
         if (currentRoute === "Dough") {
           const selectedDough = getCurrentDough();
-          navigation.navigate('Sauce', { selectedDough: selectedDough }); // Pass selected dough
+          const selectedDoughImage = getCurrentDoughImage();
+          navigation.navigate('Sauce', { selectedDough: selectedDough, selectedDoughImage: selectedDoughImage }); // Pass selected dough
         } else if (currentRoute === "Sauce") {
           const selectedDough = getCurrentDough();
           const selectedSauce = getCurrentSauce(); // Get current selected sauce

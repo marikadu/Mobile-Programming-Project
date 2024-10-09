@@ -15,6 +15,7 @@ const doughOptions = [
 export default function DoughScreen({ route, navigation }) {
     // tracking the current dough visible, the starting index of 0 for the Original Dough
     const [selectedDough, setSelectedDough] = useState(0);
+    const [selectedDoughImage, setSelectedDoughImage] = useState(doughOptions[0].image); // Used for saving the current image
     const [doughIndex, setDoughIndex] = useState(0); // Store the index for navigation
 
     useEffect(() => {
@@ -39,8 +40,8 @@ export default function DoughScreen({ route, navigation }) {
     }, [navigation, selectedDough]); // Re-run effect if selectedSauce changes
 
     useEffect(() => {
-        navigation.setParams({ selectedDough });
-    }, [selectedDough, navigation]);
+        navigation.setParams({ selectedDough, selectedDoughImage });
+    }, [selectedDough, selectedDoughImage, navigation]);
 
     //   function for the left arrow -> array goes backward 
     //   (from Original to Wholewheat)
@@ -50,6 +51,7 @@ export default function DoughScreen({ route, navigation }) {
       setDoughIndex((prevIndex) => {
         const newIndex = prevIndex === 0 ? doughOptions.length - 1 : prevIndex - 1;
         setSelectedDough(doughOptions[newIndex].value); // Update the selected dough value
+        setSelectedDoughImage(doughOptions[newIndex].image); // Update the selected image
         console.log('Dough selected:', doughOptions[newIndex].value); // Log after calculating the new index
         return newIndex;
       });
@@ -63,6 +65,7 @@ export default function DoughScreen({ route, navigation }) {
       setDoughIndex((prevIndex) => {
         const newIndex = prevIndex === doughOptions.length - 1 ? 0 : prevIndex + 1;
         setSelectedDough(doughOptions[newIndex].value); // Update the selected dough value
+        setSelectedDoughImage(doughOptions[newIndex].image); // Update the selected image
         console.log('Dough selected:', doughOptions[newIndex].value); // Log after calculating the new index
         return newIndex;
       });
