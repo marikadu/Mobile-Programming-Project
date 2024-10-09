@@ -7,7 +7,7 @@ import wholeWheatDough from '../assets/pizza_pngs/dough_whole_wheat.png';
 
 // dough options array with the images
 const doughOptions = [
-  { label: 'Original Dough', value:'Original', image: originalDough },
+  { label: 'Original Dough', value:'Original', image: originalDough }, // fix the arrow placing - Marika
   { label: 'Gluten-Free Dough', value:'Gluten-free', image: glutenFreeDough },
   { label: 'Wholewheat Dough', value:'Wholewheat', image: wholeWheatDough },
 ];
