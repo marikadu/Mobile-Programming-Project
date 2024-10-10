@@ -13,7 +13,7 @@ import basilImg from '../assets/pizza_pngs/topping_basil.png';
 import pepperoniImg from '../assets/pizza_pngs/topping_pepperoni.png';
 import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
 
-export default function OrderScreen( route, navigation) {
+export default function OrderScreen(route, navigation) {
   // hardcoded pizza for now, passed new pizza should be here
   const pizzaList = [
 
@@ -89,19 +89,19 @@ export default function OrderScreen( route, navigation) {
 
       {/* place order button */}
       <TouchableHighlight
-          style={styles.button}
-          // after you press the "Place Order" button -> goes to the Timer Screen
-          // onPress={() => props.navigation.navigate("Menu")} 
-          underlayColor='#EC863D' // colour when pressed the "button"
-          >
-          <Text style={[styles.buttonText]}>Place order {totalPrice}€</Text>
-        </TouchableHighlight>
+        style={styles.button}
+        // after you press the "Place Order" button -> goes to the Timer Screen
+        // onPress={() => props.navigation.navigate("Menu")} 
+        underlayColor='#EC863D' // colour when pressed the "button"
+      >
+        <Text style={[styles.buttonText]}>Place order {totalPrice}€</Text>
+      </TouchableHighlight>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  background:{
+  background: {
     backgroundColor: "#fff",
   },
   listItemStyle: {
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   buttonText: {
-    flex:1,
+    flex: 1,
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',

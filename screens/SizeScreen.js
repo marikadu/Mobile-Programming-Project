@@ -1,17 +1,17 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
 import { saveOrder } from '../database/db';
 
 export default function SizeScreen({ route, navigation }) {
     const options = [
-        {label: 'Small (d~15)', value: 'Small' },
-        {label: 'Medium (d~22)', value: 'Medium' },
-        {label: 'Large (d~30)', value: 'Large' }
-      ];
+        { label: 'Small (d~15)', value: 'Small' },
+        { label: 'Medium (d~22)', value: 'Medium' },
+        { label: 'Large (d~30)', value: 'Large' }
+    ];
 
     // Receive the sauce, toppings, and dough data from previous screens
-    const { selectedDough, selectedDoughImage, selectedSauce, selectedSauceImage, selectedToppings, selectedToppingImages } = route.params; 
+    const { selectedDough, selectedDoughImage, selectedSauce, selectedSauceImage, selectedToppings, selectedToppingImages } = route.params;
     const [selectedSize, setSelectedSize] = useState('Small');
 
     useEffect(() => {
@@ -34,8 +34,8 @@ export default function SizeScreen({ route, navigation }) {
 
         return unsubscribe; // Cleanup the listener
     }, [navigation, selectedSize]); // Run effect if selectedSize changes
-    
-    setSelected=(value)=>{
+
+    setSelected = (value) => {
         console.log(value);
         setSelectedSize(value);
     }
@@ -68,38 +68,39 @@ export default function SizeScreen({ route, navigation }) {
                 alert('Failed to place the order. Please try again.');
             });
     };
-    
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Choose the size</Text>
-                <View style={styles.listStyle}>
-                    <RadioForm
-                        radio_props={options}
-                        initial={0}
-                        onPress={(value) => setSelected(value)}
-                        buttonColor={'#E04A2B'}
-                        labelColor={'#E04A2B'}
-                        selectedButtonColor={'#E04A2B'}
-                        buttonSize={15}
-                        labelStyle={styles.itemText}
-                    />
+            <View style={styles.listStyle}>
 
-                     {/* Submit order button */}
-                    <Button
-                        title="Submit Order"
-                        onPress={submitOrder} // Call submitOrder function on click
-                        color="#E04A2B"
-                    />
-
-                    <View style={styles.pizzaContainer}>
-                        <Image source={selectedDoughImage} style={styles.doughImage} />
-                        <Image source={selectedSauceImage} style={styles.sauceImage} />
-                        {/* Render each selected topping image */}
-                        {selectedToppingImages.map((image, index) => (
-                            <Image key={index} source={image} style={styles.toppingImage} />
-                        ))}
-                    </View>
+                <RadioForm
+                    radio_props={options}
+                    initial={0}
+                    onPress={(value) => setSelected(value)}
+                    buttonColor={'#E04A2B'}
+                    labelColor={'#E04A2B'}
+                    selectedButtonColor={'#E04A2B'}
+                    buttonSize={15}
+                    labelStyle={styles.itemText}
+                />
+                <View style={styles.pizzaContainer}>
+                    <Image source={selectedDoughImage} style={styles.doughImage} />
+                    <Image source={selectedSauceImage} style={styles.sauceImage} />
+                    {/* Render each selected topping image */}
+                    {selectedToppingImages.map((image, index) => (
+                        <Image key={index} source={image} style={styles.toppingImage} />
+                    ))}
                 </View>
+                {/* submit order button */}
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={submitOrder}
+                    underlayColor='#EC863D' // colour when pressed the "button"
+                >
+                    <Text style={[styles.buttonText]}>Submit Order</Text>
+                </TouchableHighlight>
+            </View>
         </View>
     );
 }
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
     listStyle: {
         flex: 10,
         width: '80%',
+        alignItems: 'center',
         alignSelf: 'center',
     },
     toppingItem: {
@@ -142,6 +144,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     pizzaContainer: {
+        marginTop: 40,
         width: 200,
         height: 200,
         position: 'relative', // for the absolute position for the toppings
@@ -161,5 +164,23 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
+    button: {
+        margin: 20,
+        paddingTop: 10,
+        width: 250,
+        height: 56,
+        backgroundColor: '#F58C41',
+        borderRadius: 40,
+        alignSelf: "center",
+        top: 20,
+      },
+      buttonText: {
+        flex: 1,
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#fff',
+        textAlign: 'center',
+        alignItems: 'center',
+      },
 });
 

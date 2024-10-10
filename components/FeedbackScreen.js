@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 import NavButtons from './NavButtons.js';
 
-export default function AddressScreen( route, navigation) {
+export default function FeedbackScreen( route, navigation) {
 
   // hardcoded address
   const addressDetails = {
