@@ -9,7 +9,7 @@ import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
 import SizeScreen from './screens/SizeScreen';
 import OrderScreen from './screens/OrderScreen';
-import TimerScreen from './screens/TimerScreenLesson';
+import TimerScreen from './screens/TimerScreen';
 import HomeScreen from './components/HomeScreen.js';
 // Address Screen is a part of the "Home" from tab navigation right now
 import AddressScreen from './components/AddressScreen';

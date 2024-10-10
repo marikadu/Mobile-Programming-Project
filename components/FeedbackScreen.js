@@ -1,9 +1,10 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, TextInput } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, TextInput, KeyboardAvoidingView } from 'react-native';
 import React, { useState, useEffect } from 'react';
-
+// if you press the input field, the buttons go up with the keyboard for some reason
+// I'll try to fix this!
 import NavButtons from './NavButtons.js';
 
-export default function FeedbackScreen( route, navigation) {
+export default function FeedbackScreen(route, navigation) {
 
   // hardcoded address
   const addressDetails = {
@@ -15,13 +16,19 @@ export default function FeedbackScreen( route, navigation) {
   // Display the Address and Payment method details
   const renderAddress = () => {
     return (
-      <View>
-        <Text style={styles.text}> Address Details:</Text>
-          <TextInput style={styles.orderItemStyle}
-          placeholder={addressDetails.address}
+      <View style={styles.container}>
+        <View style={styles.backgroundBackgroundContainer}>
+          <Text style={styles.backgroundContainer}>Enjoy your pizza!</Text>
+        </View>
+
+        <Text style={styles.text}> Leave Feedback:</Text>
+        <TextInput style={styles.orderItemStyle}
+          placeholder="Leave Feedback"
           onchangeText={newText => setText(newText)}
           defaultValue={text}
-          ></TextInput>
+        ></TextInput>
+
+        {/* --- if we have time, the Camera goes here --- */}
       </View>
     );
   };
@@ -32,20 +39,37 @@ export default function FeedbackScreen( route, navigation) {
         {renderAddress()}
       </View>
 
-      {/* place order button */}
+      {/* buttons */}
+
+      {/* take picture button */}
       <TouchableHighlight
-          style={styles.button}
-          // onPress={() => props.navigation.navigate("Menu")} 
-          underlayColor='#EC863D' // colour when pressed the "button"
-          >
-          <Text style={[styles.buttonText]}>Save Address</Text>
-        </TouchableHighlight>
+        style={styles.button}
+        underlayColor='#EC863D' // colour when pressed the "button"
+        >
+        <Text style={[styles.buttonText]}>Take Picture</Text>
+      </TouchableHighlight>
+
+      {/* order details button */}
+      <TouchableHighlight
+        style={styles.button}
+        underlayColor='#EC863D'
+        >
+        <Text style={[styles.buttonText]}>Order Details</Text>
+      </TouchableHighlight>
+
+      {/* send feedback button */}
+      <TouchableHighlight
+        style={styles.button}
+        underlayColor='#EC863D'
+        >
+        <Text style={[styles.buttonText]}>Send Feedback</Text>
+      </TouchableHighlight>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  background:{
+  background: {
     backgroundColor: "#fff",
   },
   listItemStyle: {
@@ -58,6 +82,28 @@ const styles = StyleSheet.create({
     margin: 10,
     width: '80%',
     alignSelf: 'center',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  backgroundBackgroundContainer: {
+    margin: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFE8D8',
+    borderRadius: 20,
+    width: 300,
+    height: 70,
+  },
+  backgroundContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#CD6524',
   },
   orderTotalContainerStyle: {
     // flex: 1,
@@ -84,16 +130,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     justifyContent: 'flex-end',
+    marginBottom: 20,
   },
   orderItemStyle: {
     borderWidth: 2,
     borderColor: '#F58C41',
-    padding: 10,
     backgroundColor: '#FFF',
     borderRadius: 10,
+    width: 300,
+    height: 100,
     margin: 10,
-    paddingLeft: 40,
-    paddingRight: 40,
+    padding: 20,
     alignSelf: 'center',
   },
   orderItemStylePayment: {
@@ -141,16 +188,18 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   button: {
-    margin: 20,
+    flex: 1,
+    margin: 10,
     paddingTop: 10,
     width: 250,
     height: 56,
     backgroundColor: '#F58C41',
     borderRadius: 40,
     alignSelf: "center",
+    position: 'relative',
   },
   buttonText: {
-    flex:1,
+    flex: 1,
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
