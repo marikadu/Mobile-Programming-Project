@@ -13,11 +13,10 @@ import basilImg from '../assets/pizza_pngs/topping_basil.png';
 import pepperoniImg from '../assets/pizza_pngs/topping_pepperoni.png';
 import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
 
-export default function AddressScreen( route, navigation) {
+export default function OrderScreen( route, navigation) {
   // hardcoded pizza for now, passed new pizza should be here
   const pizzaList = [
-    // either here could be the description of what the user has selected, or no description, depending on the difficulty of implementation
-    // I am looking at you, Nanna 🥺
+
     { id: 1, type: 'Pizza', price: 13, description: 'Original dough, With sauce, Cheese, Pepperoni', image: pepperoniImg },
   ];
 

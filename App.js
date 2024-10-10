@@ -11,6 +11,8 @@ import SizeScreen from './screens/SizeScreen';
 import OrderScreen from './screens/OrderScreen';
 import TimerScreen from './screens/TimerScreen';
 import HomeScreen from './components/HomeScreen.js';
+// Address Screen is a part of the "Home" from tab navigation right now
+import AddressScreen from './components/AddressScreen';
 import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
 import { LogoTitle } from './components/LogoTitle.js';
@@ -113,6 +115,7 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen}  />
+        <Stack.Screen name="Address" component={AddressScreen}/>
       </Stack.Navigator>
     // <Stack.Navigator>
       
