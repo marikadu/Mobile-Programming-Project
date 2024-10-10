@@ -21,6 +21,7 @@ export default function Toppings({ route, navigation }) {
     
     const { selectedDough, selectedDoughImage, selectedSauce, selectedSauceImage } = route.params; 
     const [selectedToppings, setSelectedToppings] = useState([]);
+    // const [newTopping, setTopping] = useState(); // Custom topping
 
     useEffect(() => {
       const orderData = {
@@ -35,12 +36,11 @@ export default function Toppings({ route, navigation }) {
           },
           size: null // This will be updated in SizeScreen
       };
-  
-      // / Collect selected toppings and their images, and through nav params get the information to next screens
-      const selectedToppings = toppingsList.filter(t => t.selected);
-      const selectedToppingTitles = selectedToppings.map(t => t.title);
-      const selectedToppingImages = selectedToppings.map(t => t.image);
-      navigation.setParams({ selectedToppings: selectedToppingTitles, selectedToppingImages: selectedToppingImages }); // Pass selected toppings to params
+    // Collect selected toppings and their images, and through nav params get the information to next screens
+    const selectedToppings = toppingsList.filter(t => t.selected);
+    const selectedToppingTitles = selectedToppings.map(t => t.title);
+    const selectedToppingImages = selectedToppings.map(t => t.image);
+    navigation.setParams({ selectedToppings: selectedToppingTitles, selectedToppingImages: selectedToppingImages }); // Pass selected toppings to params
 
       // Save the orderData object to the database whenever selectedToppings changes
       if (selectedToppings.length > 0) {
@@ -50,31 +50,31 @@ export default function Toppings({ route, navigation }) {
       }
     }, [navigation, toppingsList]); // Run effect if toppingsList changes (includes selection changes)
 
-    const renderTopping=({ item })=>{
-      return (
-        <View style={styles.toppingItem}>
-            <CheckBox
-                value={item.selected}
-                onValueChange={() => setSelection(item.id)}
-                tintColors={{ true: '#E04A2B', false: '#E04A2B' }} // Checkbox colors
-            />
-            <Text style={styles.itemText}>{item.title}</Text>
-        </View>
-      );
-    };
-  
-    // Handles selection
-    const setSelection = (id) => {
-      setToppingsList(prevToppings =>
-          prevToppings.map(t => {
-              if (t.id === id) {
-                  const newSelectedState = !t.selected;
-                  return { ...t, selected: newSelectedState };
-              }
-              return t;
-          })
-      );
-    };
+  const renderTopping = ({ item }) => {
+    return (
+      <View style={styles.toppingItem}>
+        <CheckBox
+          value={item.selected}
+          onValueChange={() => setSelection(item.id)}
+          tintColors={{ true: '#E04A2B', false: '#E04A2B' }} // Checkbox colors
+        />
+        <Text style={styles.itemText}>{item.title}</Text>
+      </View>
+    );
+  };
+
+  // Handles selection
+  const setSelection = (id) => {
+    setToppingsList(prevToppings =>
+      prevToppings.map(t => {
+        if (t.id === id) {
+          const newSelectedState = !t.selected;
+          return { ...t, selected: newSelectedState };
+        }
+        return t;
+      })
+    );
+  };
 
   // rendering the images based on the selection from the user in a layered order
   const renderSelectedImages = () => {
@@ -87,8 +87,24 @@ export default function Toppings({ route, navigation }) {
           source={topping.image}
           style={[styles.toppingImage, { zIndex: topping.order }]} // Ensure correct layering
         />
-  ));
-};
+      ));
+  };
+
+  const renderPizza = (item) => {
+    return (
+      <TouchableOpacity activeOpacity={0.8} onPress={() => selectItemToUpdate(item.index)}>
+        <View style={styles.listItemStyle}>
+          <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
+          <View style={styles.itemContainer}>
+            <Image source={item.item.image} style={styles.pizzaImage} />
+            <View style={styles.textContainer}>
+              <Text style={styles.descriptionText}>{item.item.description}</Text>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  }
 
     return (
         <View style={styles.container}>
@@ -113,40 +129,40 @@ export default function Toppings({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'white',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
   },
   title: {
-      flex: 1,
-      fontSize: 24,
-      color: '#E04A2B',
-      fontWeight: 'bold',
-      marginTop: 20,
+    flex: 1,
+    fontSize: 24,
+    color: '#E04A2B',
+    fontWeight: 'bold',
+    marginTop: 20,
   },
   listItemStyle: {
-      borderWidth: 1,
-      borderColor: "blue",
-      padding: 5,
-      backgroundColor: "#abc",
-      width: "80%",
-      alignSelf: "center",
+    borderWidth: 1,
+    borderColor: "blue",
+    padding: 5,
+    backgroundColor: "#abc",
+    width: "80%",
+    alignSelf: "center",
   },
   listStyle: {
-      flex: 10,
-      width: '100%',
-      marginLeft: 40,
+    flex: 10,
+    width: '100%',
+    marginLeft: 40,
   },
   toppingItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
   },
   itemText: {
-      fontSize: 18,
-      color: '#E04A2B',
-      marginLeft: 10,
+    fontSize: 18,
+    color: '#E04A2B',
+    marginLeft: 10,
   },
   pizzaContainer: {
     width: 200,

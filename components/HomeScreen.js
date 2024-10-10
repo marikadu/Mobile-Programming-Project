@@ -5,7 +5,7 @@ import {Button, Text, View, FlatList, Image, StyleSheet, TouchableOpacity, Touch
 import NavButtons from './NavButtons.js';
 
 // const PepperoniPalsView = ({route, navigation}) =>{
-  const HomeScreen = (props) =>{
+const HomeScreen = (props) =>{
 
 
     ////////////////IMPLEMENT THE DATABASE HERE ///////////////////

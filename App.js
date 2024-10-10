@@ -8,8 +8,11 @@ import DoughScreen from './screens/DoughScreen';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
 import SizeScreen from './screens/SizeScreen';
+import OrderScreen from './screens/OrderScreen';
 import TimerScreen from './screens/TimerScreen';
 import HomeScreen from './components/HomeScreen.js';
+// Address Screen is a part of the "Home" from tab navigation right now
+import AddressScreen from './components/AddressScreen';
 import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
 import { LogoTitle } from './components/LogoTitle.js';
@@ -108,12 +111,14 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
+        <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  
         <Stack.Screen name="Details" component={DetailsScreen}  />
         {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
         <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen}  />
+        <Stack.Screen name="Address" component={AddressScreen}/>
       </Stack.Navigator>
     // <Stack.Navigator>
       
