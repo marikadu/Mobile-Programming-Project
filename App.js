@@ -15,6 +15,7 @@ import TimerScreen from './screens/TimerScreen';
 import HomeScreen from './components/HomeScreen.js';
 // Address Screen is a part of the "Home" from tab navigation right now
 import AddressScreen from './components/AddressScreen';
+import PastOrdersScreen from './components/PastOrdersScreen';
 import FeedbackScreen from './components/FeedbackScreen';
 import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
