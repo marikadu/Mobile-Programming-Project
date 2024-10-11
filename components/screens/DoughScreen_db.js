@@ -35,6 +35,7 @@ export default function DoughScreen(props) {
     );
   };
 
+
   return (
     <View style={styles.container}>
         <Text style={styles.title}>Choose the Dough</Text>
@@ -62,10 +63,10 @@ export default function DoughScreen(props) {
           <Image
             source={doughOptions[currentDoughIndex].image}
             style={styles.doughImage}/>
-            <View style={styles.title}>
+            {/* <View style={styles.title}>
                     <Text>{props.pizza.dough}</Text>
                     <Text>{props.pizza.sauce}</Text>
-                </View>
+                </View> */}
         </View>
       </View>
     </View>

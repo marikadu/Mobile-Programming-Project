@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {openDatabase} from 'react-native-sqlite-storage';
+import SQLite from 'react-native-sqlite-storage';
 
-var db = openDatabase({name: 'pizza.db'}); // Database Name
+var db = SQLite.openDatabase({name: 'pizza.db'}); // Database Name
 var tableName = 'pizza';
 
 // Predefined pizza samples (RETRIEVE LATER FROM MONGODB)

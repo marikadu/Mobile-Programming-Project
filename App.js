@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Custom icon for header
 // import HomeScreen from './screens/HomeScreen';
 import DoughScreen from './screens/DoughScreen';
-import DoughScreen_db from './components/screens/DoughScreen_db.js';
+
 // import CreatePizzaScreen from './components/screens/CreatePizzaScreen.js';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
@@ -23,7 +23,11 @@ import { MenuScreen } from './components/MenuScreen.js';
 import { SettingsScreen } from './components/SettingsScreen.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
+
+// Database version of the CREATE PIZZA SCREEN
+import DoughScreen_db from './components/screens/DoughScreen_db.js';
 import {CreatePizzaScreen} from './components/screens/CreatePizzaScreen.js';
+import SauceScreen_db from './components/screens/SauceScreen_db.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -112,8 +116,7 @@ const HomeStackScreen = () => {
         {/* <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} /> */}
         <Stack.Screen name="Home" component={HomeScreen} options={({route}) => ({title: route.params?.name ? route.params.name : "Home"})} />
         <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name = "db_DoughScreen" component={DoughScreen_db} options={{ title: 'Pick your DOUGH' }}/>
-        <Stack.Screen name = "CreatePizza" component={CreatePizzaScreen} options={{ title: 'Create Your Pizza' }}/>
+       
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
@@ -126,11 +129,13 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen}  />
         <Stack.Screen name="Address" component={AddressScreen}/>
+
+        {/* Database version of the DoughScreen */}
+        <Stack.Screen name = "db_DoughScreen" component={DoughScreen_db} options={{ title: 'Pick your DOUGH' }}/>
+        <Stack.Screen name = "CreatePizza" component={CreatePizzaScreen} options={{ title: 'Create Your Pizza' }}/>
+        <Stack.Screen name = "SauceScreen_db" component={SauceScreen_db} options={{ title: 'Select your Sauce' }}/>
+
       </Stack.Navigator>
-    // <Stack.Navigator>
-      
-    //   {/* <Stack.Screen name="Home" component={PepperoniPalsView} /> */}
-    // </Stack.Navigator>
   )
 }
 
