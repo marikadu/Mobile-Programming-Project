@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -44,7 +44,7 @@ const HeaderRightButton = ({ navigation }) => {
 
   const selectedDough = getRouteParams(navigation, 'Dough', { selectedDough: '0', selectedDoughImage: '0' });
   const selectedSauce = getRouteParams(navigation, 'Sauce', { selectedSauce: 'Add', selectedSauceImage: '0' });
-  const selectedToppings = getRouteParams(navigation, 'Toppings', { selectedToppings: [] , selectedToppingImages: '0'});
+  const selectedToppings = getRouteParams(navigation, 'Toppings', { selectedToppings: [], selectedToppingImages: '0' });
   const selectedSize = getRouteParams(navigation, 'Size', { selectedSize: 'Small' });
 
   // Handles navigation
@@ -57,7 +57,7 @@ const HeaderRightButton = ({ navigation }) => {
         navigation.navigate('Toppings', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage });
         break;
       case "Toppings":
-        navigation.navigate('Size', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages:selectedToppings.selectedToppingImages });
+        navigation.navigate('Size', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages: selectedToppings.selectedToppingImages });
         break;
       case "Size":
         console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
@@ -106,28 +106,72 @@ const HomeStackScreen = () => {
         headerRight: () => <HeaderRightButton navigation={navigation} />, // Right arrow component
         headerLeft: () => <HeaderLeftButton navigation={navigation} />, // Left arrow component
       })}>
-        {/* <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} /> */}
-        <Stack.Screen name="Home" component={HomeScreen} options={({route}) => ({title: route.params?.name ? route.params.name : "Home"})} />
-        <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  
-        <Stack.Screen name="Details" component={DetailsScreen}  />
-        <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ title: 'Leave Feedback' }} />
-        {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
-        <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
-        <Stack.Screen name="Menu" component={MenuScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen}  />
-        <Stack.Screen name="Address" component={AddressScreen}/>
-      </Stack.Navigator>
+      {/* <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} /> */}
+      <Stack.Screen name="Home" component={HomeScreen} options={({ route }) => ({ title: route.params?.name ? route.params.name : "Home" })} />
+      <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }} />
+      <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }} />
+      <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }} />
+      <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }} />
+      <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }} />
+      <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }} />
+      <Stack.Screen name="Details" component={DetailsScreen} />
+      <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ title: 'Leave Feedback' }} />
+      {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
+      <Stack.Screen name="Image" component={ImageScreen} options={{ headerTitle: (props) => <LogoTitle {...props} /> }} />
+      <Stack.Screen name="Menu" component={MenuScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="Address" component={AddressScreen} />
+    </Stack.Navigator>
     // <Stack.Navigator>
-      
+
     //   {/* <Stack.Screen name="Home" component={PepperoniPalsView} /> */}
     // </Stack.Navigator>
   )
 }
+
+// Marika is trying to do something with the Order Tab Navigation •ᴗ• sorry if this is bad lmao
+const OrderStackScreen = ({ navigation }) => {
+  const handleTimerEnd = () => {
+    navigation.navigate('Feedback'); // Navigates to the Feedback screen in the same Order tab stack
+  };
+
+  return (
+    <Stack.Navigator
+      initialRouteName="Timer"
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: 'white',
+        },
+        headerTintColor: '#E04A2B',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        headerBackTitleVisible: false,
+        headerLeftContainerStyle: {
+          paddingLeft: 10,
+        },
+        headerTitleAlign: 'center',
+      }}
+    >
+      <Stack.Screen name="Order" component={OrderScreen}
+        options={{ title: 'Creating a pizza' }} />
+
+      <Stack.Screen
+        name="Timer"
+        options={{ title: 'Creating a pizza' }}
+      >
+        {props => <TimerScreen {...props} onTimerEnd={handleTimerEnd} />}
+      </Stack.Screen>
+
+
+      <Stack.Screen name="Details"
+        component={DetailsScreen} />
+
+      <Stack.Screen name="Feedback" component={FeedbackScreen}
+        options={{ title: 'Leave Feedback' }} />
+    </Stack.Navigator>
+  );
+};
 
 export default function App({ navigation }) {
   useEffect(() => {
@@ -141,48 +185,51 @@ export default function App({ navigation }) {
   // tracking the end of the timer
   const [timerExpired, setTimerExpired] = useState(false);
 
-  const handleTimerEnd = () => {
-    setTimerExpired(true); // set the end of the timer as True
+  const handleTimerEnd = (navigation) => {
+    setTimerExpired(true);
+    // when timer runs out -> goes to the Feedback Screen but it's in the Home Tab navigation
+    // make it so that it stays in the Order tab navigation
+    navigation.navigate('Order', { screen: 'Feedback' });
   };
 
+
+
   return (
-  <NavigationContainer>
-    <Tab.Navigator
-    // shortcut for the documentation, I'll delete it later - Marika
-    // https://reactnavigation.org/docs/tab-based-navigation/
+    <NavigationContainer>
+      <Tab.Navigator
+        // shortcut for the documentation, I'll delete it later - Marika
+        // https://reactnavigation.org/docs/tab-based-navigation/
 
-    // icons list
-    // https://icons.expo.fyi/Index
-    // filter by "Ionicons"
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+        // icons list
+        // https://icons.expo.fyi/Index
+        // filter by "Ionicons"
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-          if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Settings') {
-            iconName = focused ? 'settings' : 'settings-outline';
-          } else if (route.name === 'Order') {
-            iconName = focused ? 'pizza' : 'pizza-outline';
-          }
+            if (route.name === 'Home') {
+              iconName = focused ? 'home' : 'home-outline';
+            } else if (route.name === 'Settings') {
+              iconName = focused ? 'settings' : 'settings-outline';
+            } else if (route.name === 'Order') {
+              iconName = focused ? 'pizza' : 'pizza-outline';
+            }
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: '#E04A2B',
+          tabBarInactiveTintColor: 'gray',
+          tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer has expired
+        })}
+      >
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Order" component={OrderStackScreen} />
+        {/* // {(props) => <TimerScreen {...props} onTimerEnd={() => handleTimerEnd(props.navigation)} />} */}
 
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: '#E04A2B',
-        tabBarInactiveTintColor: 'gray',
-      tabBarBadge: route.name === 'Timer' && timerExpired ? '' : undefined, // Show badge if timer has expired
-      })}
-    >
-      <Tab.Screen name="Settings" component={SettingsScreen} />
-      <Tab.Screen name="Home" component={HomeStackScreen} />
-      <Tab.Screen name="Order">
-        {/* calling the TimerComplete function for the badge */}
-        {(props) => <TimerScreen {...props} onTimerEnd={handleTimerEnd} />}
-      </Tab.Screen>
-      <Tab.Screen name="Feedback" component={FeedbackScreen} />
-    </Tab.Navigator>
-  </NavigationContainer>
-    
+
+      </Tab.Navigator>
+    </NavigationContainer>
+
     // <NavigationContainer>
     //   <Stack.Navigator
     //   initialRouteName="PepperoniPals"
@@ -217,44 +264,44 @@ export default function App({ navigation }) {
   );
 }
 
-const styles=StyleSheet.create({
-  navbuttonstyle:{
-    flex:2,
-    flexDirection:"row",
-    backgroundColor:"#def",
-    alignItems:"center",
-    justifyContent:"space-around",    
+const styles = StyleSheet.create({
+  navbuttonstyle: {
+    flex: 2,
+    flexDirection: "row",
+    backgroundColor: "#def",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
-  imageContainer:{
-    height:200,
-    width:'50%',
-    borderRadius:200,
-    overflow:'hidden',
-    borderWidth:3,
-    borderColor:'red',
+  imageContainer: {
+    height: 200,
+    width: '50%',
+    borderRadius: 200,
+    overflow: 'hidden',
+    borderWidth: 3,
+    borderColor: 'red',
   },
-  image:{
-    height:'100%',
-    width:'100%'
+  image: {
+    height: '100%',
+    width: '100%'
   },
-  listItemStyle:{
-    borderWidth:1,
-    borderColor:"blue",
-    padding:5,
-    backgroundColor:"#abc",
-    width:"80%",
-    alignSelf:"center",
+  listItemStyle: {
+    borderWidth: 1,
+    borderColor: "blue",
+    padding: 5,
+    backgroundColor: "#abc",
+    width: "80%",
+    alignSelf: "center",
   },
-  listStyle:{
-    flex:8,
-    alignItems:"center",
-    backgroundColor:"#eee",
-    borderColor:"red",
-    borderWidth:2,
-    width:"100%",
+  listStyle: {
+    flex: 8,
+    alignItems: "center",
+    backgroundColor: "#eee",
+    borderColor: "red",
+    borderWidth: 2,
+    width: "100%",
   },
-  flatliststyle:{
-    width:'80%',
-    backgroundColor:'blue',
+  flatliststyle: {
+    width: '80%',
+    backgroundColor: 'blue',
   },
 });
