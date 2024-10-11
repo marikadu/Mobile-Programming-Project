@@ -179,6 +179,7 @@ export default function App({ navigation }) {
         {/* calling the TimerComplete function for the badge */}
         {(props) => <TimerScreen {...props} onTimerEnd={handleTimerEnd} />}
       </Tab.Screen>
+      <Tab.Screen name="Feedback" component={FeedbackScreen} />
     </Tab.Navigator>
   </NavigationContainer>
     
