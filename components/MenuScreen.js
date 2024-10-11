@@ -42,7 +42,7 @@ export const MenuScreen = (props) => {
           renderItem={renderPizza}
         />
       </View>
-      <NavButtons params={props} />
+      {/* <NavButtons params={props} /> */}
     </View>
   );
 }

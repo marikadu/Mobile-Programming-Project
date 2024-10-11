@@ -23,7 +23,7 @@ import { MenuScreen } from './components/MenuScreen.js';
 import { SettingsScreen } from './components/SettingsScreen.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
-import CreatePizzaScreen from './components/screens/CreatePizzaScreen.js';
+import {CreatePizzaScreen} from './components/screens/CreatePizzaScreen.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

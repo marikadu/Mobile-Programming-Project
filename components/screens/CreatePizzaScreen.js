@@ -5,7 +5,15 @@ import {StyleSheet, Text, View} from 'react-native';
 import DoughScreen_db from './DoughScreen_db.js';
 import SauceScreen_db from './SauceScreen_db.js';
 
-export default function CreatePizzaScreen(props) {
+// IMPORT DB FUNCTIONS
+import {init, addPizza, updatePizza, deletePizza ,fetchAllPizzas } from '../../database/db.js';
+init().then(() => {
+  console.log('Database Creation Succeeded!');
+}).catch((err) => {
+  console.log('Database Creation Failed!' + err);
+})
+
+export const CreatePizzaScreen = (props) => {
   const [userNumber, setUserNumber] = useState(22);
 //   const [shouldGameStop, setShouldGameStop] = useState(false);
   const [activeScreen, setActiveScreen] = useState('DoughScreen');
