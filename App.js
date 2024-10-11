@@ -115,7 +115,6 @@ const HomeStackScreen = () => {
       <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }} />
       <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }} />
       <Stack.Screen name="Details" component={DetailsScreen} />
-      <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ title: 'Leave Feedback' }} />
       {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
       <Stack.Screen name="Image" component={ImageScreen} options={{ headerTitle: (props) => <LogoTitle {...props} /> }} />
       <Stack.Screen name="Menu" component={MenuScreen} />
@@ -123,20 +122,23 @@ const HomeStackScreen = () => {
       <Stack.Screen name="Address" component={AddressScreen} />
     </Stack.Navigator>
     // <Stack.Navigator>
-
     //   {/* <Stack.Screen name="Home" component={PepperoniPalsView} /> */}
     // </Stack.Navigator>
   )
 }
 
 // Marika is trying to do something with the Order Tab Navigation •ᴗ• sorry if this is bad lmao
+// literally the same logic as HomeStackScreens, so maybe we could implement something
+// simillar for the Settings Tab Navigation
 const OrderStackScreen = ({ navigation }) => {
+  // when timer runs out -> goes to Feedback Screen
   const handleTimerEnd = () => {
-    navigation.navigate('Feedback'); // Navigates to the Feedback screen in the same Order tab stack
+    navigation.navigate('Feedback'); 
   };
 
   return (
     <Stack.Navigator
+      // initially starting with TimerScreen, has to be changed to Previous Orders Screen later on
       initialRouteName="Timer"
       screenOptions={{
         headerStyle: {
@@ -153,22 +155,14 @@ const OrderStackScreen = ({ navigation }) => {
         headerTitleAlign: 'center',
       }}
     >
-      <Stack.Screen name="Order" component={OrderScreen}
-        options={{ title: 'Creating a pizza' }} />
-
-      <Stack.Screen
-        name="Timer"
-        options={{ title: 'Creating a pizza' }}
-      >
+      {/* stack screens for the Order Pizza navigation */}
+      <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }} />
+      {/* this has to be devided */}
+      <Stack.Screen name="Timer" options={{ title: 'Creating a pizza' }}>
         {props => <TimerScreen {...props} onTimerEnd={handleTimerEnd} />}
       </Stack.Screen>
-
-
-      <Stack.Screen name="Details"
-        component={DetailsScreen} />
-
-      <Stack.Screen name="Feedback" component={FeedbackScreen}
-        options={{ title: 'Leave Feedback' }} />
+      <Stack.Screen name="Details" component={DetailsScreen} />
+      <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ title: 'Leave Feedback' }} />
     </Stack.Navigator>
   );
 };
@@ -224,7 +218,6 @@ export default function App({ navigation }) {
         <Tab.Screen name="Settings" component={SettingsScreen} />
         <Tab.Screen name="Home" component={HomeStackScreen} />
         <Tab.Screen name="Order" component={OrderStackScreen} />
-        {/* // {(props) => <TimerScreen {...props} onTimerEnd={() => handleTimerEnd(props.navigation)} />} */}
 
 
       </Tab.Navigator>
