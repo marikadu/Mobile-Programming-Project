@@ -23,6 +23,7 @@ export default function TimerScreen({ route, navigation, onTimerEnd, onTabPress 
     } else if (timeLeft <= 0) {
       clearInterval(timer);
       onTimerEnd();
+      navigation.navigate('Feedback'); // navigate to FeedbackScreen when timer runs out
     }
 
     // https://medium.com/@garethdavisrogers/using-setinterval-and-clearinterval-with-react-hooks-7fcf26dc8fdb
