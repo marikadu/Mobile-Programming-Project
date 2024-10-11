@@ -24,7 +24,7 @@ export const DetailsScreen=(props)=>{
         {props.route.params ? <Text>{props.route.params.pizza.id}) {props.route.params.pizza.type} {props.route.params.pizza.price}€</Text> : null}
         {props.route.params ? <Image source={props.route.params.pizza.image} style={styles.pizzaImage}/> : null}
         </View>
-        <NavButtons params={props}/>
+        {/* <NavButtons params={props}/> */}
       </View>
     );
   }

@@ -69,10 +69,11 @@ import NavButtons from './NavButtons.js';
 
         <TouchableHighlight
           style={styles.button}
-          onPress={() => props.navigation.navigate("ModalScreen")} 
+          // onPress={() => props.navigation.navigate("db_DoughScreen")} 
+          onPress={() => props.navigation.navigate("CreatePizza")} 
           underlayColor='#EC863D' // colour when pressed the "button"
           >
-          <Text style={[styles.buttonText]}>Create Pizza Modal</Text>
+          <Text style={[styles.buttonText]}>Create Pizza sqlite</Text>
         </TouchableHighlight>
         
           {/* <View style={styles.imageContainer}>
@@ -93,7 +94,7 @@ import NavButtons from './NavButtons.js';
         </View>
         {/* <NavButtons params={props.params}/> */}
         {/* <NavButtons navigation={navigation} route = {route}/> */}
-        <NavButtons params={props}/>
+        {/* <NavButtons params={props.params}/> */}
       </View>
     );
   }

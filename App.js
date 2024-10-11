@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Custom icon for header
 // import HomeScreen from './screens/HomeScreen';
 import DoughScreen from './screens/DoughScreen';
+import DoughScreen_db from './components/screens/DoughScreen_db.js';
+// import CreatePizzaScreen from './components/screens/CreatePizzaScreen.js';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
 import SizeScreen from './screens/SizeScreen';
@@ -17,6 +19,7 @@ import { MenuScreen } from './components/MenuScreen.js';
 import { SettingsScreen } from './components/SettingsScreen.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
+import CreatePizzaScreen from './components/screens/CreatePizzaScreen.js';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -102,6 +105,8 @@ const HomeStackScreen = () => {
         {/* <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} /> */}
         <Stack.Screen name="Home" component={HomeScreen} options={({route}) => ({title: route.params?.name ? route.params.name : "Home"})} />
         <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
+        <Stack.Screen name = "db_DoughScreen" component={DoughScreen_db} options={{ title: 'Pick your DOUGH' }}/>
+        <Stack.Screen name = "CreatePizza" component={CreatePizzaScreen} options={{ title: 'Create Your Pizza' }}/>
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
@@ -171,44 +176,12 @@ export default function App({ navigation }) {
       </Tab.Screen>
     </Tab.Navigator>
   </NavigationContainer>
-    
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //   initialRouteName="PepperoniPals"
-    //   // initialRouteName="Dough"
-    //   screenOptions={({ navigation }) => ({
-    //     headerStyle: {
-    //       backgroundColor: 'white',
-    //     },
-    //     headerTintColor: '#E04A2B', // Left arrow and text color
-    //     headerTitleStyle: {
-    //       fontWeight: 'bold',
-    //     },
-    //     headerBackTitleVisible: false,
-    //     headerLeftContainerStyle: {
-    //       paddingLeft: 10,
-    //     },
-    //     headerTitleAlign: 'center',
-    //     headerRight: () => <HeaderRightButton navigation={navigation} />, // Right arrow component
-    //     headerLeft: () => <HeaderLeftButton navigation={navigation} />, // Left arrow component
-    //   })}>
-    //     <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} />
-    //     <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
-    //     <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
-    //     <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>  
-    //     <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  
-    //     <Stack.Screen name="Details" component={DetailsScreen}  />
-    //     {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
-    //     <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
-    //     <Stack.Screen name="Menu" component={MenuScreen} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
   );
 }
 
 const styles=StyleSheet.create({
   navbuttonstyle:{
-    flex:2,
+    // flex:2,
     flexDirection:"row",
     backgroundColor:"#def",
     alignItems:"center",

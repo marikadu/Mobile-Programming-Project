@@ -42,7 +42,7 @@ const renderPizza = (item) => {
               renderItem={renderPizza}
             />
           </View>
-        <NavButtons params={props}/>
+        {/* <NavButtons params={props}/> */}
       </View>
     );
   }

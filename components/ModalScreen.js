@@ -10,7 +10,7 @@ import {
   Modal,
 } from 'react-native';
 
-const App = () => {
+export const ModalScreen = () => {
   const [updateId, setUpdateId] = useState(-1);
   const [visibility, setVisibility] = useState(false);
   const [newFish, setFish] = useState('');
@@ -194,4 +194,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+// export default ModalScreen;
