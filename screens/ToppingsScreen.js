@@ -1,7 +1,7 @@
 import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CheckBox from '@react-native-community/checkbox';
-import { saveOrder } from '../database/db';
+import { saveOrder } from '../database/Old_db';
 
 // importing images for the pizza creation
 import cheeseImg from '../assets/pizza_pngs/topping_cheese.png';

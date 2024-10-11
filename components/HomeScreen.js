@@ -66,6 +66,15 @@ const HomeScreen = (props) =>{
           >
           <Text style={[styles.buttonText]}>See Menu</Text>
         </TouchableHighlight>
+
+        <TouchableHighlight
+          style={styles.button}
+          // onPress={() => props.navigation.navigate("db_DoughScreen")} 
+          onPress={() => props.navigation.navigate("CreatePizza")} 
+          underlayColor='#EC863D' // colour when pressed the "button"
+          >
+          <Text style={[styles.buttonText]}>Create Pizza sqlite</Text>
+        </TouchableHighlight>
         
           {/* <View style={styles.imageContainer}>
           <Image source={require('../assets/pizza_pngs/everything_pizza.png')}
@@ -85,7 +94,7 @@ const HomeScreen = (props) =>{
         </View>
         {/* <NavButtons params={props.params}/> */}
         {/* <NavButtons navigation={navigation} route = {route}/> */}
-        <NavButtons params={props}/>
+        {/* <NavButtons params={props.params}/> */}
       </View>
     );
   }

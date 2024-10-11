@@ -2,23 +2,31 @@ import React from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 
 
-const NavButton = (par) =>{
-  if (par.name!=par.active){
-    return <Button onPress={()=>par.params.navigation.navigate(par.name)} title={par.name}/>;
-  }
-  return null;
+// const NavButton = (par) =>{
+//   if (par.name!=par.active){
+//     return <Button onPress={()=>par.params.navigation.navigate(par.name)} title={par.name}/>;
+//   }
+//   return null;
+// }
+
+const NavButtons = (params) =>{
+  // if (par.name!=par.active){
+    return <Button onPress={()=>params.navigation.navigate(params.name)} title={params.name}/>;
+  // }
+  // return null;
 }
-const NavButtons=({params})=>{
-  return(
-    <View style={styles.navbuttonstyle}>
-      <NavButton params={params} name="Home" active={params.route.name}/>
-      <NavButton params={params} name="Menu" active={params.route.name}/>
-      {/* <NavButton params={params} name="Home" active={params.route.name}/> */}
-      <NavButton params={params} name="Details" active={params.route.name}/>
-      <NavButton params={params} name="Image" active={params.route.name}/>
-    </View>
-  );
-}
+
+// const NavButtons=({params})=>{
+//   return(
+//     <View style={styles.navbuttonstyle}>
+//       {/* <NavButton params={params} name="Home" active={params.route.name}/> */}
+//       {/* <NavButton params={params} name="Menu" active={params.route.name}/> */}
+//       {/* <NavButton params={params} name="Home" active={params.route.name}/> */}
+//       {/* <NavButton params={params} name="Details" active={params.route.name}/> */}
+//       {/* <NavButton params={params} name="Image" active={params.route.name}/> */}
+//     </View>
+//   );
+// }
 // const NavButton = ({navigation, name, active}) =>{
 //     if (name!=active){
 //       const title = typeof name === 'string' ? name : 'Unnamed';
