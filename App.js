@@ -10,8 +10,12 @@ import DoughScreen_db from './components/screens/DoughScreen_db.js';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
 import SizeScreen from './screens/SizeScreen';
+import OrderScreen from './screens/OrderScreen';
 import TimerScreen from './screens/TimerScreen';
 import HomeScreen from './components/HomeScreen.js';
+// Address Screen is a part of the "Home" from tab navigation right now
+import AddressScreen from './components/AddressScreen';
+import FeedbackScreen from './components/FeedbackScreen';
 import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
 import { LogoTitle } from './components/LogoTitle.js';
@@ -24,47 +28,50 @@ import CreatePizzaScreen from './components/screens/CreatePizzaScreen.js';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+// Gets the default parameters of each object
+const defaultParams = {
+  Dough: { selectedDough: '0', selectedDoughImage: '0' },
+  Sauce: { selectedSauce: 'Add', selectedSauceImage: '0' },
+  Toppings: { selectedToppings: [] },
+  Size: { selectedSize: 'Small' },
+};
+
+// General function for finding the route for each object
+const getRouteParams = (navigation, routeName) => {
+  const route = navigation.getState().routes.find(r => r.name === routeName);
+  return route ? route.params || defaultParams[routeName] : defaultParams[routeName];
+};
+
 const HeaderRightButton = ({ navigation }) => {
   const currentRoute = navigation.getState().routes[navigation.getState().index].name;
 
-  // Fetching the current selected options for the pizza
-  const getCurrentSauce = () => {
-    const sauceRoute = navigation.getState().routes.find(route => route.name === 'Sauce');
-    return sauceRoute ? sauceRoute.params?.selectedSauce : 'Add'; // Default sauce if not found
-  };
-  const getCurrentToppings = () => {
-    const toppingsRoute = navigation.getState().routes.find(route => route.name === 'Toppings');
-    return toppingsRoute ? toppingsRoute.params?.selectedToppings : [];
-  };
-  const getCurrentSize = () => {
-    const sizeRoute = navigation.getState().routes.find(route => route.name === 'Size');
-    return sizeRoute ? sizeRoute.params?.selectedSize : 'Small';
+  const selectedDough = getRouteParams(navigation, 'Dough', { selectedDough: '0', selectedDoughImage: '0' });
+  const selectedSauce = getRouteParams(navigation, 'Sauce', { selectedSauce: 'Add', selectedSauceImage: '0' });
+  const selectedToppings = getRouteParams(navigation, 'Toppings', { selectedToppings: [] , selectedToppingImages: '0'});
+  const selectedSize = getRouteParams(navigation, 'Size', { selectedSize: 'Small' });
+
+  // Handles navigation
+  const handleNavigation = () => {
+    switch (currentRoute) {
+      case "Dough":
+        navigation.navigate('Sauce', selectedDough);
+        break;
+      case "Sauce":
+        navigation.navigate('Toppings', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage });
+        break;
+      case "Toppings":
+        navigation.navigate('Size', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages:selectedToppings.selectedToppingImages });
+        break;
+      case "Size":
+        console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
+        break;
+      default:
+        break;
+    }
   };
 
   return (
-    <TouchableOpacity
-      onPress={() => {
-        if (currentRoute === "Dough") {
-          navigation.navigate('Sauce');
-        } else if (currentRoute === "Sauce") {
-          const selectedSauce = getCurrentSauce(); // Get current selected sauce
-          navigation.navigate('Toppings', { selectedSauce: selectedSauce }); // Pass selectedSauce
-        } else if (currentRoute === "Toppings") {
-          const selectedSauce = getCurrentSauce();
-          const selectedToppings = getCurrentToppings();
-          console.log('Selected Toppings:', selectedToppings);
-          navigation.navigate('Size', { selectedSauce: selectedSauce, selectedToppings: selectedToppings }); // Pass selected sauce and toppings
-        } else if (currentRoute === "Size") {
-          const selectedSauce = getCurrentSauce();
-          const selectedToppings = getCurrentToppings();
-          const selectedSize = getCurrentSize();
-          
-          console.log('Order Summary:', { selectedSauce, selectedToppings, selectedSize });
-        }
-        // Add more screens here as needed
-      }}
-      style={{ paddingRight: 15 }}
-    >
+    <TouchableOpacity onPress={handleNavigation} style={{ paddingRight: 15 }}>
       <Ionicons name="chevron-forward" size={24} color="#E04A2B" />
     </TouchableOpacity>
   );
@@ -110,12 +117,15 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
+        <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  
         <Stack.Screen name="Details" component={DetailsScreen}  />
+        <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ title: 'Leave Feedback' }} />
         {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
         <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen}  />
+        <Stack.Screen name="Address" component={AddressScreen}/>
       </Stack.Navigator>
     // <Stack.Navigator>
       
@@ -157,8 +167,8 @@ export default function App({ navigation }) {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Settings') {
             iconName = focused ? 'settings' : 'settings-outline';
-          } else if (route.name === 'Timer') {
-            iconName = focused ? 'timer' : 'timer-outline';
+          } else if (route.name === 'Order') {
+            iconName = focused ? 'pizza' : 'pizza-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -170,10 +180,11 @@ export default function App({ navigation }) {
     >
       <Tab.Screen name="Settings" component={SettingsScreen} />
       <Tab.Screen name="Home" component={HomeStackScreen} />
-      <Tab.Screen name="Timer">
+      <Tab.Screen name="Order">
         {/* calling the TimerComplete function for the badge */}
         {(props) => <TimerScreen {...props} onTimerEnd={handleTimerEnd} />}
       </Tab.Screen>
+      <Tab.Screen name="Feedback" component={FeedbackScreen} />
     </Tab.Navigator>
   </NavigationContainer>
   );

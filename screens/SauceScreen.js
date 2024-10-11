@@ -5,16 +5,19 @@ import { saveOrder } from '../database/Old_db';
 import sauceImg from '../assets/pizza_pngs/sauce.png';
 
 export default function SauceScreen({ route, navigation }) {
-    const options = [
-        {label: 'Add sauce', value: 'Add' },
+    const sauceOptions = [
+        {label: 'Add sauce', value: 'Add', image: sauceImg },
         {label: 'No sauce', value: 'None' }
       ];
 
+    const { selectedDough, selectedDoughImage } = route.params;
     const [selectedSauce, setSelectedSauce] = useState('Add');
+    const [selectedSauceImage, setSelectedSauceImage] = useState(sauceOptions[0].value); // Used for saving the current image
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             const orderData = {
+                dough: selectedDough,
                 sauce: selectedSauce,
                 toppings: null, // This will be updated in ToppingsScreen
                 size: null // This will be updated in SizeScreen
@@ -32,10 +35,12 @@ export default function SauceScreen({ route, navigation }) {
         return unsubscribe; // Cleanup the listener
     }, [navigation, selectedSauce]); // Re-run effect if selectedSauce changes
     
-    setSelected= ( value ) => {
+    setSelected = (value) => {
+        selectedOption = sauceOptions.find(options => options.value === value);
         setSelectedSauce(value);
+        setSelectedSauceImage(selectedOption.image) // Update selected sauce image if available
         console.log('Sauce selected:', value);
-        navigation.setParams({ selectedSauce: value }); // Update navigation params with selectedSauce
+        navigation.setParams({ selectedSauce: value, selectedSauceImage: selectedOption.image }); // Update navigation params with selectedSauce and image
     }
     
     return (
@@ -43,7 +48,7 @@ export default function SauceScreen({ route, navigation }) {
             <Text style={styles.title}>Choose the sauce</Text>
                 <View style={styles.listStyle}>
                     <RadioForm
-                        radio_props={options}
+                        radio_props={sauceOptions.map(option => ({ label: option.label, value: option.value }))}
                         initial={0}
                         onPress={(value) => setSelected(value)}
                         buttonColor={'#E04A2B'}
@@ -54,6 +59,7 @@ export default function SauceScreen({ route, navigation }) {
                     />
                 </View>
                 <View style={styles.pizzaContainer}>
+                    <Image source={selectedDoughImage} style={styles.doughImage} />
                     {/* render the image when the sauce is selected */}
                     {selectedSauce === "Add" && (
                     <Image source={sauceImg} style={styles.sauceImage} />
@@ -106,8 +112,13 @@ const styles = StyleSheet.create({
         height: 200,
         position: 'relative', // for the absolute position for the toppings
     },
+    doughImage: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+    },
     sauceImage: {
-        position: 'absolute', // absolute position to allow stacking of the toppings
+        position: 'absolute',
         width: '100%',
         height: '100%',
     },
