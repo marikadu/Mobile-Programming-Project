@@ -61,7 +61,12 @@ export default function SizeScreen({ route, navigation }) {
                 alert('Your pizza order has been placed!');
 
                 // After saving, navigate to the order summary or main menu
-                navigation.navigate('Dough');
+                // navigation.navigate('Dough');
+
+                // after sending the pizza, navigate to the timer screen
+                navigation.navigate('Order', { screen: 'Timer' });
+                // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
+                // and after that to Timer
             })
             .catch((err) => {
                 console.error('Error saving order:', err);

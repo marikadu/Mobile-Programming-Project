@@ -10,9 +10,9 @@ import DoughScreen_db from './components/screens/DoughScreen_db.js';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
 import SizeScreen from './screens/SizeScreen';
-import OrderScreen from './screens/OrderScreen';
+import OrderDetailsScreen from './screens/OrderDetailsScreen';
 import TimerScreen from './screens/TimerScreen';
-import HomeScreen from './components/HomeScreen.js';
+import HomeScreen from './components/HomeScreen';
 // Address Screen is a part of the "Home" from tab navigation right now
 import AddressScreen from './components/AddressScreen';
 import PastOrdersScreen from './components/PastOrdersScreen';
@@ -118,8 +118,8 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  
+        <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} options={{ title: 'Creating a pizza' }}/>
+        {/* <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>   */}
         <Stack.Screen name="Details" component={DetailsScreen}  />
         {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
         <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
@@ -145,7 +145,8 @@ const OrderStackScreen = ({ navigation }) => {
   return (
     <Stack.Navigator
       // initially starting with TimerScreen, has to be changed to Previous Orders Screen later on
-      initialRouteName="Timer"
+      // initialRouteName="Timer"
+      initialRouteName="PastOrders"
       screenOptions={{
         headerStyle: {
           backgroundColor: 'white',
@@ -162,9 +163,10 @@ const OrderStackScreen = ({ navigation }) => {
       }}
     >
       {/* stack screens for the Order Pizza navigation */}
-      <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }} />
+      <Stack.Screen name="PastOrders" component={PastOrdersScreen} options={{ title: 'Previous Orders' }} />
+      {/* <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }} /> */}
       {/* this has to be devided */}
-      <Stack.Screen name="Timer" options={{ title: 'Creating a pizza' }}>
+      <Stack.Screen name="Timer" options={{ title: 'Waiting for the delivery' }}>
         {props => <TimerScreen {...props} onTimerEnd={handleTimerEnd} />}
       </Stack.Screen>
       <Stack.Screen name="Details" component={DetailsScreen} />

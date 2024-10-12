@@ -13,7 +13,7 @@ import basilImg from '../assets/pizza_pngs/topping_basil.png';
 import pepperoniImg from '../assets/pizza_pngs/topping_pepperoni.png';
 import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
 
-export default function OrderScreen(route, navigation) {
+export default function OrderDetailsScreen(route, navigation) {
   // hardcoded pizza for now, passed new pizza should be here
   const pizzaList = [
 
