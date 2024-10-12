@@ -221,6 +221,7 @@ export default function App({ navigation }) {
           tabBarActiveTintColor: '#E04A2B',
           tabBarInactiveTintColor: 'gray',
           tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer has expired
+          headerShown: false, // Hide the header
         })}
       >
         <Tab.Screen name="Settings" component={SettingsScreen} />
