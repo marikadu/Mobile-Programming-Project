@@ -11,7 +11,7 @@ const doughOptions = [
   { label: 'Wholewheat Dough', image: wholeWheatDough },
 ];
 
-export default function DoughScreen(props, route, navigation) {
+export default function DoughScreen(props, navigation) {
   // tracking the current dough visible, the starting index of 0 for the Original Dough
   // const [currentDoughIndex, setCurrentDoughIndex] = useState(0);
   // tracking the current dough visible, the starting index of 0 for the Original Dough
@@ -19,39 +19,31 @@ export default function DoughScreen(props, route, navigation) {
   const [selectedDoughImage, setSelectedDoughImage] = useState(doughOptions[0].image); // Used for saving the current image
   const [doughIndex, setDoughIndex] = useState(0); // Store the index for navigation
 
-  const handleDoughSelect = (index) => {
-    setDoughIndex(index);
-    // Update the pizza object with the selected dough
-    setPizza(prevPizza => ({
-      ...prevPizza,
-      dough: doughOptions[index].value,
-    }));
-  };
 
-//   useEffect(() => {
-//     const unsubscribe = props.navigation.addListener('focus', () => {
-//         const orderData = {
-//             dough: selectedDough,
-//             sauce: null, // This will be updated in SauceCreen
-//             toppings: null, // This will be updated in ToppingsScreen
-//             size: null // This will be updated in SizeScreen
-//         };
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+        const orderData = {
+            dough: selectedDough,
+            sauce: null, // This will be updated in SauceCreen
+            toppings: null, // This will be updated in ToppingsScreen
+            size: null // This will be updated in SizeScreen
+        };
 
-//         saveOrder(orderData)
-//             .then(() => {
-//                 console.log('Dough saved:', orderData);
-//             })
-//             .catch((error) => {
-//                 console.error('Error saving dough:', error);
-//             });
-//     });
+        saveOrder(orderData)
+            .then(() => {
+                console.log('Dough saved:', orderData);
+            })
+            .catch((error) => {
+                console.error('Error saving dough:', error);
+            });
+    });
 
-//     return unsubscribe; // Cleanup the listener
-// }, [navigation, selectedDough]); // Re-run effect if selectedSauce changes
+    return unsubscribe; // Cleanup the listener
+}, [navigation, selectedDough]); // Re-run effect if selectedSauce changes
 
 useEffect(() => {
-    props.params = ({ selectedDough, selectedDoughImage });
-}, [selectedDough, selectedDoughImage, props]);
+    navigation.setParams({ selectedDough, selectedDoughImage });
+}, [selectedDough, selectedDoughImage, navigation]);
 
 
 //   function for the left arrow -> array goes backward 
@@ -64,7 +56,6 @@ const handleLeftPress = () => {
     setSelectedDough(doughOptions[newIndex].value); // Update the selected dough value
     setSelectedDoughImage(doughOptions[newIndex].image); // Update the selected image
     console.log('Dough selected:', doughOptions[newIndex].value); // Log after calculating the new index
-    props.params = {selectedDough, selectedDoughImage, doughIndex, doughOptions};
     return newIndex;
   });
 };
@@ -97,7 +88,6 @@ const handleLeftPress = () => {
 
 
   return (
-    
     <View style={styles.container}>
         <Text style={styles.title}>Choose the Dough</Text>
         {/* container for the dough lable and the arrows */}
@@ -131,28 +121,6 @@ const handleLeftPress = () => {
         </View>
       </View>
     </View>
-  // <View style={styles.container}>
-  //       <Text style={styles.title}>Choose the Dough</Text>
-  //       <View style={styles.lableArrows}>
-  //         {/* Left Arrow */}
-  //         <TouchableOpacity onPress={() => handleDoughSelect((doughIndex - 1 + doughOptions.length) % doughOptions.length)}>
-  //           <Text style={styles.arrow}>&lt;</Text>
-  //         </TouchableOpacity>
-  
-  //         {/* Dough Label */}
-  //         <Text style={styles.doughLabel}>{doughOptions[doughIndex].label}</Text>
-  
-  //         {/* Right Arrow */}
-  //         <TouchableOpacity onPress={() => handleDoughSelect((doughIndex + 1) % doughOptions.length)}>
-  //           <Text style={styles.arrow}>&gt;</Text>
-  //         </TouchableOpacity>
-  //       </View>
-  
-  //       <View style={styles.pizzaContainer}>
-  //         {/* Render selected dough image */}
-  //         <Image source={doughOptions[doughIndex].image} style={styles.doughImage} />
-  //       </View>
-  //     </View>
   );
 }
 

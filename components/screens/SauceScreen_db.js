@@ -4,38 +4,46 @@ import RadioForm from 'react-native-simple-radio-button';
 import { saveOrder } from '../../database/Old_db';
 import sauceImg from '../../assets/pizza_pngs/sauce.png';
 
-export default function SauceScreen_db(props) {
-    const options = [
-        {label: 'Add sauce', value: 'Add' },
+export default function SauceScreen({ props,route, navigation }) {
+    // const { selectedDough, selectedDoughImage } = route.params;
+
+
+    const sauceOptions = [
+        {label: 'Add sauce', value: 'Add', image: sauceImg },
         {label: 'No sauce', value: 'None' }
       ];
 
+    // const { selectedDough, selectedDoughImage } = route.params;
     const [selectedSauce, setSelectedSauce] = useState('Add');
+    const [selectedSauceImage, setSelectedSauceImage] = useState(sauceOptions[0].value); // Used for saving the current image
 
-    useEffect(() => {
-        const unsubscribe = props.navigation.addListener('focus', () => {
-            const orderData = {
-                sauce: selectedSauce,
-                toppings: null, // This will be updated in ToppingsScreen
-                size: null // This will be updated in SizeScreen
-            };
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         const orderData = {
+    //             dough: selectedDough,
+    //             sauce: selectedSauce,
+    //             toppings: null, // This will be updated in ToppingsScreen
+    //             size: null // This will be updated in SizeScreen
+    //         };
 
-            saveOrder(orderData)
-                .then(() => {
-                    console.log('Sauce saved:', orderData);
-                })
-                .catch((error) => {
-                    console.error('Error saving sauce:', error);
-                });
-        });
+    //         saveOrder(orderData)
+    //             .then(() => {
+    //                 console.log('Sauce saved:', orderData);
+    //             })
+    //             .catch((error) => {
+    //                 console.error('Error saving sauce:', error);
+    //             });
+    //     });
 
-        return unsubscribe; // Cleanup the listener
-    }, [props.navigation, selectedSauce]); // Re-run effect if selectedSauce changes
+    //     return unsubscribe; // Cleanup the listener
+    // }, [navigation, selectedSauce]); // Re-run effect if selectedSauce changes
     
-    setSelected= ( value ) => {
+    const setSelected = (value) => {
+        selectedOption = sauceOptions.find(options => options.value === value);
         setSelectedSauce(value);
+        setSelectedSauceImage(selectedOption.image) // Update selected sauce image if available
         console.log('Sauce selected:', value);
-        props.navigation.setParams({ selectedSauce: value }); // Update navigation params with selectedSauce
+        navigation.setParams({ selectedSauce: value, selectedSauceImage: selectedOption.image }); // Update navigation params with selectedSauce and image
     }
     
     return (
@@ -43,7 +51,7 @@ export default function SauceScreen_db(props) {
             <Text style={styles.title}>Choose the sauce</Text>
                 <View style={styles.listStyle}>
                     <RadioForm
-                        radio_props={options}
+                        radio_props={sauceOptions.map(option => ({ label: option.label, value: option.value }))}
                         initial={0}
                         onPress={(value) => setSelected(value)}
                         buttonColor={'#E04A2B'}
@@ -54,12 +62,12 @@ export default function SauceScreen_db(props) {
                     />
                 </View>
                 <View style={styles.pizzaContainer}>
+                    {/* <Image source={route.params.selectedDoughImage} style={styles.doughImage} /> */}
                     {/* render the image when the sauce is selected */}
                     {selectedSauce === "Add" && (
                     <Image source={sauceImg} style={styles.sauceImage} />
                 )}
                 </View>
-                
                 
     </View>
     );
@@ -67,13 +75,13 @@ export default function SauceScreen_db(props) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
     },
     title: {
-        flex: 1,
+        // flex: 1,
         fontSize: 24,
         color: '#ba3d23',
         fontWeight: 'bold',
@@ -88,7 +96,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
     listStyle: {
-        flex: 10,
+        // flex: 10,
         width: '80%',
         alignSelf: 'center',
     },
@@ -107,8 +115,13 @@ const styles = StyleSheet.create({
         height: 200,
         position: 'relative', // for the absolute position for the toppings
     },
+    doughImage: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+    },
     sauceImage: {
-        position: 'absolute', // absolute position to allow stacking of the toppings
+        position: 'absolute',
         width: '100%',
         height: '100%',
     },

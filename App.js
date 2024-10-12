@@ -139,6 +139,16 @@ const HomeStackScreen = () => {
   )
 }
 
+// const CreatePizzaStackScreen = () => {
+//   return (
+//     <Stack.Navigator initialRouteName='CreatePizza'>
+//       <Stack.Screen name = "db_DoughScreen" component={DoughScreen_db} options={{ title: 'Pick your DOUGH' }}/>
+//       <Stack.Screen name = "CreatePizza" component={CreatePizzaScreen} options={{ title: 'Create Your Pizza' }}/>
+//       <Stack.Screen name = "SauceScreen_db" component={SauceScreen_db} options={{ title: 'Select your Sauce' }}/>
+//     </Stack.Navigator>
+//   )
+// }
+
 export default function App({ navigation }) {
   useEffect(() => {
     // Initialize database and create tables
@@ -181,6 +191,7 @@ export default function App({ navigation }) {
         tabBarActiveTintColor: '#E04A2B',
         tabBarInactiveTintColor: 'gray',
       tabBarBadge: route.name === 'Timer' && timerExpired ? '' : undefined, // Show badge if timer has expired
+      headerShown: false,
       })}
     >
       <Tab.Screen name="Settings" component={SettingsScreen} />
