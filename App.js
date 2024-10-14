@@ -223,6 +223,7 @@ export default function App({ navigation }) {
           tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer has expired
           headerShown: false, // Hide the header
         })}
+        initialRouteName='Home'
       >
         <Tab.Screen name="Settings" component={SettingsScreen} />
         <Tab.Screen name="Home" component={HomeStackScreen} />

@@ -9,9 +9,9 @@ const HomeScreen = (props) =>{
 
 
     ////////////////IMPLEMENT THE DATABASE HERE ///////////////////
-    const [newPizza, setPizza]=useState("");
+    const [newPizza, setPizza]=useState({dough: null, sauce: null, toppings: [], size: null},);
     const [updateId, setUpdateId]=useState(0);
-    const [pizzaList, addFish]=useState([
+    const [pizzaList, addPizza]=useState([
       {"id":1, "type":"Pepperoni", "price":"12.90", description: "Original dough, With sauce, Cheese, Pepperoni", image: require('../assets/pizza_pngs/menu/pepperoni.png') },
       {"id":3, "type":"Mushrooms", "price":"11.90", description: "Original dough, With sauce, Cheese, Mushrooms",image: require('../assets/pizza_pngs/menu/mushrooms.png') }]);
     
