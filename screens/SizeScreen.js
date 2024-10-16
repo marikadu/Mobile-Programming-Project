@@ -1,7 +1,9 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
-import { saveOrder } from '../database/Old_db';
+import { saveOrder, printSomething } from '../database/Old_db';
+import { addPizza, fetchAllPizza } from '../database/db';  
+
 
 export default function SizeScreen({ route, navigation }) {
     const options = [
@@ -23,20 +25,30 @@ export default function SizeScreen({ route, navigation }) {
                 size: selectedSize,
             };
 
-            saveOrder(orderData)
-                .then(() => {
-                    console.log('Size saved:', orderData);
-                })
-                .catch((error) => {
-                    console.error('Error saving size:', error);
-                });
+            // const newPizza = {
+            //     dough: selectedDough,
+            //     sauce: selectedSauce,
+            //     toppings: selectedToppings,
+            //     size: selectedSize,
+            // }
+
+            // printSomething({newPizza});
+
+            // saveOrder(orderData)
+            //     .then(() => {
+            //         console.log('Size saved:', orderData);
+                    
+            //     })
+            //     .catch((error) => {
+            //         console.error('Error saving size:', error);
+            //     });
         });
 
         return unsubscribe; // Cleanup the listener
     }, [navigation, selectedSize]); // Run effect if selectedSize changes
 
     setSelected = (value) => {
-        console.log(value);
+        // console.log(value);
         setSelectedSize(value);
     }
 
@@ -51,27 +63,53 @@ export default function SizeScreen({ route, navigation }) {
         };
 
         // Log the order data to verify what's being sent
-        console.log('Order Data:', orderData);
-        console.log('Selected Toppings:', selectedToppings);
+        // console.log('Order Data:', orderData);
+        // console.log('Selected Toppings:', selectedToppings);
+
+        const newPizza = {
+            dough: selectedDough,
+            sauce: selectedSauce,
+            toppings: selectedToppings,
+            size: selectedSize,
+        }
+
+        // 
+
+        // printSomething({newPizza});
+
+        addPizza(newPizza).then(() => {
+            alert("Your pizza has been added to the database!");
+            // after sending the pizza, navigate to the timer screen
+            navigation.navigate('Order', { screen: 'Timer' });
+            // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
+            // and after that to Timer
+        }).catch((error) => {
+            console.error('Error saving order:', err);
+            alert('Failed to place the order. Please try again.');
+        });
+        fetchAllPizza();
+
+
 
         // Save the order to SQLite
-        saveOrder(orderData)
-            .then(() => {
-                console.log('Order saved:', orderData);
-                alert('Your pizza order has been placed!');
+        // saveOrder(orderData)
+        //     .then(() => {
+        //         // console.log('Order saved:', orderData);
+        //         console.log('Pizza saved:', newPizza);
+        //         alert('Your pizza order has been placed!');
 
-                // After saving, navigate to the order summary or main menu
-                // navigation.navigate('Dough');
+        //         // After saving, navigate to the order summary or main menu
+        //         // navigation.navigate('Dough');
 
-                // after sending the pizza, navigate to the timer screen
-                navigation.navigate('Order', { screen: 'Timer' });
-                // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
-                // and after that to Timer
-            })
-            .catch((err) => {
-                console.error('Error saving order:', err);
-                alert('Failed to place the order. Please try again.');
-            });
+        //         // after sending the pizza, navigate to the timer screen
+        //         navigation.navigate('Order', { screen: 'Timer' });
+        //         // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
+        //         // and after that to Timer
+        //     })
+        //     .catch((err) => {
+        //         console.error('Error saving order:', err);
+        //         alert('Failed to place the order. Please try again.');
+        //     });
     };
 
     return (

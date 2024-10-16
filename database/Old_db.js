@@ -21,6 +21,9 @@ export const getDBConnection = async () => {
     }
     return db;
 };
+export const printSomething = (value) => {
+    console.log('Something like this:', value);
+}
 
 export const createTables = async () => {
     const db = await getDBConnection(); // Ensure you get the db connection
@@ -33,7 +36,7 @@ export const createTables = async () => {
                 `DROP TABLE IF EXISTS pizza_orders;`,
                 [],
                 () => {
-                    console.log(`Table pizza_orders dropped!`);
+                    // console.log(`Table pizza_orders dropped!`);
 
                     // Create the pizza_orders table
                     tx.executeSql(
@@ -49,7 +52,7 @@ export const createTables = async () => {
                             order_date TEXT
                         )`,
                         [],
-                        () => console.log('Table pizza_orders created!'),
+                        // () => console.log('Table pizza_orders created!'),
                         (_, error) => console.log('Error creating table', error)
                     );
 

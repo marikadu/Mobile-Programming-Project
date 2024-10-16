@@ -17,6 +17,12 @@ export default function DoughScreen({ route, navigation }) {
     const [selectedDough, setSelectedDough] = useState(0);
     const [selectedDoughImage, setSelectedDoughImage] = useState(doughOptions[0].image); // Used for saving the current image
     const [doughIndex, setDoughIndex] = useState(0); // Store the index for navigation
+    // PIZZA OBJECT AT WORK HERE
+    // const [newPizza, setPizza] = useState({ dough: null, sauce: null, toppings: [], size: null });
+    // update the pizza object here
+    // setPizza({...newPizza,dough: doughOptions[newIndex].value});
+    // console.log('PizzaAAAAAA:', newPizza.dough);
+
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -27,13 +33,13 @@ export default function DoughScreen({ route, navigation }) {
                 size: null // This will be updated in SizeScreen
             };
 
-            saveOrder(orderData)
-                .then(() => {
-                    console.log('Dough saved:', orderData);
-                })
-                .catch((error) => {
-                    console.error('Error saving dough:', error);
-                });
+            // saveOrder(orderData)
+            //     .then(() => {
+            //         console.log('Dough saved:', orderData);
+            //     })
+            //     .catch((error) => {
+            //         console.error('Error saving dough:', error);
+            //     });
         });
 
         return unsubscribe; // Cleanup the listener
@@ -67,6 +73,8 @@ export default function DoughScreen({ route, navigation }) {
         setSelectedDough(doughOptions[newIndex].value); // Update the selected dough value
         setSelectedDoughImage(doughOptions[newIndex].image); // Update the selected image
         console.log('Dough selected:', doughOptions[newIndex].value); // Log after calculating the new index
+        // console.log('RIGHT CLICK ', newPizza.dough);
+        
         return newIndex;
       });
     };
@@ -85,6 +93,9 @@ export default function DoughScreen({ route, navigation }) {
             <Text style={styles.doughLabel}>
                 {doughOptions[doughIndex].label}
             </Text>
+            {/* <Text>
+              {newPizza.dough}
+            </Text> */}
 
             {/* right arrow */}
             <TouchableOpacity onPress={handleRightPress}>

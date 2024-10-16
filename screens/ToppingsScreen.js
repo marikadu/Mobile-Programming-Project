@@ -38,16 +38,20 @@ export default function Toppings({ route, navigation }) {
   
       // / Collect selected toppings and their images, and through nav params get the information to next screens
       const selectedToppings = toppingsList.filter(t => t.selected);
+
+      // Place the pizza here
+
+      ///
       const selectedToppingTitles = selectedToppings.map(t => t.title);
       const selectedToppingImages = selectedToppings.map(t => t.image);
       navigation.setParams({ selectedToppings: selectedToppingTitles, selectedToppingImages: selectedToppingImages }); // Pass selected toppings to params
 
       // Save the orderData object to the database whenever selectedToppings changes
-      if (selectedToppings.length > 0) {
-        saveOrder(orderData)
-          .then(() => console.log('Order saved with sauce and toppings:', orderData))
-          .catch((error) => console.error('Error saving order:', error));
-      }
+      // if (selectedToppings.length > 0) {
+      //   saveOrder(orderData)
+      //     .then(() => console.log('Order saved with sauce and toppings:', orderData))
+      //     .catch((error) => console.error('Error saving order:', error));
+      // }
     }, [navigation, toppingsList]); // Run effect if toppingsList changes (includes selection changes)
 
     const renderTopping=({ item })=>{

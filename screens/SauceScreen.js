@@ -23,13 +23,13 @@ export default function SauceScreen({ route, navigation }) {
                 size: null // This will be updated in SizeScreen
             };
 
-            saveOrder(orderData)
-                .then(() => {
-                    console.log('Sauce saved:', orderData);
-                })
-                .catch((error) => {
-                    console.error('Error saving sauce:', error);
-                });
+            // saveOrder(orderData)
+            //     .then(() => {
+            //         console.log('Sauce saved:', orderData);
+            //     })
+            //     .catch((error) => {
+            //         console.error('Error saving sauce:', error);
+            //     });
         });
 
         return unsubscribe; // Cleanup the listener
@@ -39,7 +39,7 @@ export default function SauceScreen({ route, navigation }) {
         selectedOption = sauceOptions.find(options => options.value === value);
         setSelectedSauce(value);
         setSelectedSauceImage(selectedOption.image) // Update selected sauce image if available
-        console.log('Sauce selected:', value);
+        // console.log('Sauce selected:', value);
         navigation.setParams({ selectedSauce: value, selectedSauceImage: selectedOption.image }); // Update navigation params with selectedSauce and image
     }
     

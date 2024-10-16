@@ -26,9 +26,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
 import {CreatePizzaScreen} from './components/screens/CreatePizzaScreen.js';
 
+// IMPORT DATABASE FUNCTIONS
+import {init, addPizza, updatePizza, deletePizza, fetchAllPizza} from './database/db.js';
+ init(); // Initialize the Pizza Database
+ fetchAllPizza(); // Fetch all the pizzas from the database
+
+ // 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+// PIZZA OBJECT
+// const [newPizza, setPizza] = useState({ dough: null, sauce: null, toppings: [], size: null });
+
+let newPizza = { dough: null, sauce: null, toppings: [], size: null };
 // Gets the default parameters of each object
 const defaultParams = {
   Dough: { selectedDough: '0', selectedDoughImage: '0' },
@@ -51,20 +61,22 @@ const HeaderRightButton = ({ navigation }) => {
   const selectedToppings = getRouteParams(navigation, 'Toppings', { selectedToppings: [], selectedToppingImages: '0' });
   const selectedSize = getRouteParams(navigation, 'Size', { selectedSize: 'Small' });
 
+  // newPizza = { ...newPizza, dough: selectedDough.selectedDough, sauce: selectedSauce.selectedSauce, toppings: selectedToppings.selectedToppings.true, size: selectedSize.selectedSize };
+  // console.log('New Pizza:', newPizza);
   // Handles navigation
   const handleNavigation = () => {
     switch (currentRoute) {
       case "Dough":
-        navigation.navigate('Sauce', selectedDough);
+        navigation.navigate('Sauce', {selectedDough, ...newPizza});
         break;
       case "Sauce":
-        navigation.navigate('Toppings', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage });
+        navigation.navigate('Toppings', {...newPizza, ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage });
         break;
       case "Toppings":
-        navigation.navigate('Size', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages: selectedToppings.selectedToppingImages });
+        navigation.navigate('Size', {...newPizza, ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages: selectedToppings.selectedToppingImages });
         break;
       case "Size":
-        console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
+        console.log('Order Summary:', { ...newPizza, ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
         break;
       default:
         break;
@@ -113,7 +125,7 @@ const HomeStackScreen = () => {
         {/* <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} /> */}
         <Stack.Screen name="Home" component={HomeScreen} options={({route}) => ({title: route.params?.name ? route.params.name : "Home"})} />
         <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name = "db_DoughScreen" component={DoughScreen_db} options={{ title: 'Pick your DOUGH' }}/>
+        {/* <Stack.Screen name = "db_DoughScreen" component={DoughScreen_db} options={{ title: 'Pick your DOUGH' }}/> */}
         <Stack.Screen name = "CreatePizza" component={CreatePizzaScreen} options={{ title: 'Create Your Pizza' }}/>
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
@@ -176,13 +188,13 @@ const OrderStackScreen = ({ navigation }) => {
 };
 
 export default function App({ navigation }) {
-  useEffect(() => {
-    // Initialize database and create tables
-    getDBConnection()
-      .then(() => createTables()) // Wait for the tables to be created
-      .then(() => console.log('Tables created successfully'))
-      .catch((error) => console.error('Error creating tables:', error));
-  }, []);
+  // useEffect(() => {
+  //   // Initialize database and create tables
+  //   getDBConnection()
+  //     .then(() => createTables()) // Wait for the tables to be created
+  //     .then(() => console.log('Tables created successfully'))
+  //     .catch((error) => console.error('Error creating tables:', error));
+  // }, []);
 
   // tracking the end of the timer
   const [timerExpired, setTimerExpired] = useState(false);
