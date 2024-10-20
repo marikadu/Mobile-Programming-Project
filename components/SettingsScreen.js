@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button, Image, StyleSheet, TouchableHighlight } from 'react-native';
 
-import logo2 from '../assets/logos/logo2.jpg';
+import logo2 from '../assets/logos/logo_full.png';
 
 // Import the components
 import NavButtons from './NavButtons.js';
@@ -68,9 +68,9 @@ export const SettingsScreen=(props)=>{
       backgroundColor:"#fff", // covers the grey background
     },
     pizzaImage:{
-      height:100,
-      width:100,
-      bottom: 100,
+      height:210,
+      width:280,
+      bottom: 30,
     },
     button: {
       margin: 6,
