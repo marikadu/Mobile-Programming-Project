@@ -3,6 +3,7 @@ import { View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity, Text
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Custom icon for header
+import './gesture-handler';
 // import HomeScreen from './screens/HomeScreen';
 import DoughScreen from './screens/DoughScreen';
 import DoughScreen_db from './components/screens/DoughScreen_db.js';
@@ -70,6 +71,8 @@ const HeaderRightButton = ({ navigation }) => {
         break;
     }
   };
+
+  
 
   return (
     <TouchableOpacity onPress={handleNavigation} style={{ paddingRight: 15 }}>

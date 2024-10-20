@@ -39,7 +39,7 @@ const HomeScreen = (props) =>{
     /// ////////////////END OF THE IMPLEMENTATION HERE ///////////////////
 
     return (
-      <View style={{flex:1}}>
+      <View style={styles.screenContainer}>
         
         <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
 
@@ -100,6 +100,10 @@ const HomeScreen = (props) =>{
   }
 
   const styles=StyleSheet.create({
+    screenContainer:{
+      flex:1,
+      backgroundColor:"#fff", // covers the grey background
+    },
     imageContainer:{
       height:200,
       width:'50%',

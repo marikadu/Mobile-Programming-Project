@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, Button, Image, StyleSheet, TouchableHighlight } from 'react-native';
 
+import logo2 from '../assets/logos/logo2.jpg';
+
 // Import the components
 import NavButtons from './NavButtons.js';
 // idk what was this for but this import \/ didn't allow the text to appear so I had to close it
@@ -8,10 +10,10 @@ import NavButtons from './NavButtons.js';
 
 export const SettingsScreen=(props)=>{
     return (
-        <View style={{flex:1}}>
+        <View style={styles.screenContainer}>
         <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
-        {/* <Text>Settings Screen</Text> */}
 
+        <Image source={logo2} style={styles.pizzaImage} />
 
         <TouchableHighlight
           style={styles.button}
@@ -61,47 +63,16 @@ export const SettingsScreen=(props)=>{
   }
 
   const styles=StyleSheet.create({
-    navbuttonstyle:{
-      flex:2,
-      flexDirection:"row",
-      backgroundColor:"#def",
-      alignItems:"center",
-      justifyContent:"space-around",    
+    screenContainer:{
+      flex:1,
+      backgroundColor:"#fff", // covers the grey background
     },
-    imageContainer:{
-      height:200,
-      width:'50%',
-      borderRadius:200,
-      overflow:'hidden',
-      borderWidth:3,
-      borderColor:'red',
-    },
-    image:{
-      height:'100%',
-      width:'100%'
-    },
-    listItemStyle:{
-      borderWidth:1,
-      borderColor:"blue",
-      padding:5,
-      backgroundColor:"#abc",
-      width:"80%",
-      alignSelf:"center",
-    },
-    listStyle:{
-      flex:8,
-      alignItems:"center",
-      backgroundColor:"#fff",
-      borderColor:"red",
-      borderWidth:2,
-      width:"100%",
-    },
-    flatliststyle:{
-      width:'80%',
-      backgroundColor:'blue',
+    pizzaImage:{
+      height:100,
+      width:100,
+      bottom: 100,
     },
     button: {
-      backgroundColor:"#fff", // yes I know the white is ugly visible, I am working on it
       margin: 6,
       paddingTop: 12,
       width: 200,
