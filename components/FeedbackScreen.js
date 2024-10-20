@@ -60,7 +60,7 @@ export default function FeedbackScreen({ route, navigation }) {
 
   return (
     <KeyboardAvoidingView // KeyboardAvoidingView to make the elements stay on their place when keyboard opens
-      style={{ flex: 1 }}
+      style={styles.screenContainer}
       behavior="padding"
       keyboardVerticalOffset={80} // elements slightly go up
     >
@@ -99,6 +99,10 @@ export default function FeedbackScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   background: {
     backgroundColor: "#fff",
+  },
+  screenContainer:{
+    flex:1,
+    backgroundColor:"#fff", // covers the grey background
   },
   listItemStyle: {
     flex: 1,
