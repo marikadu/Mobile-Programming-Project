@@ -7,7 +7,6 @@ import NavButtons from './NavButtons.js';
 // const PepperoniPalsView = ({route, navigation}) =>{
 const HomeScreen = (props) =>{
 
-
     ////////////////IMPLEMENT THE DATABASE HERE ///////////////////
     const [newPizza, setPizza]=useState("");
     const [updateId, setUpdateId]=useState(0);
@@ -103,6 +102,11 @@ const HomeScreen = (props) =>{
     screenContainer:{
       flex:1,
       backgroundColor:"#fff", // covers the grey background
+    },
+    pizzaImage:{
+      height:100,
+      width:100,
+      bottom: 100,
     },
     imageContainer:{
       height:200,
