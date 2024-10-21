@@ -135,6 +135,7 @@ export const deletePizza = id => {
         //If the transaction succeeds, this is called
         () => {
           resolve();
+          console.log('DELETED SUCCESSFULLY ', id); // DEBUGGING
         },
         //If the transaction fails, this is called
         (_, err) => {
@@ -157,19 +158,15 @@ export const fetchAllPizza = () => {
           let items = []; //Create a new empty Javascript array
           //And add all the items of the result (database rows/records) into that table
           for (let i = 0; i < result.rows.length; i++) {
-            // items.push(result.rows.item(i)); //The form of an item is {dough: 'Original', sauce: "Tomato", toppings: ['Cheese', "tomatoes"], size: "Small"},
-            // console.log(result.rows.item(i)); //For debugging purposes to see the data in console window
             const row = result.rows.item(i);
 
             items.push({...row, toppings: (JSON.parse(row.toppings))}); // Convert/ Parse toppings from a JSON string to an array
           }
 
-          items.forEach((item, index) => {
-            console.log('FETCHED FROM DATABASE '+ index + ' ', item); //For debugging purposes to see the data in console window
+          // items.forEach((item, index) => {
+          //   console.log('FETCHED FROM DATABASE '+ index + ' ', item); //For debugging purposes to see the data in console window
             
-          });
-
-          // console.log('FETCHED FROM DATABASE', items); //For debugging purposes to see the data in console window
+          // });
           resolve(items); //The data the Promise will have when returned
         },
         (tx, err) => {

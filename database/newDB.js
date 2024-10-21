@@ -1,8 +1,8 @@
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
-// import { saveOrder, printSomething } from '../database/Old_db';
-import { addPizza, fetchAllPizza, deletePizza } from '../database/db';  
+import { saveOrder, printSomething } from '../database/Old_db';
+import { addPizza, fetchAllPizza } from '../database/db';  
 
 
 export default function SizeScreen({ route, navigation }) {
@@ -87,10 +87,7 @@ export default function SizeScreen({ route, navigation }) {
             console.error('Error saving order:', err);
             alert('Failed to place the order. Please try again.');
         });
-        // console.log(fetchAllPizza());
-        // console.log('Pizza deleted')
-        // deletePizza(3);
-        // console.log(fetchAllPizza());
+        fetchAllPizza();
 
 
 

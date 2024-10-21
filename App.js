@@ -24,15 +24,18 @@ import { LogoTitle } from './components/LogoTitle.js';
 import { MenuScreen } from './components/MenuScreen.js';
 import { SettingsScreen } from './components/SettingsScreen.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
+// import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
 import {CreatePizzaScreen} from './components/screens/CreatePizzaScreen.js';
 
 // IMPORT DATABASE FUNCTIONS
 import {init, addPizza, updatePizza, deletePizza, fetchAllPizza} from './database/db.js';
- init(); // Initialize the Pizza Database
- fetchAllPizza(); // Fetch all the pizzas from the database
-
- // 
+//  // Initialize the Pizza Database
+//  init().then(() => {
+//   console.log('Database Creation Succeeded!');
+// }).catch((err) => {
+//   console.log('Database Creation Failed!' + err);
+// })
+//  // 
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -187,12 +190,49 @@ const OrderStackScreen = ({ navigation }) => {
 
 export default function App({ navigation }) {
   useEffect(() => {
-    // Initialize database and create tables
-    getDBConnection()
-      .then(() => createTables()) // Wait for the tables to be created
-      .then(() => console.log('Tables created successfully'))
-      .catch((error) => console.error('Error creating tables:', error));
+  //   // Initialize database and create tables
+  //   getDBConnection()
+  //     .then(() => createTables()) // Wait for the tables to be created
+  //     .then(() => console.log('Tables created successfully'))
+  //     .catch((error) => console.error('Error creating tables:', error));
+  // Initialize the Pizza Database
+ init().then(() => {
+  console.log('Database Creation Succeeded!');
+}).catch((err) => {
+  console.log('Database Creation Failed!' + err);
+})
+
+// DOWNLOAD THE DATA FROM MONGODB HERE
+
+
+// Fetch all the pizzas from the database
+async function readAllPizza() {
+  try {
+    const dbResult = await fetchAllPizza();
+    console.log('dbResult readAllPizza in App.js');
+    console.log(dbResult);
+    setPizzaList(dbResult);
+  } catch (err) {
+    console.log('Error: ' + err);
+  } finally {
+    console.log('All Pizzas are RENDERED');
+  }
+}
+
+readAllPizza(); 
   }, []);
+
+   
+ // 
+
+  const [pizzaList, setPizzaList] = useState([]); // List of pizzas
+//  fetchAllPizza(); // Fetch all the pizzas from the database
+
+pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING 
+  console.log('PizzaList:', pizzaList); // DEBUGGING
+// deletePizza(3); // DEBUGGING
+
+
 
   // tracking the end of the timer
   const [timerExpired, setTimerExpired] = useState(false);
