@@ -7,7 +7,6 @@ import NavButtons from './NavButtons.js';
 // const PepperoniPalsView = ({route, navigation}) =>{
 const HomeScreen = (props) =>{
 
-
     ////////////////IMPLEMENT THE DATABASE HERE ///////////////////
     const [newPizza, setPizza]=useState({dough: null, sauce: null, toppings: [], size: null},);
     const [updateId, setUpdateId]=useState(0);
@@ -39,7 +38,7 @@ const HomeScreen = (props) =>{
     /// ////////////////END OF THE IMPLEMENTATION HERE ///////////////////
 
     return (
-      <View style={{flex:1}}>
+      <View style={styles.screenContainer}>
         
         <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
 
@@ -100,6 +99,15 @@ const HomeScreen = (props) =>{
   }
 
   const styles=StyleSheet.create({
+    screenContainer:{
+      flex:1,
+      backgroundColor:"#fff", // covers the grey background
+    },
+    pizzaImage:{
+      height:100,
+      width:100,
+      bottom: 100,
+    },
     imageContainer:{
       height:200,
       width:'50%',

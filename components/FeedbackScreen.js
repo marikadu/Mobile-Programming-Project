@@ -1,10 +1,9 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, Alert, ScrollView, StyleSheet, Image, TouchableHighlight, TextInput, KeyboardAvoidingView } from 'react-native';
 import React, { useState, useEffect } from 'react';
-// if you press the input field, the buttons go up with the keyboard for some reason
-// I'll try to fix this!
+
 import NavButtons from './NavButtons.js';
 
-export default function FeedbackScreen(route, navigation) {
+export default function FeedbackScreen({ route, navigation }) {
 
   // hardcoded address
   const addressDetails = {
@@ -24,8 +23,9 @@ export default function FeedbackScreen(route, navigation) {
         <Text style={styles.text}> Leave Feedback:</Text>
         <TextInput style={styles.orderItemStyle}
           placeholder="Leave Feedback"
-          onchangeText={newText => setText(newText)}
-          defaultValue={text}
+          onChangeText={newText => setText(newText)}
+          value={text}
+          // defaultValue={text}
         ></TextInput>
 
         {/* --- if we have time, the Camera goes here --- */}
@@ -33,44 +33,76 @@ export default function FeedbackScreen(route, navigation) {
     );
   };
 
+  // send feedback button handler
+  const handleSendFeedback = () => {
+    setText(''); // clear text input field
+
+    // thanking for the feedback
+    Alert.alert(
+      "Feedback Sent",
+      "Thank you for your feedback!",
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            // navigating to the Home Screen after sending the feedback
+            // navigation.navigate('Home'); // Assuming 'Home' is the name of your home screen in navigation
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Order', params: { screen: 'PastOrders' } }],
+            }); // Order tab goes back to be the Past Orders Screen
+            navigation.navigate('Home', { screen: 'Home' });
+          }
+        }
+      ]
+    );
+  };
+
   return (
-    <View style={{ flex: 1 }} backgroundColor="#fff">
-      <View style={styles.listStyle}>
-        {renderAddress()}
-      </View>
+    <KeyboardAvoidingView // KeyboardAvoidingView to make the elements stay on their place when keyboard opens
+      style={styles.screenContainer}
+      behavior="padding"
+      keyboardVerticalOffset={80} // elements slightly go up
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.listStyle}>
+          {renderAddress()}
+        </View>
 
-      {/* buttons */}
+        {/* take picture button */}
+        <TouchableHighlight
+          style={styles.button}
+          underlayColor='#EC863D'>
+          <Text style={styles.buttonText}>Take Picture</Text>
+        </TouchableHighlight>
 
-      {/* take picture button */}
-      <TouchableHighlight
-        style={styles.button}
-        underlayColor='#EC863D' // colour when pressed the "button"
+        {/* order details button */}
+        <TouchableHighlight
+          style={styles.button}
+          underlayColor='#EC863D'
         >
-        <Text style={[styles.buttonText]}>Take Picture</Text>
-      </TouchableHighlight>
+          <Text style={styles.buttonText}>Order Details</Text>
+        </TouchableHighlight>
 
-      {/* order details button */}
-      <TouchableHighlight
-        style={styles.button}
-        underlayColor='#EC863D'
-        >
-        <Text style={[styles.buttonText]}>Order Details</Text>
-      </TouchableHighlight>
-
-      {/* send feedback button */}
-      <TouchableHighlight
-        style={styles.button}
-        underlayColor='#EC863D'
-        >
-        <Text style={[styles.buttonText]}>Send Feedback</Text>
-      </TouchableHighlight>
-    </View>
+        {/* send feedback button */}
+        <TouchableHighlight
+          style={styles.button}
+          underlayColor='#EC863D'
+          onPress={handleSendFeedback}>
+          <Text style={styles.buttonText}>Send Feedback</Text>
+        </TouchableHighlight>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   background: {
     backgroundColor: "#fff",
+  },
+  screenContainer:{
+    flex:1,
+    backgroundColor:"#fff", // covers the grey background
   },
   listItemStyle: {
     flex: 1,
