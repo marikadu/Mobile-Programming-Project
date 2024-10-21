@@ -238,47 +238,13 @@ export default function App({ navigation }) {
           tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer has expired
           headerShown: false, // Hide the header
         })}
-        initialRouteName='Home'
+        initialRouteName='Home' // Set the initial route to Home
       >
         <Tab.Screen name="Settings" component={SettingsScreen} />
         <Tab.Screen name="Home" component={HomeStackScreen} />
         <Tab.Screen name="Order" component={OrderStackScreen} />
-
-
       </Tab.Navigator>
     </NavigationContainer>
-
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //   initialRouteName="PepperoniPals"
-    //   // initialRouteName="Dough"
-    //   screenOptions={({ navigation }) => ({
-    //     headerStyle: {
-    //       backgroundColor: 'white',
-    //     },
-    //     headerTintColor: '#E04A2B', // Left arrow and text color
-    //     headerTitleStyle: {
-    //       fontWeight: 'bold',
-    //     },
-    //     headerBackTitleVisible: false,
-    //     headerLeftContainerStyle: {
-    //       paddingLeft: 10,
-    //     },
-    //     headerTitleAlign: 'center',
-    //     headerRight: () => <HeaderRightButton navigation={navigation} />, // Right arrow component
-    //     headerLeft: () => <HeaderLeftButton navigation={navigation} />, // Left arrow component
-    //   })}>
-    //     <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} />
-    //     <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
-    //     <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
-    //     <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>  
-    //     <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  
-    //     <Stack.Screen name="Details" component={DetailsScreen}  />
-    //     {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
-    //     <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
-    //     <Stack.Screen name="Menu" component={MenuScreen} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
   );
 }
 

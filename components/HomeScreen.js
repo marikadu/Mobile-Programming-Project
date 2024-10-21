@@ -3,6 +3,7 @@ import {Button, Text, View, FlatList, Image, StyleSheet, TouchableOpacity, Touch
 
 // Import the components
 import NavButtons from './NavButtons.js';
+import { fetchAllPizza } from '../database/db.js';
 
 // const PepperoniPalsView = ({route, navigation}) =>{
 const HomeScreen = (props) =>{
@@ -14,6 +15,27 @@ const HomeScreen = (props) =>{
       {"id":1, "type":"Pepperoni", "price":"12.90", description: "Original dough, With sauce, Cheese, Pepperoni", image: require('../assets/pizza_pngs/menu/pepperoni.png') },
       {"id":3, "type":"Mushrooms", "price":"11.90", description: "Original dough, With sauce, Cheese, Mushrooms",image: require('../assets/pizza_pngs/menu/mushrooms.png') }]);
     
+
+      /////// TESTING OUT THE DATABASE /////////////////
+    const [pizzaDatabase, setPizzaDatabase]=useState([]);
+
+    async function readAllPizza() {
+      try {
+        const dbResult = await fetchAllPizza();
+        console.log('dbResult readAllPizza in HomeScreen.js');
+        console.log(dbResult);
+        setPizzaDatabase(dbResult);
+      } catch (err) {
+        console.log('Error: ' + err);
+      } finally {
+        console.log('All pizza are rendered' , pizzaDatabase);
+      }
+    }
+
+
+    //// END OF TESTING OUT THE DATABASE /////////////////
+
+
     const selectItemToUpdate=(id)=>{
       setUpdateId(id);
       setPizza(pizzaList[id].type);
@@ -74,6 +96,8 @@ const HomeScreen = (props) =>{
           >
           <Text style={[styles.buttonText]}>Create Pizza sqlite</Text>
         </TouchableHighlight>
+
+        <Button title="Read all PIZZA" onPress={() => readAllPizza()} />
         
           {/* <View style={styles.imageContainer}>
           <Image source={require('../assets/pizza_pngs/everything_pizza.png')}
