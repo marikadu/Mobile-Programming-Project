@@ -18,7 +18,7 @@ export const DetailsScreen=(props)=>{
     return (
       <View style={{flex:1}}>
         <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
-          <TextInput style={styles.inputStyle} placeholder="Pizza Type..." 
+          <TextInput style={styles.inputStyle} placeholder="Pizza Dough..." 
           onChangeText={pizzaInputHandler}
           value={newPizza} />
         {props.route.params ? <Text>{props.route.params.pizza.id}) {props.route.params.pizza.type} {props.route.params.pizza.price}€</Text> : null}
