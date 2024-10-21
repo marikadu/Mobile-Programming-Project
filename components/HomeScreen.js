@@ -10,7 +10,7 @@ const HomeScreen = (props) =>{
     ////////////////IMPLEMENT THE DATABASE HERE ///////////////////
     const [newPizza, setPizza]=useState("");
     const [updateId, setUpdateId]=useState(0);
-    const [pizzaList, addFish]=useState([
+    const [pizzaList, addPizza]=useState([
       {"id":1, "type":"Pepperoni", "price":"12.90", description: "Original dough, With sauce, Cheese, Pepperoni", image: require('../assets/pizza_pngs/menu/pepperoni.png') },
       {"id":3, "type":"Mushrooms", "price":"11.90", description: "Original dough, With sauce, Cheese, Mushrooms",image: require('../assets/pizza_pngs/menu/mushrooms.png') }]);
     
@@ -66,14 +66,14 @@ const HomeScreen = (props) =>{
           <Text style={[styles.buttonText]}>See Menu</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight
+        {/* <TouchableHighlight
           style={styles.button}
           // onPress={() => props.navigation.navigate("db_DoughScreen")} 
           onPress={() => props.navigation.navigate("CreatePizza")} 
           underlayColor='#EC863D' // colour when pressed the "button"
           >
           <Text style={[styles.buttonText]}>Create Pizza sqlite</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
         
           {/* <View style={styles.imageContainer}>
           <Image source={require('../assets/pizza_pngs/everything_pizza.png')}
@@ -91,9 +91,6 @@ const HomeScreen = (props) =>{
           </View>
       </View>
         </View>
-        {/* <NavButtons params={props.params}/> */}
-        {/* <NavButtons navigation={navigation} route = {route}/> */}
-        {/* <NavButtons params={props.params}/> */}
       </View>
     );
   }
