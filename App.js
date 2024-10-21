@@ -27,6 +27,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
 import {CreatePizzaScreen} from './components/screens/CreatePizzaScreen.js';
 
+// IMPORT DATABASE FUNCTIONS
+import {init, addPizza, updatePizza, deletePizza, fetchAllPizza} from './database/db.js';
+ init(); // Initialize the Pizza Database
+ fetchAllPizza(); // Fetch all the pizzas from the database
+
+ // 
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
