@@ -1,7 +1,9 @@
-import React from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableHighlight } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, Button, Image, StyleSheet, TouchableHighlight, Switch } from 'react-native';
+import { DarkModeContext } from '../App'; // dark mode content
 
-import logo2 from '../assets/logos/logo_full.png';
+import logo_full from '../assets/logos/logo_full.png';
+import logo_full_darkmode from '../assets/logos/logo_full2.png';
 
 // Import the components
 import NavButtons from './NavButtons.js';
@@ -9,11 +11,17 @@ import NavButtons from './NavButtons.js';
 // import { Text } from 'react-native-svg';
 
 export const SettingsScreen=(props)=>{
+  const { darkMode, setDarkMode } = useContext(DarkModeContext); // access dark mode state
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode); // toggle the dark mode state
+  };
+
     return (
-        <View style={styles.screenContainer}>
+      <View style={[styles.screenContainer, { backgroundColor: darkMode ? '#1c1b1b' : '#fff' }]}>
         <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
 
-        <Image source={logo2} style={styles.pizzaImage} />
+        <Image source={darkMode ? logo_full_darkmode : logo_full} style={styles.pizzaImage} />
 
         <TouchableHighlight
           style={styles.button}
@@ -27,26 +35,28 @@ export const SettingsScreen=(props)=>{
         <TouchableHighlight
           style={styles.button}
           underlayColor='#fff'
-          // onPress={()=> console.log('Address Details')}
           onPress={() => props.navigation.navigate("Address")} 
           >
-          <Text style={[styles.buttonText]}>Address Details</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? '#fff' : '#000' }]}>Address Details</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight
-          style={styles.button}
-          underlayColor='#fff'
-          onPress={()=> console.log('Settings')}
-          >
-          <Text style={[styles.buttonText]}>Settings</Text>
-        </TouchableHighlight>
+        {/* dark mode switch */}
+        <View style={styles.settingRow}>
+          <Text style={[styles.buttonText, { color: darkMode ? '#fff' : '#000' }]}>Dark Mode</Text>
+          <Switch
+            trackColor={{ false: "#767577", true: "#4a4848" }}
+            thumbColor={darkMode ? "#adaaaa" : "#f2f0f2"}
+            onValueChange={toggleDarkMode}
+            value={darkMode}
+          />
+        </View>
         
         <TouchableHighlight
           style={styles.button}
           underlayColor='#fff'
           onPress={()=> console.log('About Us')}
           >
-          <Text style={[styles.buttonText]}>About Us</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? '#fff' : '#000' }]}>About Us</Text>
         </TouchableHighlight>
 
         <TouchableHighlight
@@ -54,7 +64,7 @@ export const SettingsScreen=(props)=>{
           underlayColor='#fff'
           onPress={()=> console.log('Log Out')}
           >
-          <Text style={[styles.buttonText]}>Log Out</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? '#fff' : '#000' }]}>Log Out</Text>
         </TouchableHighlight>
          
         </View>
@@ -85,5 +95,12 @@ export const SettingsScreen=(props)=>{
       color: '#F58C41',
       textAlign: 'center',
       alignItems: 'center',
+    },
+    settingRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignSelf: 'center',
+      justifyContent: 'space-around',
+      width: 200,
     },
   });

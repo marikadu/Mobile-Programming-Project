@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, createContext, useEffect, useContext } from 'react';
 import { View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -57,12 +57,17 @@ const getRouteParams = (navigation, routeName) => {
 const HeaderRightButton = ({ navigation }) => {
   const currentRoute = navigation.getState().routes[navigation.getState().index].name;
 
+  // if the user is on the HomeScreen, don't show the arrow
+  // if (currentRoute === 'Home') {
+  //   return null;
+  // }
+
   const selectedDough = getRouteParams(navigation, 'Dough', { selectedDough: '0', selectedDoughImage: '0' });
   const selectedSauce = getRouteParams(navigation, 'Sauce', { selectedSauce: 'Add', selectedSauceImage: '0' });
   const selectedToppings = getRouteParams(navigation, 'Toppings', { selectedToppings: [], selectedToppingImages: '0' });
   const selectedSize = getRouteParams(navigation, 'Size', { selectedSize: 'Small' });
 
-  // Handles navigation
+  // handles navigation
   const handleNavigation = () => {
     switch (currentRoute) {
       case "Dough":
@@ -106,8 +111,11 @@ const HomeStackScreen = () => {
 
     <Stack.Navigator
       initialRouteName="Home"
-      // initialRouteName="Dough"
-      screenOptions={({ navigation }) => ({
+
+      // tab navigation with the arrows
+      screenOptions={({ navigation}) => {
+        
+        return {
         headerStyle: {
           backgroundColor: 'white',
         },
@@ -120,11 +128,21 @@ const HomeStackScreen = () => {
           paddingLeft: 10,
         },
         headerTitleAlign: 'center',
+        
         headerRight: () => <HeaderRightButton navigation={navigation} />, // Right arrow component
         headerLeft: () => <HeaderLeftButton navigation={navigation} />, // Left arrow component
-      })}>
+        };
+      }}>
         {/* <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} /> */}
-        <Stack.Screen name="Home" component={HomeScreen} options={({route}) => ({title: route.params?.name ? route.params.name : "Home"})} />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={({ route }) => ({
+            title: route.params?.name ? route.params.name : "Home",
+            // title: "",
+            headerShown: false, // header with arrows is not shown when on HomeScreen
+          })}
+        />
         <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name = "db_DoughScreen" component={DoughScreen_db} options={{ title: 'Pick your DOUGH' }}/>
         <Stack.Screen name = "CreatePizza" component={CreatePizzaScreen} options={{ title: 'Create Your Pizza' }}/>
@@ -146,7 +164,6 @@ const HomeStackScreen = () => {
   )
 }
 
-// Marika is trying to do something with the Order Tab Navigation •ᴗ• sorry if this is bad lmao
 // literally the same logic as HomeStackScreens, so maybe we could implement something
 // simillar for the Settings Tab Navigation
 const OrderStackScreen = ({ navigation }) => {
@@ -188,7 +205,12 @@ const OrderStackScreen = ({ navigation }) => {
   );
 };
 
+// dark mode
+export const DarkModeContext = createContext();
+
 export default function App({ navigation }) {
+  const [darkMode, setDarkMode] = useState(false); // as default the dark mode is turned off
+
   useEffect(() => {
   //   // Initialize database and create tables
   //   getDBConnection()
@@ -247,40 +269,46 @@ pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING
 
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        // shortcut for the documentation, I'll delete it later - Marika
-        // https://reactnavigation.org/docs/tab-based-navigation/
+    <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
+      <NavigationContainer>
+        <Tab.Navigator
+          // shortcut for the documentation, I'll delete it later - Marika
+          // https://reactnavigation.org/docs/tab-based-navigation/
 
-        // icons list
-        // https://icons.expo.fyi/Index
-        // filter by "Ionicons"
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+          // icons list
+          // https://icons.expo.fyi/Index
+          // filter by "Ionicons"
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-            if (route.name === 'Home') {
-              iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'settings' : 'settings-outline';
-            } else if (route.name === 'Order') {
-              iconName = focused ? 'pizza' : 'pizza-outline';
-            }
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#E04A2B',
-          tabBarInactiveTintColor: 'gray',
-          tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer has expired
-        })}
-        initialRouteName='Home' // Setting the initial route to Home
-      >
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Order" component={OrderStackScreen} />
+              if (route.name === 'Home') {
+                iconName = focused ? 'home' : 'home-outline';
+              } else if (route.name === 'Settings') {
+                iconName = focused ? 'settings' : 'settings-outline';
+              } else if (route.name === 'Order') {
+                iconName = focused ? 'pizza' : 'pizza-outline';
+              }
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: darkMode ? '#F58C41' : '#E04A2B', // Change active color
+            tabBarInactiveTintColor: darkMode ? '#b0b0b0' : 'gray', // Change inactive color
+            tabBarStyle: {
+              backgroundColor: darkMode ? '#333' : '#fff', // Tab bar background color
+              borderTopColor: darkMode ? '#444' : '#ddd', // Tab bar border color
+            },
+            tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer expired
+          })}
+          initialRouteName='Home' // Setting the initial route to Home
+        >
+          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Home" component={HomeStackScreen} />
+          <Tab.Screen name="Order" component={OrderStackScreen} />
 
 
-      </Tab.Navigator>
-    </NavigationContainer>
+        </Tab.Navigator>
+      </NavigationContainer>
+     </DarkModeContext.Provider>
   );
 }
 
