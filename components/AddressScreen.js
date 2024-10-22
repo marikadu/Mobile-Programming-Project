@@ -35,7 +35,6 @@ export default function AddressScreen( route, navigation) {
       {/* place order button */}
       <TouchableHighlight
           style={styles.button}
-          // after you press the "Place Order" button -> goes to the Timer Screen
           // onPress={() => props.navigation.navigate("Menu")} 
           underlayColor='#EC863D' // colour when pressed the "button"
           >

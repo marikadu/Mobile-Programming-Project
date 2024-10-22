@@ -24,6 +24,7 @@ export default function TimerScreen({ route, navigation }) {
       clearInterval(timer);
     }
 
+    // details
     // https://medium.com/@garethdavisrogers/using-setinterval-and-clearinterval-with-react-hooks-7fcf26dc8fdb
     return () => clearInterval(timer); // cleanup the interval on unmount
   }, [timeLeft]);
@@ -51,7 +52,7 @@ export default function TimerScreen({ route, navigation }) {
     };
   });
 
-    // skipping the timer to 3 seconds for faster testing
+  // skipping the timer to 3 seconds for faster testing
   // so no need to wait for 30 minutes all the time
   const skipToThreeSeconds = () => {
     setTimeLeft(3);
@@ -108,44 +109,44 @@ export default function TimerScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'white',
-    },
-    backgroundBackgroundContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#FFE8D8',
-      borderRadius: 20,
-      width: 300,
-      height: 100,
-    },
-    backgroundContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      fontSize: 24,
-      fontWeight: 'bold',
-      color: '#CD6524',
-    },
-    textMessage: {
-      justifyContent: 'center',
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: '#CD6524',
-      backgroundColor: 'FFE8D8',
-      margin: 40,
-    },
-    timerWrapper: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'relative',
-    },
-    timerText: {
-      position: 'absolute',  // timer numbers are top of the circle
-      fontSize: 48,
-      fontWeight: 'bold',
-      color: '#CD6524',
-    },
-  });  
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  backgroundBackgroundContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFE8D8',
+    borderRadius: 20,
+    width: 300,
+    height: 100,
+  },
+  backgroundContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#CD6524',
+  },
+  textMessage: {
+    justifyContent: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#CD6524',
+    backgroundColor: 'FFE8D8',
+    margin: 40,
+  },
+  timerWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative', // allows absolute position for the timer numbers
+  },
+  timerText: {
+    position: 'absolute',  // timer numbers are top of the circle
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#CD6524',
+  },
+});  

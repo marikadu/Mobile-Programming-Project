@@ -1,32 +1,71 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Button, Text, View, FlatList, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
 
-// Import the components
-import NavButtons from './NavButtons.js';
+// Import the DATABASE
+import { fetchAllPizza } from '../database/db';
 
 // const PepperoniPalsView = ({route, navigation}) =>{
 const HomeScreen = (props) =>{
 
-
     ////////////////IMPLEMENT THE DATABASE HERE ///////////////////
     const [newPizza, setPizza]=useState("");
     const [updateId, setUpdateId]=useState(0);
-    const [pizzaList, addFish]=useState([
-      {"id":1, "type":"Pepperoni", "price":"12.90", description: "Original dough, With sauce, Cheese, Pepperoni", image: require('../assets/pizza_pngs/menu/pepperoni.png') },
-      {"id":3, "type":"Mushrooms", "price":"11.90", description: "Original dough, With sauce, Cheese, Mushrooms",image: require('../assets/pizza_pngs/menu/mushrooms.png') }]);
+    // const [pizzaList, addPizza]=useState([
+    //   {"id":1, "type":"Pepperoni", "price":"12.90", description: "Original dough, With sauce, Cheese, Pepperoni", image: require('../assets/pizza_pngs/menu/pepperoni.png') },
+    //   {"id":3, "type":"Mushrooms", "price":"11.90", description: "Original dough, With sauce, Cheese, Mushrooms",image: require('../assets/pizza_pngs/menu/mushrooms.png') }]);
     
+
+    const [pizzaList, setPizzaList]=useState([]);
+
     const selectItemToUpdate=(id)=>{
       setUpdateId(id);
       setPizza(pizzaList[id].type);
       props.navigation.navigate("Details", {pizza:pizzaList[id]});
     }
+    // const renderPizza = (item) => {
+    //   return (
+    //     <TouchableOpacity activeOpacity={0.8} onPress={() => selectItemToUpdate(item.index)}>
+    //       <View style={styles.listItemStyle}>
+    //       <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
+    //         <View style={styles.itemContainer}>
+    //           <Image source={item.item.image} style={styles.pizzaImage} />
+    //           <View style={styles.textContainer}>
+    //             <Text style={styles.descriptionText}>{item.item.description}</Text>
+    //           </View>
+    //         </View>
+    //       </View>
+    //     </TouchableOpacity>
+    //   );
+    
+    // }
+
+    const readAllPizza = async () => {
+      try {
+        const dbResult = await fetchAllPizza();
+        console.log('dbResult readAllPizza in App.js');
+        console.log(dbResult);
+        setPizzaList(dbResult);
+      } catch (err) {
+        console.log('Error: ' + err);
+      } finally {
+        console.log('All Pizzas are RENDERED in HOMESCREEN');
+      }
+    };
+
+    useEffect(() => {
+      readAllPizza();
+
+      }, []);
+
+
+    // RENDER PAST PIZZA LIST FROM DATABASE
     const renderPizza = (item) => {
       return (
         <TouchableOpacity activeOpacity={0.8} onPress={() => selectItemToUpdate(item.index)}>
           <View style={styles.listItemStyle}>
-          <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
+          <Text style={styles.itemText}>{item.item.size} {item.item.dough} dough pizza with {item.item.sauce} sauce and {item.item.toppings.join(', ')} Toppings</Text>
             <View style={styles.itemContainer}>
-              <Image source={item.item.image} style={styles.pizzaImage} />
+              {/* <Image source={item.item.image} style={styles.pizzaImage} /> */}
               <View style={styles.textContainer}>
                 <Text style={styles.descriptionText}>{item.item.description}</Text>
               </View>
@@ -36,10 +75,11 @@ const HomeScreen = (props) =>{
       );
     
     }
+
     /// ////////////////END OF THE IMPLEMENTATION HERE ///////////////////
 
     return (
-      <View style={{flex:1}}>
+      <View style={styles.screenContainer}>
         
         <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
 
@@ -57,7 +97,7 @@ const HomeScreen = (props) =>{
           <Text style={[styles.buttonText]}>Create Your Pizza</Text>
         </TouchableHighlight>
 
-        {/* <Button onPress={()=> props.navigation.navigate("Menu")} title="See Menu"/>  */}
+        {/* <Button onPress={()=> readAllPizza()} title="REFRESH FAVORITES"/>  */}
 
         <TouchableHighlight
           style={styles.button}
@@ -66,12 +106,22 @@ const HomeScreen = (props) =>{
           >
           <Text style={[styles.buttonText]}>See Menu</Text>
         </TouchableHighlight>
+
+        {/* <TouchableHighlight
+          style={styles.button}
+          // onPress={() => props.navigation.navigate("db_DoughScreen")} 
+          onPress={() => props.navigation.navigate("CreatePizza")} 
+          underlayColor='#EC863D' // colour when pressed the "button"
+          >
+          <Text style={[styles.buttonText]}>Create Pizza sqlite</Text>
+        </TouchableHighlight> */}
         
           {/* <View style={styles.imageContainer}>
           <Image source={require('../assets/pizza_pngs/everything_pizza.png')}
               style={styles.image} resizeMode='cover'/>
           </View>  */}
 
+<Button onPress={()=> readAllPizza()} title="REFRESH FAVORITES "/> 
           <Text style={[styles.text]}>Your Favourites</Text>
           {/* /////// DATABASE FLATLIST HERE /////// */}
           <View style={{flex:4}}>
@@ -83,14 +133,20 @@ const HomeScreen = (props) =>{
           </View>
       </View>
         </View>
-        {/* <NavButtons params={props.params}/> */}
-        {/* <NavButtons navigation={navigation} route = {route}/> */}
-        <NavButtons params={props}/>
       </View>
     );
   }
 
   const styles=StyleSheet.create({
+    screenContainer:{
+      flex:1,
+      backgroundColor:"#fff", // covers the grey background
+    },
+    pizzaImage:{
+      height:100,
+      width:100,
+      bottom: 100,
+    },
     imageContainer:{
       height:200,
       width:'50%',

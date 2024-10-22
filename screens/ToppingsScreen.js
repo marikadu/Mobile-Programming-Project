@@ -1,7 +1,7 @@
 import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CheckBox from '@react-native-community/checkbox';
-import { saveOrder } from '../database/db';
+import { saveOrder } from '../database/Old_db';
 
 // importing images for the pizza creation
 import cheeseImg from '../assets/pizza_pngs/topping_cheese.png';
@@ -43,11 +43,11 @@ export default function Toppings({ route, navigation }) {
       navigation.setParams({ selectedToppings: selectedToppingTitles, selectedToppingImages: selectedToppingImages }); // Pass selected toppings to params
 
       // Save the orderData object to the database whenever selectedToppings changes
-      if (selectedToppings.length > 0) {
-        saveOrder(orderData)
-          .then(() => console.log('Order saved with sauce and toppings:', orderData))
-          .catch((error) => console.error('Error saving order:', error));
-      }
+      // if (selectedToppings.length > 0) {
+      //   saveOrder(orderData)
+      //     .then(() => console.log('Order saved with sauce and toppings:', orderData))
+      //     .catch((error) => console.error('Error saving order:', error));
+      // }
     }, [navigation, toppingsList]); // Run effect if toppingsList changes (includes selection changes)
 
     const renderTopping=({ item })=>{
