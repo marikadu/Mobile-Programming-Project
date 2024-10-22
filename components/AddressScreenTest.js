@@ -1,124 +1,139 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, TextInput } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, TextInput, Modal, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { init, addAddress, updateFish, deleteFish, fetchAllFish } from '../database/addressDB';
+import { addAddress, updateAddress, deleteAddress, fetchAllAddress } from '../database/db'; 
 
-init()
-.then(()=>{
-    console.log('Database creation succeeded!');
-}).catch((err)=>{
-  console.log('Database IS NOT initialized! '+err);
-});
+export default function AddressScreenTest( route, navigation ) {
+  const [text, setText] = useState('');
+  const [newAddressLine1, setAddressLine1] = useState('');
+  const [newAddressLine2, setAddressLine2] = useState('');
+  const [newCity, setCity] = useState('');
+  const [newPostcode, setPostcode] = useState('');
+  const [addressList, setAddressList] = useState([]);
+  const [updateId, setUpdateId] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState(null);  // Store selected address for deletion
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);  // Control the modal visibility
 
-export default function AddressScreenTest( route, navigation) {
-  // hardcoded address
-  const addressDetails = {
-    address: 'Red Str. 89 1. floor',
+  // Fetch addresses when the component mounts
+  useEffect(() => {
+    readAllAddresses();
+    clearInputFields();  // Clear form after saving
+  }, []);  
+
+  // Function to save the address
+  const saveAddress = () => {
+    const newAddress = {
+        addressLine1: newAddressLine1,
+        addressLine2: newAddressLine2,
+        city: newCity,
+        postcode: newPostcode,
+    };
+
+    addAddress(newAddress).then(() => {
+        alert("Your address has been added to the database!");
+        readAllAddresses();  // Refresh the list after adding a new address
+        clearInputFields();  // Clear form after saving
+    }).catch((error) => {
+        console.error('Error saving order:', err);
+        alert('Failed to save the address. Please try again.');
+    });
   };
 
-  const [text, setText] = useState('');
-  const [isInserted, setIsInserted]=useState(false);
-  const [fishList, setFishList]=useState([]);
-  const [newAddress, setNewAddress] = useState('');
-  const [newBreed, setBreed] = useState('');
-  const [newWeight, setWeight] = useState('');
-  const [newFirstName, setnewFirstName] = useState('');
-  const [newLastName, setNewLastName] = useState('');
-  const [selectedFishId, setSelectedFishId] = useState(null);
+  // Function to update the address in DB
+  const updateAddressInDb = () => {
+    if (updateId) {
+      updateAddress(updateId, newAddressLine1, newAddressLine2, newCity, newPostcode)
+        .then(() => {
+          alert('Address updated successfully!');
+          readAllAddresses();  // Refresh the address list
+          clearInputFields();  // Clear the form after updating
+          setUpdateId(null);   // Reset update mode
+        })
+        .catch((error) => {
+          console.error('Error updating address:', error);
+          alert('Failed to update the address. Please try again.');
+        });
+    }
+  };
 
-  async function saveAddress(){
-    try{
-      const dbResult = await addAddress(newAddress, newFirstName, newLastName);
-      console.log("dbResult: "+dbResult);
-      readAllFish();
+  // Function to delete address from DB
+  const confirmDeleteAddress = () => {
+    if (selectedAddress) {
+      deleteAddress(selectedAddress.id).then(() => {
+        alert("Address deleted successfully.");
+        readAllAddresses();  // Refresh the list after deleting
+        setDeleteModalVisible(false);  // Hide the modal
+        setSelectedAddress(null);  // Clear the selected address
+      }).catch((error) => {
+        console.error('Error deleting address:', error);
+        alert('Failed to delete the address. Please try again.');
+      });
     }
-    catch(err){
-      console.log(err);
-    }
-    finally{
-      //No need to do anything
+  };
+
+  // Function to cancel deletion
+  const cancelDelete = () => {
+    setDeleteModalVisible(false);  // Hide the modal
+    setSelectedAddress(null);  // Clear the selected address
+  };
+
+  async function readAllAddresses() {
+    try {
+      const dbResult = await fetchAllAddress();  // Wait for the result
+      console.log("Fetched addresses:", dbResult);
+      setAddressList(dbResult);  // Set the fetched addresses to state
+    } catch (err) {
+      console.error("Error fetching addresses: ", err);
     }
   }
 
-  async function deleteFishFromDb(){
-    try{
-      const dbResult = await deleteFish(selectedFishId);
-      console.log("Fish deleted: " + selectedFishId);
-      readAllFish();
-      clearInputFields();
-    }
-    catch(err){
-      console.log(err);
-    }
-    finally{
-      //No need to do anything
-    }
-  }
+  // Function to populate the form when an address is selected for editing
+  const handleAddressPress = (address) => {
+    setAddressLine1(address.addressLine1);
+    setAddressLine2(address.addressLine2);
+    setCity(address.city);
+    setPostcode(address.postcode);
+    setUpdateId(address.id);  // Set the ID for update mode
+  };
 
-  async function updateFishInDb(){
-    if (selectedFishId !== null) {
-      try{
-        const dbResult = await updateFish(selectedFishId, newBreed, newWeight);
-        console.log("Fish updated: " + selectedFishId);
-        readAllFish();
-        clearInputFields();
-      }
-      catch(err){
-        console.log(err);
-      }
-      finally{
-        //No need to do anything
-      }
-    }
-  }
+  // Function to handle long press and show delete confirmation
+  const handleLongPress = (address) => {
+    setSelectedAddress(address);  // Store the selected address
+    setDeleteModalVisible(true);  // Show the confirmation modal
+  };
 
-  async function readAllFish(){
-    try{
-      const dbResult = await fetchAllFish();
-      console.log("dbResult readAllFish in App.js");
-      console.log(dbResult);
-      setFishList(dbResult);
-    }
-    catch(err){
-      console.log("Error: "+err);
-    }
-    finally{
-      console.log("All fish are read");
-    }
-  }
+  // Function to clear the form
+  const clearInputFields = () => {
+    setAddressLine1('');
+    setAddressLine2('');
+    setCity('');
+    setPostcode('');
+    setUpdateId(null);  // Exit update mode
+  };
 
-  function selectFish(fish) {
-    setNewAddress(fish.address);
-    setnewFirstName(fish.firstName);
-    setNewLastName(fish.lastName);
-    setSelectedFishId(fish.id);
-    console.log("Selected fish: ", fish);
-  }
-
-  function clearInputFields() {
-    setBreed('');
-    setWeight('');
-    setSelectedFishId(null);
-  }
-
-  // Display the Address and Payment method details
+  // Display the Address details
   const renderAddress = () => {
     return (
       <View>
         <Text style={styles.text}> Address Details:</Text>
           <TextInput style={styles.orderItemStyle}
-          placeholder="Street name and number"
-          value={newAddress}
-          onchangeText={(text) => setNewAddress(text)}
+          placeholder="Address line 1"
+          value={newAddressLine1}
+          onChangeText={setAddressLine1}
           ></TextInput>
           <TextInput style={styles.orderItemStyle}
-          placeholder="First name"
-          value={newFirstName}
-          onChangeText={(text) => setnewFirstName(text)}
+          placeholder="Address line 2"
+          value={newAddressLine2}
+          onChangeText={setAddressLine2}
           ></TextInput>
           <TextInput style={styles.orderItemStyle}
-          placeholder="Last name"
-          value={newLastName}
-          onChangeText={(text) => setNewLastName(text)}
+          placeholder="City"
+          value={newCity}
+          onChangeText={setCity}
+          ></TextInput>
+          <TextInput style={styles.orderItemStyle}
+          placeholder="Postcode"
+          value={newPostcode}
+          onChangeText={setPostcode}
           ></TextInput>
       </View>
     );
@@ -128,37 +143,69 @@ export default function AddressScreenTest( route, navigation) {
     <View style={{ flex: 1 }} backgroundColor="#fff">
       <View style={styles.listStyle}>
         {renderAddress()}
+
+        {/* Save or Update Address button */}
+        <TouchableHighlight
+          style={styles.button}
+          onPress={updateId ? updateAddressInDb : saveAddress}  // Change handler based on updateId
+          underlayColor='#EC863D' // colour when pressed the "button"
+        >
+          <Text style={[styles.buttonText]}>
+            {updateId ? 'Update Address' : 'Save Address'}  {/* Change button text */}
+          </Text>
+        </TouchableHighlight>
       </View>
 
       <View>
-          <Text style={styles.fishlist}>The fishlist:</Text>
+        <Text style={styles.fishlist}>Saved Addresses:</Text>
 
-           {/* Fishlist */}
-          <FlatList
-          data={fishList}
+        {/* Address List */}
+        <FlatList
+          data={addressList}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({item})=> (
-            <TouchableOpacity onPress={() => selectFish(item)}>
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handleAddressPress(item)} onLongPress={() => handleLongPress(item)}>
               <View>
-                <Text>{item.id} {item.address} {item.firstName} {item.lastName}</Text>
+                <Text>{item.id} {item.addressLine1} {item.addressLine2} {item.city} {item.postcode}</Text>
               </View>
             </TouchableOpacity>
           )}
-         />
-        </View>
+        />
+      </View>
 
-      {/* place order button */}
-      {/* <TouchableHighlight
-          style={styles.button}
-          // after you press the "Place Order" button -> goes to the Timer Screen
-          // onPress={() => props.navigation.navigate("Menu")} 
-          underlayColor='#EC863D' // colour when pressed the "button"
-          >
-          <Text style={[styles.buttonText]}>Save Address</Text>
-        </TouchableHighlight> */}
-        <Button color="#F58C41" title="Save" onPress={()=>saveAddress()} />
-        <Button color="#F58C41" title="Delete" onPress={()=>deleteFishFromDb()} disabled={!selectedFishId}/>
-        <Button color="#F58C41" title="Update" onPress={()=>updateFishInDb()} disabled={!selectedFishId}/>
+      {/* Delete Confirmation Modal */}
+      <Modal
+        visible={isDeleteModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={cancelDelete}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Delete Address</Text>
+            <Text style={styles.modalMessage}>Are you sure you want to delete this address?</Text>
+
+            {/* Confirmation Buttons */}
+            <View style={styles.modalButtons}>
+              <TouchableHighlight
+                style={styles.modalButtonDelete}
+                onPress={confirmDeleteAddress}
+                underlayColor="#d9534f"
+              >
+                <Text style={styles.modalButtonText}>Delete</Text>
+              </TouchableHighlight>
+
+              <TouchableHighlight
+                style={styles.modalButtonCancel}
+                onPress={cancelDelete}
+                underlayColor="#f0f0f0"
+              >
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -296,5 +343,46 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 10,
-  }
+  }, // The rest is modal styling, change as needed
+  modalBackground: { 
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContainer: {
+    width: 300,
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    elevation: 10,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  modalButtonDelete: {
+    backgroundColor: '#d9534f',
+    padding: 10,
+    borderRadius: 5,
+  },
+  modalButtonCancel: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
