@@ -7,11 +7,11 @@ import SauceScreen_db from './SauceScreen_db.js';
 
 // IMPORT DB FUNCTIONS
 import {init, addPizza, updatePizza, deletePizza ,fetchAllPizzas } from '../../database/db.js';
-init().then(() => {
-  console.log('Database Creation Succeeded!');
-}).catch((err) => {
-  console.log('Database Creation Failed!' + err);
-})
+// init().then(() => {
+//   console.log('Database Creation Succeeded!');
+// }).catch((err) => {
+//   console.log('Database Creation Failed!' + err);
+// })
 
 export const CreatePizzaScreen = (props) => {
   const [userNumber, setUserNumber] = useState(22);

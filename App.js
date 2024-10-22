@@ -24,8 +24,18 @@ import { LogoTitle } from './components/LogoTitle.js';
 import { MenuScreen } from './components/MenuScreen.js';
 import { SettingsScreen } from './components/SettingsScreen.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
+// import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
 import {CreatePizzaScreen} from './components/screens/CreatePizzaScreen.js';
+
+// IMPORT DATABASE FUNCTIONS
+import {init, addPizza, updatePizza, deletePizza, fetchAllPizza} from './database/db.js';
+//  // Initialize the Pizza Database
+//  init().then(() => {
+//   console.log('Database Creation Succeeded!');
+// }).catch((err) => {
+//   console.log('Database Creation Failed!' + err);
+// })
+//  // 
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -180,12 +190,49 @@ const OrderStackScreen = ({ navigation }) => {
 
 export default function App({ navigation }) {
   useEffect(() => {
-    // Initialize database and create tables
-    getDBConnection()
-      .then(() => createTables()) // Wait for the tables to be created
-      .then(() => console.log('Tables created successfully'))
-      .catch((error) => console.error('Error creating tables:', error));
+  //   // Initialize database and create tables
+  //   getDBConnection()
+  //     .then(() => createTables()) // Wait for the tables to be created
+  //     .then(() => console.log('Tables created successfully'))
+  //     .catch((error) => console.error('Error creating tables:', error));
+  // Initialize the Pizza Database
+ init().then(() => {
+  console.log('Database Creation Succeeded!');
+}).catch((err) => {
+  console.log('Database Creation Failed!' + err);
+})
+
+// DOWNLOAD THE DATA FROM MONGODB HERE
+
+
+// Fetch all the pizzas from the database
+async function readAllPizza() {
+  try {
+    const dbResult = await fetchAllPizza();
+    console.log('dbResult readAllPizza in App.js');
+    console.log(dbResult);
+    setPizzaList(dbResult);
+  } catch (err) {
+    console.log('Error: ' + err);
+  } finally {
+    console.log('All Pizzas are RENDERED');
+  }
+}
+
+readAllPizza(); 
   }, []);
+
+   
+ // 
+
+  const [pizzaList, setPizzaList] = useState([]); // List of pizzas
+//  fetchAllPizza(); // Fetch all the pizzas from the database
+
+pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING 
+  console.log('PizzaList:', pizzaList); // DEBUGGING
+// deletePizza(3); // DEBUGGING
+
+
 
   // tracking the end of the timer
   const [timerExpired, setTimerExpired] = useState(false);
@@ -225,7 +272,7 @@ export default function App({ navigation }) {
           tabBarInactiveTintColor: 'gray',
           tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer has expired
         })}
-        initialRouteName='Home' // Set the initial route to Home
+        initialRouteName='Home' // Setting the initial route to Home
       >
         <Tab.Screen name="Settings" component={SettingsScreen} />
         <Tab.Screen name="Home" component={HomeStackScreen} />
@@ -234,38 +281,6 @@ export default function App({ navigation }) {
 
       </Tab.Navigator>
     </NavigationContainer>
-
-    // <NavigationContainer>
-    //   <Stack.Navigator
-    //   initialRouteName="PepperoniPals"
-    //   // initialRouteName="Dough"
-    //   screenOptions={({ navigation }) => ({
-    //     headerStyle: {
-    //       backgroundColor: 'white',
-    //     },
-    //     headerTintColor: '#E04A2B', // Left arrow and text color
-    //     headerTitleStyle: {
-    //       fontWeight: 'bold',
-    //     },
-    //     headerBackTitleVisible: false,
-    //     headerLeftContainerStyle: {
-    //       paddingLeft: 10,
-    //     },
-    //     headerTitleAlign: 'center',
-    //     headerRight: () => <HeaderRightButton navigation={navigation} />, // Right arrow component
-    //     headerLeft: () => <HeaderLeftButton navigation={navigation} />, // Left arrow component
-    //   })}>
-    //     <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} />
-    //     <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
-    //     <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
-    //     <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>  
-    //     <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>  
-    //     <Stack.Screen name="Details" component={DetailsScreen}  />
-    //     {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
-    //     <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
-    //     <Stack.Screen name="Menu" component={MenuScreen} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
   );
 }
 
