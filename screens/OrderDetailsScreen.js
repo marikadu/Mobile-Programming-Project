@@ -38,7 +38,7 @@ export default function OrderDetailsScreen({ route, navigation }) {
   const pizzaList = [
     {
       id: 1,
-      type: 'Pizza',
+      type: 'Custom Pizza',
       // price: pizzaPrice,
       price: 13,
       description: `${selectedDough || 'Default Dough'}, ${selectedSauce || 'With Sauce'}, ${joinToppings(selectedToppings)}`,
