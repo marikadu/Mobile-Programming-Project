@@ -8,9 +8,9 @@ export const MenuScreen = (props) => {
   const [newPizza, setPizza] = useState("");
   const [updateId, setUpdateId] = useState(0);
   const [pizzaList, addPizza] = useState([
-    { "id": 1, "type": "Pepperoni", "price": "12.90", description: "Original dough, With sauce, Cheese, Pepperoni", image: require('../assets/pizza_pngs/menu/pepperoni.png') },
-    { "id": 2, "type": "Bianca", "price": "10.90", description: "Original dough, No sauce, Cheese", image: require('../assets/pizza_pngs/menu/bianca.png') },
-    { "id": 3, "type": "Mushrooms", "price": "11.90", description: "Original dough, With sauce, Cheese, Mushrooms", image: require('../assets/pizza_pngs/menu/mushrooms.png') }]);
+    { "id": 1, "type": "Pepperoni", "price": "12.90", description: "Original dough, With sauce, Cheese, Pepperoni", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMDbvohJ2KYuQP5TT_h3XQhhnr7mPVx2e1AnI0l7EjWV9OnlcStMF2Ar2BksfV8tdRGBc&usqp=CAU" },
+    { "id": 2, "type": "Bianca", "price": "10.90", description: "Original dough, No sauce, Cheese", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrMuL0UO0MhQV9CPDA-R15yfak1TqP0JkrWcFauigPPY0t88d5WXdmjdYAOli9yRYWiXI&usqp=CAU" },
+    { "id": 3, "type": "Mushrooms", "price": "11.90", description: "Original dough, With sauce, Cheese, Mushrooms", image: "https://www.shutterstock.com/image-photo/delicious-savory-porcini-mushroom-pizza-260nw-2484910843.jpg" }]);
 
   const selectItemToUpdate = (id) => {
     setUpdateId(id);
@@ -24,7 +24,8 @@ export const MenuScreen = (props) => {
         <View style={styles.listItemStyle}>
           <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
           <View style={styles.itemContainer}>
-            <Image source={item.item.image} style={styles.pizzaImage} />
+            {/* <Image source={item.item.image} style={styles.pizzaImage} /> */}
+            <Image source={{uri: item.item.image}} style={styles.pizzaImage} />
             <View style={styles.textContainer}>
               <Text style={styles.descriptionText}>{item.item.description}</Text>
             </View>

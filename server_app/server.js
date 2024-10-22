@@ -19,9 +19,9 @@ const client = new MongoClient(uri, {
 
 // Sample pizza menu
 const pizzaMenu = [
-    { "type": "Pepperoni", "price": "12.90", "description": "Original dough, With sauce, Cheese, Pepperoni", "image": "pepperoni.png" },
-    { "type": "Bianca", "price": "10.90", "description": "Original dough, No sauce, Cheese", "image": "bianca.png" },
-    { "type": "Mushrooms", "price": "11.90", "description": "Original dough, With sauce, Cheese, Mushrooms", "image": "mushrooms.png" }
+    { "type": "Pepperoni", "price": "12.90", "description": "Original dough, With sauce, Cheese, Pepperoni", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMDbvohJ2KYuQP5TT_h3XQhhnr7mPVx2e1AnI0l7EjWV9OnlcStMF2Ar2BksfV8tdRGBc&usqp=CAU" },
+    { "type": "Bianca", "price": "10.90", "description": "Original dough, No sauce, Cheese", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrMuL0UO0MhQV9CPDA-R15yfak1TqP0JkrWcFauigPPY0t88d5WXdmjdYAOli9yRYWiXI&usqp=CAU" },
+    { "type": "Mushrooms", "price": "11.90", "description": "Original dough, With sauce, Cheese, Mushrooms", "image": "https://www.shutterstock.com/image-photo/delicious-savory-porcini-mushroom-pizza-260nw-2484910843.jpg" }
 ];
 
 app.use("/html", express.static('views'));
@@ -48,6 +48,7 @@ app.delete('/deleteonepizza/:id', (req, res) => {
         }
     });
 });
+
 
 // Reset pizza menu (delete all and insert fresh pizza list)
 app.get('/reset', (req, res) => {
@@ -79,23 +80,45 @@ async function readAllPizzas() {
     }
 }
 
+// async function deleteOnePizza(id) {
+//     console.log("deleteOnePizza started");
+//     let ok = false;
+//     try {
+//         const deleteQuery = { "_id": new ObjectId("" + id) };
+//         await client.connect();
+//         ok = await client.db("pizzadb").collection("menu").deleteOne(deleteQuery).then(result => {
+//             return result.deletedCount == 1;
+//         });
+//         console.log("ok=" + ok);
+//     } catch (e) {
+//         console.log("Delete Exception:", e);
+//     } finally {
+//         await client.close();
+//     }
+//     return ok;
+// }
+
 async function deleteOnePizza(id) {
     console.log("deleteOnePizza started");
     let ok = false;
     try {
-        const deleteQuery = { "_id": new ObjectId("" + id) };
+        var deletequery = { "_id": new ObjectId("" + id) }; // Convert to ObjectId
+        // Connect the client to the server (optional starting in v4.7)
         await client.connect();
-        ok = await client.db("pizzadb").collection("menu").deleteOne(deleteQuery).then(result => {
-            return result.deletedCount == 1;
-        });
+        ok = await client.db("pizzadb").collection("pizza").deleteOne(deletequery)
+            .then(result => {
+                return result.deletedCount == 1;
+            });
         console.log("ok=" + ok);
     } catch (e) {
-        console.log("Delete Exception:", e);
-    } finally {
+        console.log("Deletion error: ", e);
+    } 
+    finally {
         await client.close();
     }
     return ok;
 }
+
 
 async function resetPizzaMenu() {
     console.log("resetPizzaMenu started");
