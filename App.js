@@ -80,7 +80,11 @@ const HeaderRightButton = ({ navigation }) => {
         navigation.navigate('Size', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages: selectedToppings.selectedToppingImages });
         break;
       case "Size":
+        navigation.navigate('OrderDetails', selectedDough);
         console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
+        break;
+      case "Dough":
+        navigation.navigate('Sauce', selectedDough);
         break;
       default:
         break;
@@ -272,9 +276,6 @@ pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
       <NavigationContainer>
         <Tab.Navigator
-          // shortcut for the documentation, I'll delete it later - Marika
-          // https://reactnavigation.org/docs/tab-based-navigation/
-
           // icons list
           // https://icons.expo.fyi/Index
           // filter by "Ionicons"

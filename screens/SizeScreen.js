@@ -24,24 +24,6 @@ export default function SizeScreen({ route, navigation }) {
                 toppings: selectedToppings,
                 size: selectedSize,
             };
-
-            // const newPizza = {
-            //     dough: selectedDough,
-            //     sauce: selectedSauce,
-            //     toppings: selectedToppings,
-            //     size: selectedSize,
-            // }
-
-            // printSomething({newPizza});
-
-            // saveOrder(orderData)
-            //     .then(() => {
-            //         console.log('Size saved:', orderData);
-                    
-            //     })
-            //     .catch((error) => {
-            //         console.error('Error saving size:', error);
-            //     });
         });
 
         return unsubscribe; // Cleanup the listener
