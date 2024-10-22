@@ -298,6 +298,8 @@ pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING
               borderTopColor: darkMode ? '#444' : '#ddd', // Tab bar border color
             },
             tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer expired
+            // tabBarLabel: '',
+            headerShown: false, // Hide the header
           })}
           initialRouteName='Home' // Setting the initial route to Home
         >
