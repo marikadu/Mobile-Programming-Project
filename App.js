@@ -80,11 +80,12 @@ const HeaderRightButton = ({ navigation }) => {
         navigation.navigate('Size', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages: selectedToppings.selectedToppingImages });
         break;
       case "Size":
-        navigation.navigate('OrderDetails', selectedDough);
+        navigation.navigate('OrderDetails', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages: selectedToppings.selectedToppingImages });
         console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
         break;
-      case "Dough":
-        navigation.navigate('Sauce', selectedDough);
+      case "Order":
+        console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
+        // navigation.navigate('Timer', selectedDough);
         break;
       default:
         break;
