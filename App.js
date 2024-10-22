@@ -225,6 +225,7 @@ export default function App({ navigation }) {
           tabBarInactiveTintColor: 'gray',
           tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer has expired
         })}
+        initialRouteName='Home' // Set the initial route to Home
       >
         <Tab.Screen name="Settings" component={SettingsScreen} />
         <Tab.Screen name="Home" component={HomeStackScreen} />
