@@ -5,7 +5,6 @@ import { addAddress, updateAddress, deleteAddress, fetchAllAddress } from '../da
 // const targetURL = "https://pepperonipals.lm.r.appspot.com";
 const targetURL = 'http://localhost:8080'
 
-export default function AddressScreenTest( route, navigation ) {
 export default function AddressScreen( route, navigation ) {
   const [text, setText] = useState('');
   const [newAddressLine1, setAddressLine1] = useState('');
