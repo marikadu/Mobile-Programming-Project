@@ -42,28 +42,28 @@ export const init = () => {
             () => {
               console.log('Table emptied successfully.');
 
-              // Check if the table is empty and insert sample data if needed
-              tx.executeSql(
-                `SELECT COUNT(*) AS count FROM ${tableName}`,
-                [],
-                (tx, result) => {
-                  if (result.rows.item(0).count === 0) {
-                    // Insert predefined pizza if the table is empty
-                    pizzaList.forEach(pizza => {
-                      tx.executeSql(
-                        `INSERT INTO ${tableName} (dough, sauce, toppings, size) VALUES (?, ?, ?, ?);`,
-                        [pizza.dough, pizza.sauce, JSON.stringify(pizza.toppings), pizza.size], // Store toppings as JSON string
-                      );
-                    });
-                    console.log('Sample data inserted successfully.');
-                  }
-                  resolve();
-                },
-                (_, err) => {
-                  console.log('Error counting rows:', err);
-                  reject(err);
-                }
-              );
+            //   // Check if the table is empty and insert sample data if needed
+            //   tx.executeSql(
+            //     `SELECT COUNT(*) AS count FROM ${tableName}`,
+            //     [],
+            //     (tx, result) => {
+            //       if (result.rows.item(0).count === 0) {
+            //         // Insert predefined pizza if the table is empty
+            //         pizzaList.forEach(pizza => {
+            //           tx.executeSql(
+            //             `INSERT INTO ${tableName} (dough, sauce, toppings, size) VALUES (?, ?, ?, ?);`,
+            //             [pizza.dough, pizza.sauce, JSON.stringify(pizza.toppings), pizza.size], // Store toppings as JSON string
+            //           );
+            //         });
+            //         console.log('Sample data inserted successfully.');
+            //       }
+            //       resolve();
+            //     },
+            //     (_, err) => {
+            //       console.log('Error counting rows:', err);
+            //       reject(err);
+            //     }
+            //   );
             },
             (_, err) => {
               console.log('Error deleting data:', err);

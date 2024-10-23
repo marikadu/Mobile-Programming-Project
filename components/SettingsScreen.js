@@ -27,7 +27,7 @@ export const SettingsScreen=(props)=>{
           style={styles.button}
           underlayColor='#fff' // colour when pressed the "button"
           // onPress={() => props.navigation.navigate("Dough")} 
-          onPress={()=> console.log('Past Orders')}
+          onPress={()=> props.navigation.navigate('Order', { screen: 'PastOrders'})} 
           >
           <Text style={[styles.buttonText]}>Past Orders</Text>
         </TouchableHighlight>

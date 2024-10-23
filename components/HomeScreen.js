@@ -63,7 +63,7 @@ const HomeScreen = (props) =>{
       return (
         <TouchableOpacity activeOpacity={0.8} onPress={() => selectItemToUpdate(item.index)}>
           <View style={styles.listItemStyle}>
-          <Text style={styles.itemText}>{item.item.size} {item.item.dough} dough pizza with {item.item.sauce} sauce and {item.item.toppings.join(', ')} Toppings</Text>
+          <Text style={styles.itemText}>{item.item.size} {item.item.dough.toLowerCase()} dough pizza {item.item.sauce.toLowerCase()} and {item.item.toppings.join(', ').toLowerCase()} toppings</Text>
             <View style={styles.itemContainer}>
               {/* <Image source={item.item.image} style={styles.pizzaImage} /> */}
               <View style={styles.textContainer}>
@@ -121,7 +121,7 @@ const HomeScreen = (props) =>{
               style={styles.image} resizeMode='cover'/>
           </View>  */}
 
-<Button onPress={()=> readAllPizza()} title="REFRESH FAVORITES "/> 
+        <Button onPress={()=> readAllPizza()} title="REFRESH FAVORITES "/> 
           <Text style={[styles.text]}>Past Orders</Text>
           {/* /////// DATABASE FLATLIST HERE /////// */}
           <View style={{flex:4}}>
@@ -131,7 +131,7 @@ const HomeScreen = (props) =>{
               renderItem={renderPizza}
             />
           </View>
-      </View>
+          </View>
         </View>
       </View>
     );

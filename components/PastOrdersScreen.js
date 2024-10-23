@@ -1,5 +1,6 @@
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 // importing images for the pizza creation
 import originalDough from '../assets/pizza_pngs/dough_og.png';
 import glutenFreeDough from '../assets/pizza_pngs/dough_gluten_free.png';
@@ -10,41 +11,119 @@ import tomatoImg from '../assets/pizza_pngs/topping_tomato.png';
 import basilImg from '../assets/pizza_pngs/topping_basil.png';
 import pepperoniImg from '../assets/pizza_pngs/topping_pepperoni.png';
 import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
+import { fetchAllPizza } from '../database/db.js';
 
 export default function PastOrdersScreen({ navigation }) {
+  const [pastOrdersList, setPastOrdersList] = useState([]);
+
+  // This hook returns true if the screen is focused, we will use it to trigger refresh
+  const isFocused = useIsFocused();
+
+  // Fetch pizzas whenever the screen is focused
+  useEffect(() => {
+    if (isFocused) {
+      readAllPizzas();
+    }
+  }, [isFocused]); // Depend on the focus state
+
   // hardcoded pizza for now, passed pizzas should be here
   const pizzaList = [
     { id: 1, type: 'Pizza', price: 13, description: 'Original dough, With sauce, Cheese, Pepperoni', image: pepperoniImg },
   ];
 
-  // render pizza
-  const renderPizza = (item) => {
-    return (
+    // Mapping dough types to their corresponding images
+  const doughImages = {
+    original: originalDough,
+    glutenfree: glutenFreeDough,
+    wholewheat: wholeWheatDough
+  };
+  
+  // Mapping toppings to their corresponding images
+  const toppingImages = {
+    cheese: cheeseImg,
+    tomato: tomatoImg,
+    basil: basilImg,
+    pepperoni: pepperoniImg,
+    mushrooms: mushroomsImg
+  };
+
+  const getPizzaImage = (pizza) => {
+    const normalizedDough = pizza.dough.toLowerCase().replace(/[\s-]+/g, ''); // Normalize to lowercase and remove spaces
+    const doughImage = doughImages[normalizedDough]; // Check against the normalized key
+
+    // Map topping names to their corresponding images
+    const toppingImagesArray = pizza.toppings.map(topping => {
+        const normalizedTopping = topping.toLowerCase(); // Normalize topping names
+        return toppingImages[normalizedTopping]; // Get the image from the mapping
+    });
+
+    // Determine if there is a sauce image
+    const sauceImage = pizza.sauce ? sauceImg : null; // Only set sauceImage if there's a sauce
+    
+    // You can combine these images in the UI later, or return them as needed
+    return {
+      doughImage,
+      sauceImage,
+      toppingImagesArray
+    };
+  };
+
+  async function readAllPizzas() {
+    try {
+      const dbResult = await fetchAllPizza();  // Wait for the result
+      console.log("Fetched pizzas:", dbResult);
+      setPastOrdersList(dbResult);  // Set the fetched addresses to state
+    } catch (err) {
+      console.error("Error fetching addresses: ", err);
+    }
+  };
+
+    // render pizza
+    const renderPizza = (item) => {
+      console.log("Rendering pizza:", item);
+      const { doughImage, toppingImagesArray, sauceImage } = getPizzaImage(item.item);
+
+      return (
       <TouchableOpacity activeOpacity={0.8}>
         <View style={styles.listItemStyle}>
-          <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
-          <View style={styles.itemContainer}>
-            <Image source={item.item.image} style={styles.pizzaImage} />
-            <View style={styles.textContainer}>
+          <Text style={styles.itemText}>{item.item.size} {item.item.dough.toLowerCase()} dough pizza {item.item.sauce.toLowerCase()} and {item.item.toppings.join(', ').toLowerCase()} topping(s)</Text>
+          <View style={styles.pizzaContainer}>
+            {/* Render the dough image */}
+            {doughImage && <Image source={doughImage} style={styles.doughImage} />}
+
+             {/* Render the sauce image if it exists */}
+             {sauceImage && <Image source={sauceImg} style={styles.sauceImage} />}
+
+            {/* Optionally, you could layer or display topping images */}
+            {toppingImagesArray.map((toppingImg, index) => (
+              toppingImg && <Image key={index} source={toppingImg} style={styles.toppingImage} />
+            ))}
+
+            {/* <View style={styles.textContainer}>
               <Text style={styles.descriptionText}>{item.item.description}</Text>
-            </View>
+            </View> */}
           </View>
         </View>
       </TouchableOpacity>
-    );
+      );
   };
 
   return (
     <View style={{ flex: 1 }} backgroundColor="#fff">
       <Text style={styles.text}> Past Orders:</Text>
-      <View style={styles.listStyle}>
-        <FlatList
-          style={styles.flatliststyle}
-          data={pizzaList}
-          renderItem={renderPizza}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </View>
+      {/* Conditionally render the FlatList only if there are pizzas */}
+      {pastOrdersList.length > 0 ? (
+        <View style={styles.listStyle}>
+          <FlatList
+            style={styles.flatliststyle}
+            data={pastOrdersList}
+            renderItem={renderPizza}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        </View>
+      ) : (
+        <Text style={styles.text}>No past orders found.</Text>
+      )}
 
       {/* Order a new Pizza button */}
       <TouchableHighlight
@@ -153,5 +232,30 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
+  },
+  pizzaContainer: {
+    width: 100,
+    height: 100,
+    position: 'relative', // for the absolute position for the toppings
+  },
+  doughImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+},
+sauceImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  toppingImage: {
+      position: 'absolute', // absolute position to allow stacking of the toppings
+      width: '100%',
+      height: '100%',
+  },
+  listStyle: {
+    flex: 9,
+    alignItems: 'center',
+    width: '100%',
   },
 });

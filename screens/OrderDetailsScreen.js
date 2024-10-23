@@ -69,6 +69,16 @@ export default function OrderDetailsScreen({ route, navigation }) {
     setSelectedSize(value);
   }
 
+  async function readAllPizzas() {
+    try {
+      const dbResult = await fetchAllPizza();  // Wait for the result
+      console.log("Fetched pizzas:", dbResult);
+      setPastOrdersList(dbResult);  // Set the fetched addresses to state
+    } catch (err) {
+      console.error("Error fetching addresses: ", err);
+    }
+  };
+
   // Function to submit the final order
   const submitOrder = () => {
     const newPizza = {
@@ -83,7 +93,7 @@ export default function OrderDetailsScreen({ route, navigation }) {
     addPizza(newPizza).then(() => {
       alert("Your pizza has been added to the database!");
       // after sending the pizza, navigate to the timer screen
-      navigation.navigate('Order', { screen: 'Timer' });
+      navigation.navigate('Order', { screen: 'Timer' }, { onGoBack: readAllPizzas });
       // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
       // and after that to Timer
     }).catch((error) => {

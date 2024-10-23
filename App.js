@@ -157,6 +157,7 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen}  />
         <Stack.Screen name="Address" component={AddressScreen}/>
+        <Stack.Screen name="PastOrders" component={PastOrdersScreen}/>
       </Stack.Navigator>
     // <Stack.Navigator>
     //   {/* <Stack.Screen name="Home" component={PepperoniPalsView} /> */}
