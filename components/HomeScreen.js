@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Button, Text, View, FlatList, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
+import PizzaList from './PizzaList'; // Import the reusable PizzaList component
 
 // Import the DATABASE
 import { fetchAllPizza } from '../database/db';
@@ -59,22 +60,11 @@ const HomeScreen = (props) =>{
 
 
     // RENDER PAST PIZZA LIST FROM DATABASE
-    const renderPizza = (item) => {
+    const renderPizza = ({navigation}) => {
       return (
-        <TouchableOpacity activeOpacity={0.8} onPress={() => selectItemToUpdate(item.index)}>
-          <View style={styles.listItemStyle}>
-          <Text style={styles.itemText}>{item.item.size} {item.item.dough.toLowerCase()} dough pizza {item.item.sauce.toLowerCase()} and {item.item.toppings.join(', ').toLowerCase()} toppings</Text>
-            <View style={styles.itemContainer}>
-              {/* <Image source={item.item.image} style={styles.pizzaImage} /> */}
-              <View style={styles.textContainer}>
-                <Text style={styles.descriptionText}>{item.item.description}</Text>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
+        <PizzaList navigation={navigation} />
       );
-    
-    }
+    };
 
     /// ////////////////END OF THE IMPLEMENTATION HERE ///////////////////
 
@@ -121,17 +111,8 @@ const HomeScreen = (props) =>{
               style={styles.image} resizeMode='cover'/>
           </View>  */}
 
-        <Button onPress={()=> readAllPizza()} title="REFRESH FAVORITES "/> 
           <Text style={[styles.text]}>Past Orders</Text>
-          {/* /////// DATABASE FLATLIST HERE /////// */}
-          <View style={{flex:4}}>
-          <View style={styles.listStyle}>
-            <FlatList style={styles.flatliststyle}
-              data={pizzaList}
-              renderItem={renderPizza}
-            />
-          </View>
-          </View>
+          <PizzaList navigation={props.navigation} />
         </View>
       </View>
     );
@@ -227,12 +208,13 @@ const HomeScreen = (props) =>{
       alignItems: 'center',
     },
     text: {
-      flex:1,
-      fontSize: 24,
+      //flex:1,
+      fontSize: 20,
       fontWeight: 'bold',
       color: '#000',
       right: 100,
-      paddingTop: 30,
+      paddingTop: 20,
+      paddingBottom: 10,
       // textAlign: 'center',
       // alignItems: 'left',
       justifyContent: 'flex-end',
