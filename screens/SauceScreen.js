@@ -7,7 +7,7 @@ import sauceImg from '../assets/pizza_pngs/sauce.png';
 export default function SauceScreen({ route, navigation }) {
     const sauceOptions = [
         {label: 'Add sauce', value: 'With sauce', image: sauceImg },
-        {label: 'No sauce', value: 'No sauce' }
+        {label: 'No sauce', value: 'With no sauce' }
       ];
 
     const { selectedDough, selectedDoughImage } = route.params;
