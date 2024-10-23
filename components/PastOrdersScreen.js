@@ -58,7 +58,7 @@ export default function PastOrdersScreen({ navigation }) {
     });
 
     // Determine if there is a sauce image
-    const sauceImage = pizza.sauce ? sauceImg : null; // Only set sauceImage if there's a sauce
+    const sauceImage = pizza.sauce === 'With sauce' ? sauceImg : null; // Only set sauceImage if it's "With sauce"
     
     // You can combine these images in the UI later, or return them as needed
     return {
@@ -86,7 +86,8 @@ export default function PastOrdersScreen({ navigation }) {
       return (
       <TouchableOpacity activeOpacity={0.8}>
         <View style={styles.listItemStyle}>
-          <Text style={styles.itemText}>{item.item.size} {item.item.dough.toLowerCase()} dough pizza {item.item.sauce.toLowerCase()} and {item.item.toppings.join(', ').toLowerCase()} topping(s)</Text>
+          <Text style={styles.itemText}>{item.item.size} {item.item.dough.toLowerCase()} pizza {item.item.sauce.toLowerCase()}.</Text>
+          <Text style={styles.itemText}>Toppings: {item.item.toppings.join(', ').toLowerCase()}</Text>
           <View style={styles.pizzaContainer}>
             {/* Render the dough image */}
             {doughImage && <Image source={doughImage} style={styles.doughImage} />}
