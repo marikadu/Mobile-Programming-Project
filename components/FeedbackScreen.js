@@ -59,7 +59,7 @@ export default function FeedbackScreen({ route, navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView // KeyboardAvoidingView to make the elements stay on their place when keyboard opens
+    <KeyboardAvoidingView // KeyboardAvoidingView makes the elements stay on their place when keyboard opens
       style={styles.screenContainer}
       behavior="padding"
       keyboardVerticalOffset={80} // elements slightly go up

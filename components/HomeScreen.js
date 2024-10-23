@@ -228,7 +228,7 @@ const HomeScreen = (props) =>{
     },
     text: {
       flex:1,
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: 'bold',
       color: '#000',
       right: 100,

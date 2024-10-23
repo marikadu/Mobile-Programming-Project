@@ -1,4 +1,4 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, TextInput, Modal, Alert } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, TextInput, Modal, Alert, KeyboardAvoidingView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { addAddress, updateAddress, deleteAddress, fetchAllAddress } from '../database/db'; 
 
@@ -29,7 +29,7 @@ export default function AddressScreenTest( route, navigation ) {
     };
 
     addAddress(newAddress).then(() => {
-        alert("Your address has been added to the database!");
+        Alert.alert("Address Saved", "Your address has been added!"); // "Alert.alert()"" instead of "alert" to also change the title of the alert window
         readAllAddresses();  // Refresh the list after adding a new address
         clearInputFields();  // Clear form after saving
     }).catch((error) => {
@@ -43,7 +43,7 @@ export default function AddressScreenTest( route, navigation ) {
     if (updateId) {
       updateAddress(updateId, newAddressLine1, newAddressLine2, newCity, newPostcode)
         .then(() => {
-          alert('Address updated successfully!');
+          Alert.alert('Address Updated', 'Address updated successfully!');
           readAllAddresses();  // Refresh the address list
           clearInputFields();  // Clear the form after updating
           setUpdateId(null);   // Reset update mode
@@ -115,22 +115,22 @@ export default function AddressScreenTest( route, navigation ) {
     return (
       <View>
         <Text style={styles.text}> Address Details:</Text>
-          <TextInput style={styles.orderItemStyle}
+          <TextInput style={styles.addressItemStyle}
           placeholder="Address line 1"
           value={newAddressLine1}
           onChangeText={setAddressLine1}
           ></TextInput>
-          <TextInput style={styles.orderItemStyle}
+          <TextInput style={styles.addressItemStyle}
           placeholder="Address line 2"
           value={newAddressLine2}
           onChangeText={setAddressLine2}
           ></TextInput>
-          <TextInput style={styles.orderItemStyle}
+          <TextInput style={styles.addressItemStyle}
           placeholder="City"
           value={newCity}
           onChangeText={setCity}
           ></TextInput>
-          <TextInput style={styles.orderItemStyle}
+          <TextInput style={styles.addressItemStyle}
           placeholder="Postcode"
           value={newPostcode}
           onChangeText={setPostcode}
@@ -156,22 +156,24 @@ export default function AddressScreenTest( route, navigation ) {
         </TouchableHighlight>
       </View>
 
-      <View>
-        <Text style={styles.fishlist}>Saved Addresses:</Text>
-
+      <KeyboardAvoidingView // KeyboardAvoidingView makes the elements stay on their place when keyboard opens
+      style={styles.screenContainer}
+      behavior="padding"
+      >
+        <Text style={styles.text}>Saved Addresses:</Text>
         {/* Address List */}
         <FlatList
           data={addressList}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleAddressPress(item)} onLongPress={() => handleLongPress(item)}>
+            <TouchableHighlight underlayColor='#fff' onPress={() => handleAddressPress(item)} onLongPress={() => handleLongPress(item)}>
               <View>
-                <Text>{item.id} {item.addressLine1} {item.addressLine2} {item.city} {item.postcode}</Text>
+                <Text style={styles.listItems}>{item.addressLine1} {item.addressLine2} {item.city} {item.postcode}</Text>
               </View>
-            </TouchableOpacity>
+            </TouchableHighlight>
           )}
         />
-      </View>
+      </KeyboardAvoidingView>
 
       {/* Delete Confirmation Modal */}
       <Modal
@@ -214,6 +216,10 @@ const styles = StyleSheet.create({
   background:{
     backgroundColor: "#fff",
   },
+  screenContainer:{
+    // flex:1,
+    backgroundColor:"#fff", // covers the grey background
+  },
   listItemStyle: {
     flex: 1,
     borderWidth: 2,
@@ -222,47 +228,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF9F2',
     borderRadius: 20,
     margin: 10,
-    width: '80%',
+    // width: '80%',
     alignSelf: 'center',
-  },
-  orderTotalContainerStyle: {
-    // flex: 1,
-    padding: 5,
-    justifyContent: 'space-around',
-    paddingLeft: 20,
-    flexDirection: 'row',
     alignItems: 'center',
-  },
-  orderTotalStyle: {
-    flex: 1,
-    color: "#CD6524",
-    fontSize: 20,
-    padding: 6,
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    margin: 30,
-    textAlign: 'center',
+    // width: 500,
   },
   text: {
     // flex: 1,
     color: '#CD6524',
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     justifyContent: 'flex-end',
   },
-  orderItemStyle: {
+  addressItemStyle: {
     borderWidth: 2,
     borderColor: '#F58C41',
     padding: 10,
     backgroundColor: '#FFF',
     borderRadius: 10,
     margin: 10,
+    fontSize: 18,
     paddingLeft: 40,
     paddingRight: 40,
     alignSelf: 'center',
+    width: 220,
   },
-  orderItemStylePayment: {
+  addressItemStylePayment: {
     borderWidth: 2,
     borderColor: '#FFF9F2',
     padding: 10,
@@ -274,9 +266,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   listStyle: {
-    flex: 9,
+    // flex: 9,
     alignItems: 'center',
     width: '100%',
+  },
+  listItems: {
+    margin: 5,
+    padding: 4,
+    color: '#CD6524',
+    fontSize: 20,
+    backgroundColor: '#FFE8D8',
+    width: '80%',
+    borderRadius: 10,
+    // fontWeight: 'bold',
+    textAlign: 'center',
+    alignSelf: 'center',
+    // justifyContent: 'flex-end',
   },
   itemText: {
     color: '#CD6524',
@@ -338,32 +343,32 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
   },
-  fishlist: {
-    fontSize: 20,
+  addressList: {
+    fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 10,
-  }, // The rest is modal styling, change as needed
+
+  }, // modal styling
   modalBackground: { 
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // half transparent background
   },
   modalContainer: {
-    width: 300,
-    padding: 20,
+    width: 320,
+    padding: 24,
     backgroundColor: '#fff',
     borderRadius: 10,
-    elevation: 10,
+    elevation: 10, // shadow under the container
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
+    bottom: 8,
     marginBottom: 10,
   },
   modalMessage: {
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 20,
   },
   modalButtons: {
@@ -371,17 +376,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   modalButtonDelete: {
-    backgroundColor: '#d9534f',
-    padding: 10,
+    backgroundColor: '#db5b44',
+    padding: 12,
     borderRadius: 5,
   },
   modalButtonCancel: {
-    backgroundColor: '#f0f0f0',
-    padding: 10,
+    backgroundColor: '#dedcdc',
+    padding: 12,
     borderRadius: 5,
   },
   modalButtonText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
   },
