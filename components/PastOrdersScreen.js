@@ -12,121 +12,133 @@ import basilImg from '../assets/pizza_pngs/topping_basil.png';
 import pepperoniImg from '../assets/pizza_pngs/topping_pepperoni.png';
 import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
 import { fetchAllPizza } from '../database/db.js';
+import PizzaList from './PizzaList'; // Import the reusable PizzaList component
 
 export default function PastOrdersScreen({ navigation }) {
-  const [pastOrdersList, setPastOrdersList] = useState([]);
+  // const [pastOrdersList, setPastOrdersList] = useState([]);
 
-  // This hook returns true if the screen is focused, we will use it to trigger refresh
-  const isFocused = useIsFocused();
+  // // This hook returns true if the screen is focused, we will use it to trigger refresh
+  // const isFocused = useIsFocused();
 
-  // Fetch pizzas whenever the screen is focused
-  useEffect(() => {
-    if (isFocused) {
-      readAllPizzas();
-    }
-  }, [isFocused]); // Depend on the focus state
+  // // Fetch pizzas whenever the screen is focused
+  // useEffect(() => {
+  //   if (isFocused) {
+  //     readAllPizzas();
+  //   }
+  // }, [isFocused]); // Depend on the focus state
 
-  // hardcoded pizza for now, passed pizzas should be here
-  const pizzaList = [
-    { id: 1, type: 'Pizza', price: 13, description: 'Original dough, With sauce, Cheese, Pepperoni', image: pepperoniImg },
-  ];
+  // // hardcoded pizza for now, passed pizzas should be here
+  // const pizzaList = [
+  //   { id: 1, type: 'Pizza', price: 13, description: 'Original dough, With sauce, Cheese, Pepperoni', image: pepperoniImg },
+  // ];
 
-    // Mapping dough types to their corresponding images
-  const doughImages = {
-    original: originalDough,
-    glutenfree: glutenFreeDough,
-    wholewheat: wholeWheatDough
-  };
+  //   // Mapping dough types to their corresponding images
+  // const doughImages = {
+  //   original: originalDough,
+  //   glutenfree: glutenFreeDough,
+  //   wholewheat: wholeWheatDough
+  // };
   
-  // Mapping toppings to their corresponding images
-  const toppingImages = {
-    cheese: cheeseImg,
-    tomato: tomatoImg,
-    basil: basilImg,
-    pepperoni: pepperoniImg,
-    mushrooms: mushroomsImg
-  };
+  // // Mapping toppings to their corresponding images
+  // const toppingImages = {
+  //   cheese: cheeseImg,
+  //   tomato: tomatoImg,
+  //   basil: basilImg,
+  //   pepperoni: pepperoniImg,
+  //   mushrooms: mushroomsImg
+  // };
 
-  const getPizzaImage = (pizza) => {
-    const normalizedDough = pizza.dough.toLowerCase().replace(/[\s-]+/g, ''); // Normalize to lowercase and remove spaces
-    const doughImage = doughImages[normalizedDough]; // Check against the normalized key
+  // const getPizzaImage = (pizza) => {
+  //   const normalizedDough = pizza.dough.toLowerCase().replace(/[\s-]+/g, ''); // Normalize to lowercase and remove spaces
+  //   const doughImage = doughImages[normalizedDough]; // Check against the normalized key
 
-    // Map topping names to their corresponding images
-    const toppingImagesArray = pizza.toppings.map(topping => {
-        const normalizedTopping = topping.toLowerCase(); // Normalize topping names
-        return toppingImages[normalizedTopping]; // Get the image from the mapping
-    });
+  //   // Map topping names to their corresponding images
+  //   const toppingImagesArray = pizza.toppings.map(topping => {
+  //       const normalizedTopping = topping.toLowerCase(); // Normalize topping names
+  //       return toppingImages[normalizedTopping]; // Get the image from the mapping
+  //   });
 
-    // Determine if there is a sauce image
-    const sauceImage = pizza.sauce === 'With sauce' ? sauceImg : null; // Only set sauceImage if it's "With sauce"
+  //   // Determine if there is a sauce image
+  //   const sauceImage = pizza.sauce === 'With sauce' ? sauceImg : null; // Only set sauceImage if it's "With sauce"
     
-    // You can combine these images in the UI later, or return them as needed
-    return {
-      doughImage,
-      sauceImage,
-      toppingImagesArray
-    };
-  };
+  //   // You can combine these images in the UI later, or return them as needed
+  //   return {
+  //     doughImage,
+  //     sauceImage,
+  //     toppingImagesArray
+  //   };
+  // };
 
-  async function readAllPizzas() {
-    try {
-      const dbResult = await fetchAllPizza();  // Wait for the result
-      console.log("Fetched pizzas:", dbResult);
-      setPastOrdersList(dbResult);  // Set the fetched addresses to state
-    } catch (err) {
-      console.error("Error fetching addresses: ", err);
-    }
-  };
+  // async function readAllPizzas() {
+  //   try {
+  //     const dbResult = await fetchAllPizza();  // Wait for the result
+  //     console.log("Fetched pizzas:", dbResult);
+  //     setPastOrdersList(dbResult);  // Set the fetched addresses to state
+  //   } catch (err) {
+  //     console.error("Error fetching addresses: ", err);
+  //   }
+  // };
 
-    // render pizza
-    const renderPizza = (item) => {
-      console.log("Rendering pizza:", item);
-      const { doughImage, toppingImagesArray, sauceImage } = getPizzaImage(item.item);
+  //   // render pizza
+  //   const renderPizza = (item) => {
+  //     console.log("Rendering pizza:", item);
+  //     const { doughImage, toppingImagesArray, sauceImage } = getPizzaImage(item.item);
 
-      return (
-      <TouchableOpacity activeOpacity={0.8}>
-        <View style={styles.listItemStyle}>
-          <Text style={styles.itemText}>{item.item.size} {item.item.dough.toLowerCase()} pizza {item.item.sauce.toLowerCase()}.</Text>
-          <Text style={styles.itemText}>Toppings: {item.item.toppings.join(', ').toLowerCase()}</Text>
-          <View style={styles.pizzaContainer}>
-            {/* Render the dough image */}
-            {doughImage && <Image source={doughImage} style={styles.doughImage} />}
+  //     return (
+  //     <TouchableOpacity activeOpacity={0.8}>
+  //       <View style={styles.listItemStyle}>
+  //         <Text style={styles.itemText}>{item.item.size} {item.item.dough.toLowerCase()} pizza {item.item.sauce.toLowerCase()}.</Text>
+  //         <Text style={styles.itemText}>Toppings: {item.item.toppings.join(', ').toLowerCase()}</Text>
+  //         <View style={styles.pizzaContainer}>
+  //           {/* Render the dough image */}
+  //           {doughImage && <Image source={doughImage} style={styles.doughImage} />}
 
-             {/* Render the sauce image if it exists */}
-             {sauceImage && <Image source={sauceImg} style={styles.sauceImage} />}
+  //            {/* Render the sauce image if it exists */}
+  //            {sauceImage && <Image source={sauceImg} style={styles.sauceImage} />}
 
-            {/* Optionally, you could layer or display topping images */}
-            {toppingImagesArray.map((toppingImg, index) => (
-              toppingImg && <Image key={index} source={toppingImg} style={styles.toppingImage} />
-            ))}
-          </View>
-        </View>
-      </TouchableOpacity>
-      );
-  };
+  //           {/* Optionally, you could layer or display topping images */}
+  //           {toppingImagesArray.map((toppingImg, index) => (
+  //             toppingImg && <Image key={index} source={toppingImg} style={styles.toppingImage} />
+  //           ))}
+  //         </View>
+  //       </View>
+  //     </TouchableOpacity>
+  //     );
+  // };
 
   return (
-    <View style={{ flex: 1 }} backgroundColor="#fff">
-      {/* Conditionally render the FlatList only if there are pizzas */}
-      {pastOrdersList.length > 0 ? (
-        <View style={styles.listStyle}>
-          <FlatList
-            style={styles.flatliststyle}
-            data={pastOrdersList}
-            renderItem={renderPizza}
-            keyExtractor={(item) => item.id.toString()}
-          />
-        </View>
-      ) : (
-        <Text style={styles.text}>No past orders found.</Text>
-      )}
+    // <View style={{ flex: 1 }} backgroundColor="#fff">
+    //   {/* Conditionally render the FlatList only if there are pizzas */}
+    //   {pastOrdersList.length > 0 ? (
+    //     <View style={styles.listStyle}>
+    //       <FlatList
+    //         style={styles.flatliststyle}
+    //         data={pastOrdersList}
+    //         renderItem={renderPizza}
+    //         keyExtractor={(item) => item.id.toString()}
+    //       />
+    //     </View>
+    //   ) : (
+    //     <Text style={styles.text}>No past orders found.</Text>
+    //   )}
 
-      {/* Order a new Pizza button */}
+    //   {/* Order a new Pizza button */}
+    //   <TouchableHighlight
+    //     style={styles.button}
+    //     // Navigate to the Dough screen when pressed
+    //     onPress={() => navigation.navigate("Dough")}
+    //     underlayColor='#EC863D' // colour when pressed the "button"
+    //   >
+    //     <Text style={[styles.buttonText]}>Order a new Pizza</Text>
+    //   </TouchableHighlight>
+    // </View>
+     <View style={{ flex: 1 }} backgroundColor="#fff">
+      <PizzaList navigation={navigation} />
+
       <TouchableHighlight
         style={styles.button}
-        // Navigate to the Dough screen when pressed
-        onPress={() => navigation.navigate("Dough")}
-        underlayColor='#EC863D' // colour when pressed the "button"
+        onPress={() => navigation.navigate('Dough')}
+        underlayColor="#EC863D"
       >
         <Text style={[styles.buttonText]}>Order a new Pizza</Text>
       </TouchableHighlight>
