@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { addAddress, updateAddress, deleteAddress, fetchAllAddress } from '../database/db'; 
 
 // const targetURL = "https://pepperonipals.lm.r.appspot.com";
-const targetURL = 'http://localhost:8080'
+const targetURL = 'http://10.0.2.2:8080'
 
 export default function AddressScreen( route, navigation ) {
   const [text, setText] = useState('');
@@ -61,7 +61,8 @@ export default function AddressScreen( route, navigation ) {
   // Function to delete address from DB
   const confirmDeleteAddress = () => {
     if (selectedAddress) {
-      deleteAddress(selectedAddress.id).then(() => {
+      // deleteAddress(selectedAddress.id).then(() => {
+        deleteOneAddress(selectedAddress._id).then(() => {
         alert("Address deleted successfully.");
         readAllAddresses();  // Refresh the list after deleting
         setDeleteModalVisible(false);  // Hide the modal
@@ -73,21 +74,57 @@ export default function AddressScreen( route, navigation ) {
     }
   };
 
+    // Delete Address from MongoDB
+    const deleteOneAddress = async id => {
+      console.log('Delete id: ' + id);
+      try {
+        let response = await fetch(
+          targetURL + '/deleteoneaddress/' + id,
+          {
+            method: 'DELETE',
+          },
+        );
+        let json = await response.json();
+        setAddressList(json);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+
+
   // Function to cancel deletion
   const cancelDelete = () => {
     setDeleteModalVisible(false);  // Hide the modal
     setSelectedAddress(null);  // Clear the selected address
   };
 
-  async function readAllAddresses() {
+  // async function readAllAddresses() {
+  //   try {
+  //     const dbResult = await fetchAllAddress();  // Wait for the result
+  //     console.log("Fetched addresses:", dbResult);
+  //     setAddressList(dbResult);  // Set the fetched addresses to state
+  //   } catch (err) {
+  //     console.error("Error fetching addresses: ", err);
+  //   }
+  // }
+
+  // READING Address Data from MongoDB
+  const readAllAddresses = async () => {
+    
     try {
-      const dbResult = await fetchAllAddress();  // Wait for the result
-      console.log("Fetched addresses:", dbResult);
-      setAddressList(dbResult);  // Set the fetched addresses to state
-    } catch (err) {
-      console.error("Error fetching addresses: ", err);
+      let response = await fetch(
+        // 'http://10.0.2.2:8080/readmenu', // FROM MONGODB OR GOOGLE CLOUD
+        targetURL + '/readalladdresses', // FROM GOOGLE CLOUD
+      );
+      let json = await response.json();
+      setAddressList(json);
+      console.log('Fetching all address data from MongoDB');
+      console.log(json);
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
 
   // Function to populate the form when an address is selected for editing
   const handleAddressPress = (address) => {
@@ -95,7 +132,7 @@ export default function AddressScreen( route, navigation ) {
     setAddressLine2(address.addressLine2);
     setCity(address.city);
     setPostcode(address.postcode);
-    setUpdateId(address.id);  // Set the ID for update mode
+    setUpdateId(address._id);  // Set the ID for update mode
   };
 
   // Function to handle long press and show delete confirmation
@@ -167,7 +204,7 @@ export default function AddressScreen( route, navigation ) {
         {/* Address List */}
         <FlatList
           data={addressList}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item._id.toString()}
           renderItem={({ item }) => (
             <TouchableHighlight underlayColor='#fff' onPress={() => handleAddressPress(item)} onLongPress={() => handleLongPress(item)}>
               <View>
