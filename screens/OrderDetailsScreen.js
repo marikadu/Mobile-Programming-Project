@@ -1,6 +1,7 @@
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { saveOrder } from '../database/db';
+// import { saveOrder } from '../database/db';
+import { addPizza, fetchAllPizza, deletePizza } from '../database/db';
 
 // importing images for the pizza creation
 import originalDough from '../assets/pizza_pngs/dough_og.png';
@@ -13,12 +14,85 @@ import basilImg from '../assets/pizza_pngs/topping_basil.png';
 import pepperoniImg from '../assets/pizza_pngs/topping_pepperoni.png';
 import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
 
-export default function OrderDetailsScreen(route, navigation) {
+export default function OrderDetailsScreen({ route, navigation }) {
+  // Receive the sauce, toppings, and dough data from previous screens
+  const { selectedDough, selectedDoughImage, selectedSauce, selectedSauceImage, selectedToppings, selectedToppingImages, selectedSize } = route.params;
+  // const [selectedSize, setSelectedSize] = useState('Small');
+
+  // price depending on the size of the pizza
+  // const pizzaPrice = selectedSize === 'Small' ? 10 : selectedSize === 'Medium' ? 15 : 20;
+
+  // if we were to add drinks, snacks, the calculation would be here
+  // but since there is only pizza, the total price is the pizza price
+  // const totalPrice = pizzaPrice;
+
+
+  // join toppings together to add into the description
+  const joinToppings = (toppings) => {
+    // if no toppings, says no toppings
+    if (!toppings || toppings.length === 0) return 'No toppings'; 
+    return toppings.join(', ');
+  };
+
   // hardcoded pizza for now, passed new pizza should be here
   const pizzaList = [
+    {
+      id: 1,
+      type: 'Custom Pizza',
+      // price: pizzaPrice,
+      price: 13,
+      description: `${selectedDough || 'Original'}, ${selectedSauce || 'With Sauce'}, ${joinToppings(selectedToppings)}, ${selectedSize || 'Small'}`,
+      // image: selectedToppingImages[0] || pepperoniImg,  // Set a default image if no topping image is provided
+    },
+  ];  
 
-    { id: 1, type: 'Pizza', price: 13, description: 'Original dough, With sauce, Cheese, Pepperoni', image: pepperoniImg },
-  ];
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const orderData = {
+        dough: selectedDough,
+        sauce: selectedSauce,
+        toppings: selectedToppings,
+        size: selectedSize,
+      };
+      console.log('Order Data:', orderData);
+    });
+
+    return unsubscribe; // Cleanup the listener
+  }, [navigation, selectedSize, selectedDough, selectedSauce, selectedToppings]); // Run effect if selectedSize changes
+
+  const handleSizeSelection = (value) => {
+    setSelectedSize(value);
+  };
+
+  setSelected = (value) => {
+    // console.log(value);
+    setSelectedSize(value);
+  }
+
+  // Function to submit the final order
+  const submitOrder = () => {
+    const newPizza = {
+      dough: selectedDough,
+      sauce: selectedSauce,
+      toppings: selectedToppings,
+      size: selectedSize,
+    };
+
+    // printSomething({newPizza});
+
+    addPizza(newPizza).then(() => {
+      alert("Your pizza has been added to the database!");
+      // after sending the pizza, navigate to the timer screen
+      navigation.navigate('Order', { screen: 'Timer' });
+      // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
+      // and after that to Timer
+    }).catch((error) => {
+      console.error('Error saving order:', error);
+      alert('Failed to place the order. Please try again.');
+    }
+    )
+  };
+
 
   // hardcoded address and payment details
   const addressDetails = {
@@ -27,7 +101,7 @@ export default function OrderDetailsScreen(route, navigation) {
   };
 
   // calculating the total price
-  const totalPrice = pizzaList.reduce((total, pizza) => total + pizza.price, 0);
+  // const totalPrice = pizzaList.reduce((total, pizza) => total + pizza.price, 0);
 
   // render pizza
   const renderPizza = (item) => {
@@ -36,7 +110,19 @@ export default function OrderDetailsScreen(route, navigation) {
         <View style={styles.listItemStyle}>
           <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
           <View style={styles.itemContainer}>
-            <Image source={item.item.image} style={styles.pizzaImage} />
+            {/* <Image source={item.item.image} style={styles.pizzaImage} /> */}
+
+            <View style={styles.pizzaContainer}>
+              <Image source={selectedDoughImage} style={styles.doughImage} />
+              {/* sauce and toppings don't render for some reason */}
+              <Image source={selectedSauceImage} style={styles.sauceImage} />
+
+              {/* render each selected topping image */}
+              {(selectedToppingImages || []).map((image, index) => (
+                <Image key={index} source={image} style={styles.toppingImage} />
+              ))}
+
+            </View>
             <View style={styles.textContainer}>
               <Text style={styles.descriptionText}>{item.item.description}</Text>
             </View>
@@ -46,24 +132,24 @@ export default function OrderDetailsScreen(route, navigation) {
     );
   };
 
-  // Display the total cost of the order
+  // display order total cost
   const renderCost = () => {
     return (
       <View style={styles.orderTotalContainerStyle}>
         <Text style={styles.orderTotalStyle}>Order Total:</Text>
-        <Text style={styles.orderTotalStyle}>{totalPrice}€</Text>
+        {/* <Text style={styles.orderTotalStyle}>{totalPrice}€</Text> */}
+        <Text style={styles.orderTotalStyle}>13€</Text>
       </View>
     );
   };
 
-  // Display the Address and Payment method details
+  // display the Address and Payment method details
   const renderDetails = () => {
     return (
       <View>
         <Text style={styles.text}> Address Details:</Text>
         <TouchableHighlight style={styles.orderItemStyle} underlayColor='#EC863D'>
           {/* make it so that on press the address can be changed */}
-          {/* onPress={() => props.navigation.navigate("Menu")}  */}
           <Text style={styles.itemText}>{addressDetails.address}</Text>
         </TouchableHighlight>
         <Text style={styles.text}> Payment Method:</Text>
@@ -90,11 +176,11 @@ export default function OrderDetailsScreen(route, navigation) {
       {/* place order button */}
       <TouchableHighlight
         style={styles.button}
-        // after you press the "Place Order" button -> goes to the Timer Screen
-        // onPress={() => props.navigation.navigate("Menu")} 
+        onPress={submitOrder}
         underlayColor='#EC863D' // colour when pressed the "button"
       >
-        <Text style={[styles.buttonText]}>Place order {totalPrice}€</Text>
+        {/* <Text style={styles.buttonText}> Submit Order {totalPrice}€</Text> */}
+        <Text style={styles.buttonText}> Submit Order 13€</Text>
       </TouchableHighlight>
     </View>
   );
@@ -163,6 +249,26 @@ const styles = StyleSheet.create({
     paddingRight: 40,
     alignSelf: 'center',
   },
+  pizzaContainer: {
+    width: 100,
+    height: 100,
+    position: 'relative', // for the absolute position for the toppings
+  },
+  doughImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+},
+sauceImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  toppingImage: {
+      position: 'absolute', // absolute position to allow stacking of the toppings
+      width: '100%',
+      height: '100%',
+  },
   listStyle: {
     flex: 9,
     alignItems: 'center',
@@ -191,12 +297,8 @@ const styles = StyleSheet.create({
     color: '#CD6524',
     fontSize: 16,
   },
-  pizzaImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 25,
-  },
   button: {
+    flex: 1,
     margin: 20,
     paddingTop: 10,
     width: 250,
@@ -206,6 +308,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   buttonText: {
+    top: 8,
     flex: 1,
     fontSize: 24,
     fontWeight: 'bold',

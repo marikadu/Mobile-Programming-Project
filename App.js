@@ -43,7 +43,7 @@ const Stack = createNativeStackNavigator();
 // Gets the default parameters of each object
 const defaultParams = {
   Dough: { selectedDough: '0', selectedDoughImage: '0' },
-  Sauce: { selectedSauce: 'Add', selectedSauceImage: '0' },
+  Sauce: { selectedSauce: 'With sauce', selectedSauceImage: '0' },
   Toppings: { selectedToppings: [] },
   Size: { selectedSize: 'Small' },
 };
@@ -57,13 +57,8 @@ const getRouteParams = (navigation, routeName) => {
 const HeaderRightButton = ({ navigation }) => {
   const currentRoute = navigation.getState().routes[navigation.getState().index].name;
 
-  // if the user is on the HomeScreen, don't show the arrow
-  // if (currentRoute === 'Home') {
-  //   return null;
-  // }
-
   const selectedDough = getRouteParams(navigation, 'Dough', { selectedDough: '0', selectedDoughImage: '0' });
-  const selectedSauce = getRouteParams(navigation, 'Sauce', { selectedSauce: 'Add', selectedSauceImage: '0' });
+  const selectedSauce = getRouteParams(navigation, 'Sauce', { selectedSauce: 'With sauce', selectedSauceImage: '0' });
   const selectedToppings = getRouteParams(navigation, 'Toppings', { selectedToppings: [], selectedToppingImages: '0' });
   const selectedSize = getRouteParams(navigation, 'Size', { selectedSize: 'Small' });
 
@@ -80,7 +75,12 @@ const HeaderRightButton = ({ navigation }) => {
         navigation.navigate('Size', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages: selectedToppings.selectedToppingImages });
         break;
       case "Size":
+        navigation.navigate('OrderDetails', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages: selectedToppings.selectedToppingImages, selectedSize: selectedSize.selectedSize });
         console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
+        break;
+      case "Order":
+        console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
+        // navigation.navigate('Timer', selectedDough);
         break;
       default:
         break;
@@ -272,9 +272,6 @@ pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
       <NavigationContainer>
         <Tab.Navigator
-          // shortcut for the documentation, I'll delete it later - Marika
-          // https://reactnavigation.org/docs/tab-based-navigation/
-
           // icons list
           // https://icons.expo.fyi/Index
           // filter by "Ionicons"
