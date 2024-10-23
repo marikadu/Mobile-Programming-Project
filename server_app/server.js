@@ -7,6 +7,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // This middleware is available in Express v4.16.0 onwards
 app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 // const uri = "mongodb+srv://pihkoi:MfrGm39Qj9TO8j5y@cluster0.fnypd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
@@ -136,6 +137,35 @@ const newAddress = [
 app.get('/addresses', (req, res) => {
     res.send("Pepperoni Pals Addresses!");
   });
+
+// CREATE NEW ADDRESS
+
+//Adding one address into Mongo database
+app.post('/addoneaddress', (req, res) => {
+    console.log("Address Added");
+    let address=req.body;
+    addOneAddress(address).then(()=>readAllAddresses().then(z=>res.send(z)));
+});
+
+
+
+async function addOneAddress(address) {
+    console.log("addOneAddress started");
+    try {
+      // Connect the client to the server (optional starting in v4.7)
+      await client.connect();
+      await client.db("pizzadb").collection("address").insertOne(address);
+    }
+    catch(e){
+        console.log("Lisäyspoikkeus");
+    } 
+    //finally is run ALWAYS - even if there is a return before
+    finally {
+      await client.close();
+    }
+}
+
+
 
 // Read all Addresses from address table
 app.get('/readAllAddresses', (req, res) => {
