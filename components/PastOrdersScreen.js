@@ -99,10 +99,6 @@ export default function PastOrdersScreen({ navigation }) {
             {toppingImagesArray.map((toppingImg, index) => (
               toppingImg && <Image key={index} source={toppingImg} style={styles.toppingImage} />
             ))}
-
-            {/* <View style={styles.textContainer}>
-              <Text style={styles.descriptionText}>{item.item.description}</Text>
-            </View> */}
           </View>
         </View>
       </TouchableOpacity>
