@@ -18,6 +18,7 @@ export default function OrderDetailsScreen({ route, navigation }) {
   // Receive the sauce, toppings, and dough data from previous screens
   const { selectedDough, selectedDoughImage, selectedSauce, selectedSauceImage, selectedToppings, selectedToppingImages, selectedSize } = route.params;
   // const [selectedSize, setSelectedSize] = useState('Small');
+  const [initialTime, setInitialTime] = useState(30 * 60); // 30 minutes in seconds, resets the Timer for every new pizza ordered
 
   // price depending on the size of the pizza
   // const pizzaPrice = selectedSize === 'Small' ? 10 : selectedSize === 'Medium' ? 15 : 20;
@@ -92,8 +93,8 @@ export default function OrderDetailsScreen({ route, navigation }) {
 
     addPizza(newPizza).then(() => {
       alert("Your pizza has been added to the database!");
-      // after sending the pizza, navigate to the timer screen
-      navigation.navigate('Order', { screen: 'Timer' }, { onGoBack: readAllPizzas });
+      // after sending the pizza, navigate to the timer screen with the default time of 30 minutes
+      navigation.navigate('Order', { screen: 'Timer', params: { initialTime } });
       // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
       // and after that to Timer
     }).catch((error) => {

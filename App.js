@@ -139,7 +139,6 @@ const HomeStackScreen = () => {
           component={HomeScreen}
           options={({ route }) => ({
             title: route.params?.name ? route.params.name : "Home",
-            // title: "",
             headerShown: false, // header with arrows is not shown when on HomeScreen
           })}
         />
@@ -149,7 +148,7 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} options={{ title: 'Creating a pizza' }}/>
+        <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} options={{ title: 'Creating a pizza', headerRight: null }}/>
         {/* <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>   */}
         <Stack.Screen name="Details" component={DetailsScreen}  />
         {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
@@ -159,9 +158,6 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Address" component={AddressScreen}/>
         <Stack.Screen name="PastOrders" component={PastOrdersScreen}/>
       </Stack.Navigator>
-    // <Stack.Navigator>
-    //   {/* <Stack.Screen name="Home" component={PepperoniPalsView} /> */}
-    // </Stack.Navigator>
   )
 }
 
@@ -197,14 +193,15 @@ const OrderStackScreen = ({ navigation }) => {
       <Stack.Screen name="PastOrders" component={PastOrdersScreen} options={{ title: 'Previous Orders' }} />
       {/* <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }} /> */}
       {/* this has to be devided */}
-      <Stack.Screen name="Timer" options={{ title: 'Waiting for the delivery' }}>
+      <Stack.Screen name="Timer" options={{ title: 'Waiting for the delivery', headerLeft: null, headerBackVisible: false, }}>
         {props => <TimerScreen {...props} onTimerEnd={handleTimerEnd} />}
       </Stack.Screen>
       <Stack.Screen name="Details" component={DetailsScreen} />
-      <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ title: 'Leave Feedback' }} />
+      <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ title: 'Leave Feedback', headerLeft: null, headerBackVisible: false, }} />
     </Stack.Navigator>
   );
 };
+
 
 // dark mode
 export const DarkModeContext = createContext();

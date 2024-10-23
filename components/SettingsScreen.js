@@ -29,7 +29,7 @@ export const SettingsScreen=(props)=>{
           // onPress={() => props.navigation.navigate("Dough")} 
           onPress={()=> props.navigation.navigate('Order', { screen: 'PastOrders'})} 
           >
-          <Text style={[styles.buttonText]}>Past Orders</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? '#ffc399' : '#F58C41' }]}>Past Orders</Text>
         </TouchableHighlight>
 
         <TouchableHighlight
@@ -37,12 +37,12 @@ export const SettingsScreen=(props)=>{
           underlayColor='#fff'
           onPress={() => props.navigation.navigate("Address")} 
           >
-          <Text style={[styles.buttonText, { color: darkMode ? '#fff' : '#000' }]}>Address Details</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? '#ffc399' : '#F58C41' }]}>Address Details</Text>
         </TouchableHighlight>
 
         {/* dark mode switch */}
         <View style={styles.settingRow}>
-          <Text style={[styles.buttonText, { color: darkMode ? '#fff' : '#000' }]}>Dark Mode</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? '#ffc399' : '#F58C41' }]}>Dark Mode</Text>
           <Switch
             trackColor={{ false: "#767577", true: "#4a4848" }}
             thumbColor={darkMode ? "#adaaaa" : "#f2f0f2"}
@@ -56,7 +56,7 @@ export const SettingsScreen=(props)=>{
           underlayColor='#fff'
           onPress={()=> console.log('About Us')}
           >
-          <Text style={[styles.buttonText, { color: darkMode ? '#fff' : '#000' }]}>About Us</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? '#ffc399' : '#F58C41' }]}>About Us</Text>
         </TouchableHighlight>
 
         <TouchableHighlight
@@ -64,7 +64,7 @@ export const SettingsScreen=(props)=>{
           underlayColor='#fff'
           onPress={()=> console.log('Log Out')}
           >
-          <Text style={[styles.buttonText, { color: darkMode ? '#fff' : '#000' }]}>Log Out</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? '#ffc399' : '#F58C41' }]}>Log Out</Text>
         </TouchableHighlight>
          
         </View>
