@@ -2,7 +2,7 @@ import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, Touc
 import React, { useState, useEffect } from 'react';
 import { addAddress, updateAddress, deleteAddress, fetchAllAddress } from '../database/db'; 
 
-export default function AddressScreenTest( route, navigation ) {
+export default function AddressScreen( route, navigation ) {
   const [text, setText] = useState('');
   const [newAddressLine1, setAddressLine1] = useState('');
   const [newAddressLine2, setAddressLine2] = useState('');
