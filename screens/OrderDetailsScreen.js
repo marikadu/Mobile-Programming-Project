@@ -41,7 +41,7 @@ export default function OrderDetailsScreen({ route, navigation }) {
       type: 'Custom Pizza',
       // price: pizzaPrice,
       price: 13,
-      description: `${selectedDough || 'Default Dough'}, ${selectedSauce || 'With Sauce'}, ${joinToppings(selectedToppings)}`,
+      description: `${selectedDough || 'Original'}, ${selectedSauce || 'With Sauce'}, ${joinToppings(selectedToppings)}, ${selectedSize || 'Small'}`,
       // image: selectedToppingImages[0] || pepperoniImg,  // Set a default image if no topping image is provided
     },
   ];  

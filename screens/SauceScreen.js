@@ -6,12 +6,12 @@ import sauceImg from '../assets/pizza_pngs/sauce.png';
 
 export default function SauceScreen({ route, navigation }) {
     const sauceOptions = [
-        {label: 'Add sauce', value: 'Add', image: sauceImg },
-        {label: 'No sauce', value: 'None' }
+        {label: 'Add sauce', value: 'With sauce', image: sauceImg },
+        {label: 'No sauce', value: 'No sauce' }
       ];
 
     const { selectedDough, selectedDoughImage } = route.params;
-    const [selectedSauce, setSelectedSauce] = useState('Add');
+    const [selectedSauce, setSelectedSauce] = useState('With sauce');
     const [selectedSauceImage, setSelectedSauceImage] = useState(sauceOptions[0].value); // Used for saving the current image
 
     useEffect(() => {
@@ -61,7 +61,7 @@ export default function SauceScreen({ route, navigation }) {
                 <View style={styles.pizzaContainer}>
                     <Image source={selectedDoughImage} style={styles.doughImage} />
                     {/* render the image when the sauce is selected */}
-                    {selectedSauce === "Add" && (
+                    {selectedSauce === "With sauce" && (
                     <Image source={sauceImg} style={styles.sauceImage} />
                 )}
                 </View>

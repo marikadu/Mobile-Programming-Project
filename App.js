@@ -43,7 +43,7 @@ const Stack = createNativeStackNavigator();
 // Gets the default parameters of each object
 const defaultParams = {
   Dough: { selectedDough: '0', selectedDoughImage: '0' },
-  Sauce: { selectedSauce: 'Add', selectedSauceImage: '0' },
+  Sauce: { selectedSauce: 'With sauce', selectedSauceImage: '0' },
   Toppings: { selectedToppings: [] },
   Size: { selectedSize: 'Small' },
 };
@@ -58,7 +58,7 @@ const HeaderRightButton = ({ navigation }) => {
   const currentRoute = navigation.getState().routes[navigation.getState().index].name;
 
   const selectedDough = getRouteParams(navigation, 'Dough', { selectedDough: '0', selectedDoughImage: '0' });
-  const selectedSauce = getRouteParams(navigation, 'Sauce', { selectedSauce: 'Add', selectedSauceImage: '0' });
+  const selectedSauce = getRouteParams(navigation, 'Sauce', { selectedSauce: 'With sauce', selectedSauceImage: '0' });
   const selectedToppings = getRouteParams(navigation, 'Toppings', { selectedToppings: [], selectedToppingImages: '0' });
   const selectedSize = getRouteParams(navigation, 'Size', { selectedSize: 'Small' });
 
