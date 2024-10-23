@@ -4,6 +4,9 @@ import { Alert, View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacit
 // Import the component
 import NavButtons from './NavButtons.js';
 
+
+const targetURL = "https://pepperonipals.lm.r.appspot.com";
+
 export const MenuScreen = (props) => {
   const [newPizza, setPizza] = useState("");
   const [updateId, setUpdateId] = useState(-1);
@@ -39,7 +42,8 @@ export const MenuScreen = (props) => {
     
     try {
       let response = await fetch(
-        'http://10.0.2.2:8080/readmenu', // FROM MONGODB OR GOOGLE CLOUD
+        // 'http://10.0.2.2:8080/readmenu', // FROM MONGODB OR GOOGLE CLOUD
+        'https://pepperonipals.lm.r.appspot.com/readmenu', // FROM GOOGLE CLOUD
       );
       let json = await response.json();
       setPizzaList(json);
