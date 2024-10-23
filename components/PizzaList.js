@@ -1,5 +1,3 @@
-// PizzaList.js
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
@@ -66,23 +64,21 @@ const PizzaList = ({ navigation }) => {
   const renderPizza = ({ item }) => {
     const { doughImage, toppingImagesArray, sauceImage } = getPizzaImage(item);
     return (
-      <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Details', { pizza: item })}>
-        <View style={styles.listItemStyle}>
-          <Text style={styles.itemText}>
-            {item.size} {item.dough.toLowerCase()} pizza {item.sauce.toLowerCase()}.
-          </Text>
-          <Text style={styles.itemText}>
-            Toppings: {item.toppings.join(', ').toLowerCase()}
-          </Text>
-          <View style={styles.pizzaContainer}>
-            {doughImage && <Image source={doughImage} style={styles.doughImage} />}
-            {sauceImage && <Image source={sauceImage} style={styles.sauceImage} />}
-            {toppingImagesArray.map((toppingImg, index) => (
-              toppingImg && <Image key={index} source={toppingImg} style={styles.toppingImage} />
-            ))}
-          </View>
+      <View style={styles.listItemStyle}>
+        <Text style={styles.itemText}>
+          {item.size} {item.dough.toLowerCase()} pizza {item.sauce.toLowerCase()}.
+        </Text>
+        <Text style={styles.itemText}>
+          Toppings: {item.toppings.join(', ').toLowerCase()}
+        </Text>
+        <View style={styles.pizzaContainer}>
+          {doughImage && <Image source={doughImage} style={styles.doughImage} />}
+          {sauceImage && <Image source={sauceImage} style={styles.sauceImage} />}
+          {toppingImagesArray.map((toppingImg, index) => (
+            toppingImg && <Image key={index} source={toppingImg} style={styles.toppingImage} />
+          ))}
         </View>
-      </TouchableOpacity>
+      </View>
     );
   };
 
