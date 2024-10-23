@@ -11,29 +11,6 @@ export const MenuScreen = (props) => {
   const [newPizza, setPizza] = useState("");
   const [updateId, setUpdateId] = useState(-1);
   const [isLoading, setLoading] = useState(true);
-  // const [pizzaList, addPizza] = useState([
-  //   {
-  //   _id: "67180d81a0a571d9106d8b79",
-  //   type: "Bianca",
-  //   price: "10.90",
-  //   description: "Original dough, No sauce, Cheese",
-  //   image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrMuL0UO0MhQV9CPDA-R15yfak1TqP0JkrWcFauigPPY0t88d5WXdmjdYAOli9yRYWiXI&usqp=CAU"
-  //   },
-  //   {
-  //   _id: "67180d81a0a571d9106d8b7a",
-  //   type: "Mushrooms",
-  //   price: "11.90",
-  //   description: "Original dough, With sauce, Cheese, Mushrooms",
-  //   image: "https://www.shutterstock.com/image-photo/delicious-savory-porcini-mushroom-pizza-260nw-2484910843.jpg"
-  //   },
-  //   {
-  //   _id: "67180d81a0a571d9106d8b78",
-  //   type: "Pepperoni",
-  //   price: "12.90",
-  //   description: "Original dough, With sauce, Cheese, Pepperoni",
-  //   image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMDbvohJ2KYuQP5TT_h3XQhhnr7mPVx2e1AnI0l7EjWV9OnlcStMF2Ar2BksfV8tdRGBc&usqp=CAU"
-  //   }
-  //   ]);
 
   const [pizzaList, setPizzaList] = useState([]);
 
@@ -43,7 +20,7 @@ export const MenuScreen = (props) => {
     try {
       let response = await fetch(
         // 'http://10.0.2.2:8080/readmenu', // FROM MONGODB OR GOOGLE CLOUD
-        'https://pepperonipals.lm.r.appspot.com/readmenu', // FROM GOOGLE CLOUD
+        targetURL + '/readmenu', // FROM GOOGLE CLOUD
       );
       let json = await response.json();
       setPizzaList(json);
@@ -58,7 +35,7 @@ export const MenuScreen = (props) => {
   const refreshPizzaMenu = async () => {
     try{
       let response = await fetch(
-        'http://10.0.2.2:8080/reset', // FROM MONGODB 
+        targetURL + '/reset', // FROM MONGODB 
 
       ); 
       let json = await response.json();
@@ -96,7 +73,7 @@ export const MenuScreen = (props) => {
     // console.log(pizzaList[_id])
     try {
       let response = await fetch(
-        'http://10.0.2.2:8080/deleteonepizza/' + id,
+        targetURL + '/deleteonepizza/' + id,
         {
           method: 'DELETE',
         },

@@ -2,6 +2,9 @@ import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, Touc
 import React, { useState, useEffect } from 'react';
 import { addAddress, updateAddress, deleteAddress, fetchAllAddress } from '../database/db'; 
 
+// const targetURL = "https://pepperonipals.lm.r.appspot.com";
+const targetURL = 'http://localhost:8080'
+
 export default function AddressScreenTest( route, navigation ) {
   const [text, setText] = useState('');
   const [newAddressLine1, setAddressLine1] = useState('');
