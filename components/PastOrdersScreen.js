@@ -111,7 +111,6 @@ export default function PastOrdersScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1 }} backgroundColor="#fff">
-      <Text style={styles.text}> Past Orders:</Text>
       {/* Conditionally render the FlatList only if there are pizzas */}
       {pastOrdersList.length > 0 ? (
         <View style={styles.listStyle}>
