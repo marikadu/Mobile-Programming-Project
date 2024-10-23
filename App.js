@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, createContext, useEffect, useContext } from 'react';
 import { View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -43,7 +43,7 @@ const Stack = createNativeStackNavigator();
 // Gets the default parameters of each object
 const defaultParams = {
   Dough: { selectedDough: '0', selectedDoughImage: '0' },
-  Sauce: { selectedSauce: 'Add', selectedSauceImage: '0' },
+  Sauce: { selectedSauce: 'With sauce', selectedSauceImage: '0' },
   Toppings: { selectedToppings: [] },
   Size: { selectedSize: 'Small' },
 };
@@ -58,11 +58,11 @@ const HeaderRightButton = ({ navigation }) => {
   const currentRoute = navigation.getState().routes[navigation.getState().index].name;
 
   const selectedDough = getRouteParams(navigation, 'Dough', { selectedDough: '0', selectedDoughImage: '0' });
-  const selectedSauce = getRouteParams(navigation, 'Sauce', { selectedSauce: 'Add', selectedSauceImage: '0' });
+  const selectedSauce = getRouteParams(navigation, 'Sauce', { selectedSauce: 'With sauce', selectedSauceImage: '0' });
   const selectedToppings = getRouteParams(navigation, 'Toppings', { selectedToppings: [], selectedToppingImages: '0' });
   const selectedSize = getRouteParams(navigation, 'Size', { selectedSize: 'Small' });
 
-  // Handles navigation
+  // handles navigation
   const handleNavigation = () => {
     switch (currentRoute) {
       case "Dough":
@@ -75,7 +75,12 @@ const HeaderRightButton = ({ navigation }) => {
         navigation.navigate('Size', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages: selectedToppings.selectedToppingImages });
         break;
       case "Size":
+        navigation.navigate('OrderDetails', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedSauceImage: selectedSauce.selectedSauceImage, selectedToppings: selectedToppings.selectedToppings, selectedToppingImages: selectedToppings.selectedToppingImages, selectedSize: selectedSize.selectedSize });
         console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
+        break;
+      case "Order":
+        console.log('Order Summary:', { ...selectedDough, selectedSauce: selectedSauce.selectedSauce, selectedToppings: selectedToppings.selectedToppings, selectedSize: selectedSize.selectedSize });
+        // navigation.navigate('Timer', selectedDough);
         break;
       default:
         break;
@@ -106,8 +111,11 @@ const HomeStackScreen = () => {
 
     <Stack.Navigator
       initialRouteName="Home"
-      // initialRouteName="Dough"
-      screenOptions={({ navigation }) => ({
+
+      // tab navigation with the arrows
+      screenOptions={({ navigation}) => {
+        
+        return {
         headerStyle: {
           backgroundColor: 'white',
         },
@@ -120,33 +128,40 @@ const HomeStackScreen = () => {
           paddingLeft: 10,
         },
         headerTitleAlign: 'center',
+        
         headerRight: () => <HeaderRightButton navigation={navigation} />, // Right arrow component
         headerLeft: () => <HeaderLeftButton navigation={navigation} />, // Left arrow component
-      })}>
+        };
+      }}>
         {/* <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} /> */}
-        <Stack.Screen name="Home" component={HomeScreen} options={({route}) => ({title: route.params?.name ? route.params.name : "Home"})} />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={({ route }) => ({
+            title: route.params?.name ? route.params.name : "Home",
+            headerShown: false, // header with arrows is not shown when on HomeScreen
+          })}
+        />
         <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name = "db_DoughScreen" component={DoughScreen_db} options={{ title: 'Pick your DOUGH' }}/>
         <Stack.Screen name = "CreatePizza" component={CreatePizzaScreen} options={{ title: 'Create Your Pizza' }}/>
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} options={{ title: 'Creating a pizza' }}/>
+        <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} options={{ title: 'Creating a pizza', headerRight: null }}/>
         {/* <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>   */}
         <Stack.Screen name="Details" component={DetailsScreen}  />
         {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
         <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen}  />
-        <Stack.Screen name="Address" component={AddressScreen}/>
+        <Stack.Screen name="Address" component={AddressScreen} options={{
+          // removes the arrow to the right for AddressScreen
+          headerRight: null}}/>
       </Stack.Navigator>
-    // <Stack.Navigator>
-    //   {/* <Stack.Screen name="Home" component={PepperoniPalsView} /> */}
-    // </Stack.Navigator>
   )
 }
 
-// Marika is trying to do something with the Order Tab Navigation •ᴗ• sorry if this is bad lmao
 // literally the same logic as HomeStackScreens, so maybe we could implement something
 // simillar for the Settings Tab Navigation
 const OrderStackScreen = ({ navigation }) => {
@@ -179,16 +194,22 @@ const OrderStackScreen = ({ navigation }) => {
       <Stack.Screen name="PastOrders" component={PastOrdersScreen} options={{ title: 'Previous Orders' }} />
       {/* <Stack.Screen name="Order" component={OrderScreen} options={{ title: 'Creating a pizza' }} /> */}
       {/* this has to be devided */}
-      <Stack.Screen name="Timer" options={{ title: 'Waiting for the delivery' }}>
+      <Stack.Screen name="Timer" options={{ title: 'Waiting for the delivery', headerLeft: null, headerBackVisible: false, }}>
         {props => <TimerScreen {...props} onTimerEnd={handleTimerEnd} />}
       </Stack.Screen>
       <Stack.Screen name="Details" component={DetailsScreen} />
-      <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ title: 'Leave Feedback' }} />
+      <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ title: 'Leave Feedback', headerLeft: null, headerBackVisible: false, }} />
     </Stack.Navigator>
   );
 };
 
+
+// dark mode
+export const DarkModeContext = createContext();
+
 export default function App({ navigation }) {
+  const [darkMode, setDarkMode] = useState(false); // as default the dark mode is turned off
+
   useEffect(() => {
   //   // Initialize database and create tables
   //   getDBConnection()
@@ -247,40 +268,45 @@ pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING
 
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        // shortcut for the documentation, I'll delete it later - Marika
-        // https://reactnavigation.org/docs/tab-based-navigation/
+    <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
+      <NavigationContainer>
+        <Tab.Navigator
+          // icons list
+          // https://icons.expo.fyi/Index
+          // filter by "Ionicons"
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-        // icons list
-        // https://icons.expo.fyi/Index
-        // filter by "Ionicons"
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+              if (route.name === 'Home') {
+                iconName = focused ? 'home' : 'home-outline';
+              } else if (route.name === 'Settings') {
+                iconName = focused ? 'settings' : 'settings-outline';
+              } else if (route.name === 'Order') {
+                iconName = focused ? 'pizza' : 'pizza-outline';
+              }
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: darkMode ? '#F58C41' : '#E04A2B', // Change active color
+            tabBarInactiveTintColor: darkMode ? '#b0b0b0' : 'gray', // Change inactive color
+            tabBarStyle: {
+              backgroundColor: darkMode ? '#333' : '#fff', // Tab bar background color
+              borderTopColor: darkMode ? '#444' : '#ddd', // Tab bar border color
+            },
+            tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer expired
+            // tabBarLabel: '',
+            headerShown: false, // Hide the header
+          })}
+          initialRouteName='Home' // Setting the initial route to Home
+        >
+          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Home" component={HomeStackScreen} />
+          <Tab.Screen name="Order" component={OrderStackScreen} />
 
-            if (route.name === 'Home') {
-              iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'settings' : 'settings-outline';
-            } else if (route.name === 'Order') {
-              iconName = focused ? 'pizza' : 'pizza-outline';
-            }
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#E04A2B',
-          tabBarInactiveTintColor: 'gray',
-          tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer has expired
-        })}
-        initialRouteName='Home' // Setting the initial route to Home
-      >
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Order" component={OrderStackScreen} />
 
-
-      </Tab.Navigator>
-    </NavigationContainer>
+        </Tab.Navigator>
+      </NavigationContainer>
+     </DarkModeContext.Provider>
   );
 }
 

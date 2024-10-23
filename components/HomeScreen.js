@@ -122,7 +122,7 @@ const HomeScreen = (props) =>{
           </View>  */}
 
 <Button onPress={()=> readAllPizza()} title="REFRESH FAVORITES "/> 
-          <Text style={[styles.text]}>Your Favourites</Text>
+          <Text style={[styles.text]}>Past Orders</Text>
           {/* /////// DATABASE FLATLIST HERE /////// */}
           <View style={{flex:4}}>
           <View style={styles.listStyle}>
@@ -228,7 +228,7 @@ const HomeScreen = (props) =>{
     },
     text: {
       flex:1,
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: 'bold',
       color: '#000',
       right: 100,

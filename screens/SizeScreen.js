@@ -24,95 +24,15 @@ export default function SizeScreen({ route, navigation }) {
                 toppings: selectedToppings,
                 size: selectedSize,
             };
-
-            // const newPizza = {
-            //     dough: selectedDough,
-            //     sauce: selectedSauce,
-            //     toppings: selectedToppings,
-            //     size: selectedSize,
-            // }
-
-            // printSomething({newPizza});
-
-            // saveOrder(orderData)
-            //     .then(() => {
-            //         console.log('Size saved:', orderData);
-                    
-            //     })
-            //     .catch((error) => {
-            //         console.error('Error saving size:', error);
-            //     });
         });
 
         return unsubscribe; // Cleanup the listener
     }, [navigation, selectedSize]); // Run effect if selectedSize changes
 
     setSelected = (value) => {
-        // console.log(value);
         setSelectedSize(value);
-    }
-
-    // Function to submit the final order
-    const submitOrder = () => {
-        // Construct the order object
-        const orderData = {
-            dough: selectedDough,
-            sauce: selectedSauce,
-            toppings: selectedToppings,
-            size: selectedSize,
-        };
-
-        // Log the order data to verify what's being sent
-        // console.log('Order Data:', orderData);
-        // console.log('Selected Toppings:', selectedToppings);
-
-        const newPizza = {
-            dough: selectedDough,
-            sauce: selectedSauce,
-            toppings: selectedToppings,
-            size: selectedSize,
-        }
-
-        // 
-
-        // printSomething({newPizza});
-
-        addPizza(newPizza).then(() => {
-            alert("Your pizza has been added to the database!");
-            // after sending the pizza, navigate to the timer screen
-            navigation.navigate('Order', { screen: 'Timer' });
-            // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
-            // and after that to Timer
-        }).catch((error) => {
-            console.error('Error saving order:', err);
-            alert('Failed to place the order. Please try again.');
-        });
-        // console.log(fetchAllPizza());
-        // console.log('Pizza deleted')
-        // deletePizza(3);
-        // console.log(fetchAllPizza());
-
-
-
-        // Save the order to SQLite
-        // saveOrder(orderData)
-        //     .then(() => {
-        //         // console.log('Order saved:', orderData);
-        //         console.log('Pizza saved:', newPizza);
-        //         alert('Your pizza order has been placed!');
-
-        //         // After saving, navigate to the order summary or main menu
-        //         // navigation.navigate('Dough');
-
-        //         // after sending the pizza, navigate to the timer screen
-        //         navigation.navigate('Order', { screen: 'Timer' });
-        //         // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
-        //         // and after that to Timer
-        //     })
-        //     .catch((err) => {
-        //         console.error('Error saving order:', err);
-        //         alert('Failed to place the order. Please try again.');
-        //     });
+        console.log('Size selected:', value);
+        navigation.setParams({ selectedSize: value }); // Update navigation params with selectedSize
     };
 
     return (
@@ -138,14 +58,6 @@ export default function SizeScreen({ route, navigation }) {
                         <Image key={index} source={image} style={styles.toppingImage} />
                     ))}
                 </View>
-                {/* submit order button */}
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={submitOrder}
-                    underlayColor='#EC863D' // colour when pressed the "button"
-                >
-                    <Text style={[styles.buttonText]}>Submit Order</Text>
-                </TouchableHighlight>
             </View>
         </View>
     );

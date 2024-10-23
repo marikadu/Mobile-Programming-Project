@@ -6,7 +6,8 @@ import Animated, { useSharedValue, useAnimatedProps, withTiming, Easing } from '
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function TimerScreen({ route, navigation, onTimerEnd, onTabPress }) {
-  const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutes in seconds
+  const { initialTime } = route.params;
+  const [timeLeft, setTimeLeft] = useState(initialTime || 30 * 60); // 30 minutes in seconds, default of 30 minutes
 
   const radius = 100;
   const strokeWidth = 10;
@@ -37,6 +38,11 @@ export default function TimerScreen({ route, navigation, onTimerEnd, onTabPress 
       easing: Easing.linear,
     });
   }, [timeLeft]);
+
+  // reset the timer and go back to 30 minutes when a new order is sent
+  useEffect(() => {
+    setTimeLeft(initialTime || 30 * 60); // reset timer for every new order
+  }, [initialTime]);
 
   const formatTime = (seconds) => {
     // rounding a number down to the nearest integer
