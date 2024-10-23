@@ -2,6 +2,9 @@ import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, Touc
 import React, { useState, useEffect } from 'react';
 import { addAddress, updateAddress, deleteAddress, fetchAllAddress } from '../database/db'; 
 
+const targetURL = "https://pepperonipals.lm.r.appspot.com";
+// const targetURL = 'http://10.0.2.2:8080'
+
 export default function AddressScreen( route, navigation ) {
   const [text, setText] = useState('');
   const [newAddressLine1, setAddressLine1] = useState('');
@@ -28,37 +31,130 @@ export default function AddressScreen( route, navigation ) {
         postcode: newPostcode,
     };
 
-    addAddress(newAddress).then(() => {
+  //   addAddress(newAddress).then(() => {
+  //       Alert.alert("Address Saved", "Your address has been added!"); // "Alert.alert()"" instead of "alert" to also change the title of the alert window
+  //       readAllAddresses();  // Refresh the list after adding a new address
+  //       clearInputFields();  // Clear form after saving
+  //   }).catch((error) => {
+  //       console.error('Error saving order:', err);
+  //       alert('Failed to save the address. Please try again.');
+  //   });
+
+      addAddress(newAddress).then(() => {
         Alert.alert("Address Saved", "Your address has been added!"); // "Alert.alert()"" instead of "alert" to also change the title of the alert window
         readAllAddresses();  // Refresh the list after adding a new address
         clearInputFields();  // Clear form after saving
     }).catch((error) => {
-        console.error('Error saving order:', err);
+        console.error('Error saving order:', error);
         alert('Failed to save the address. Please try again.');
     });
+
+  // addAddress(newAddress);
   };
 
+  async function addAddress(newAddress) {
+    const response = await fetch(
+      targetURL + '/addoneaddress',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // body: JSON.stringify({
+        //   addressLine1: newAddressLine1, addressLine2: newAddressLine2, city: newCity, postcode: newPostcode,
+        // }),
+        body: JSON.stringify(newAddress),
+      },
+    );
+
+    const responseData = await response.json();
+    console.log(responseData);
+    setAddressList(addressList => [...addressList, responseData]);
+  }
+
+  // async function addAddress(newAddress) {
+  //   try {
+  //     const response = await fetch(targetURL + '/addoneaddress', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(newAddress),
+  //     });
+  
+  //     if (!response.ok) {
+  //       throw new Error(`Server responded with status ${response.status}`);
+  //     }
+  
+  //     const responseData = await response.json();
+  //     console.log('Address added successfully:', responseData);
+  
+  //     setAddressList((prevList) => [...prevList, responseData]);
+  //   } catch (error) {
+  //     console.error('Error adding address:', error);
+  //     Alert.alert('Failed to save the address. Please try again.');
+  //   }
+  // }
+  
+
+
   // Function to update the address in DB
-  const updateAddressInDb = () => {
-    if (updateId) {
-      updateAddress(updateId, newAddressLine1, newAddressLine2, newCity, newPostcode)
-        .then(() => {
-          Alert.alert('Address Updated', 'Address updated successfully!');
-          readAllAddresses();  // Refresh the address list
-          clearInputFields();  // Clear the form after updating
-          setUpdateId(null);   // Reset update mode
-        })
-        .catch((error) => {
-          console.error('Error updating address:', error);
-          alert('Failed to update the address. Please try again.');
-        });
+  // const updateAddressInDb = () => {
+  //   if (updateId) {
+  //     updateAddress(updateId, newAddressLine1, newAddressLine2, newCity, newPostcode)
+  //       .then(() => {
+  //         Alert.alert('Address Updated', 'Address updated successfully!');
+  //         readAllAddresses();  // Refresh the address list
+  //         clearInputFields();  // Clear the form after updating
+  //         setUpdateId(null);   // Reset update mode
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error updating address:', error);
+  //         alert('Failed to update the address. Please try again.');
+  //       });
+  //   }
+  // };
+
+  // UPDATE Address in mongoDB FUNCTION
+  const updateAddressInDb = async () => {
+    console.log('Update id: ' + updateId);
+    // console.log('Update fish: ' + newFish.breed);
+    if (!updateId) return; // If no item is selected to update, return
+    setAddressList(addressList => addressList.filter(address => address._id != updateId));
+    try {
+      let response = await fetch(
+        targetURL + '/updateoneaddress',
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            _id: updateId, // address._id,
+            addressLine1: newAddressLine1, addressLine2: newAddressLine2, city: newCity, postcode: newPostcode,
+          }),
+        },
+      );
+      setUpdateId(null); // Reset the update ID after updating
+      // setFish({breed: 'breed', weight: 0, length: 0}); // Reset the input fields
+      setAddressLine1(''); // Reset the input fields
+      setAddressLine2(''); // Reset the input fields
+      setCity(''); // Reset the input fields
+      setPostcode(''); // Reset the input fields
+
+      // Reload the list
+      let json = await response.json();
+      setAddressList(json);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   // Function to delete address from DB
   const confirmDeleteAddress = () => {
     if (selectedAddress) {
-      deleteAddress(selectedAddress.id).then(() => {
+      // deleteAddress(selectedAddress.id).then(() => {
+        deleteOneAddress(selectedAddress._id).then(() => {
         alert("Address deleted successfully.");
         readAllAddresses();  // Refresh the list after deleting
         setDeleteModalVisible(false);  // Hide the modal
@@ -70,21 +166,57 @@ export default function AddressScreen( route, navigation ) {
     }
   };
 
+    // Delete Address from MongoDB
+    const deleteOneAddress = async id => {
+      console.log('Delete id: ' + id);
+      try {
+        let response = await fetch(
+          targetURL + '/deleteoneaddress/' + id,
+          {
+            method: 'DELETE',
+          },
+        );
+        let json = await response.json();
+        setAddressList(json);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+
+
   // Function to cancel deletion
   const cancelDelete = () => {
     setDeleteModalVisible(false);  // Hide the modal
     setSelectedAddress(null);  // Clear the selected address
   };
 
-  async function readAllAddresses() {
+  // async function readAllAddresses() {
+  //   try {
+  //     const dbResult = await fetchAllAddress();  // Wait for the result
+  //     console.log("Fetched addresses:", dbResult);
+  //     setAddressList(dbResult);  // Set the fetched addresses to state
+  //   } catch (err) {
+  //     console.error("Error fetching addresses: ", err);
+  //   }
+  // }
+
+  // READING Address Data from MongoDB
+  const readAllAddresses = async () => {
+    
     try {
-      const dbResult = await fetchAllAddress();  // Wait for the result
-      console.log("Fetched addresses:", dbResult);
-      setAddressList(dbResult);  // Set the fetched addresses to state
-    } catch (err) {
-      console.error("Error fetching addresses: ", err);
+      let response = await fetch(
+        // 'http://10.0.2.2:8080/readmenu', // FROM MONGODB OR GOOGLE CLOUD
+        targetURL + '/readalladdresses', // FROM GOOGLE CLOUD
+      );
+      let json = await response.json();
+      setAddressList(json);
+      console.log('Fetching all address data from MongoDB');
+      console.log(json);
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
 
   // Function to populate the form when an address is selected for editing
   const handleAddressPress = (address) => {
@@ -92,7 +224,7 @@ export default function AddressScreen( route, navigation ) {
     setAddressLine2(address.addressLine2);
     setCity(address.city);
     setPostcode(address.postcode);
-    setUpdateId(address.id);  // Set the ID for update mode
+    setUpdateId(address._id);  // Set the ID for update mode
   };
 
   // Function to handle long press and show delete confirmation
@@ -148,6 +280,7 @@ export default function AddressScreen( route, navigation ) {
         <TouchableHighlight
           style={styles.button}
           onPress={updateId ? updateAddressInDb : saveAddress}  // Change handler based on updateId
+          // onPress={updateId ? updateAddressInDb : addAddress}  // Change handler based on updateId
           underlayColor='#EC863D' // colour when pressed the "button"
         >
           <Text style={[styles.buttonText]}>
@@ -164,7 +297,9 @@ export default function AddressScreen( route, navigation ) {
         {/* Address List */}
         <FlatList
           data={addressList}
-          keyExtractor={(item) => item.id.toString()}
+          // keyExtractor={(item) => item._id.toString()}
+          keyExtractor={(item) => (item._id ? item._id.toString() : Math.random().toString())}
+          // keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <TouchableHighlight underlayColor='#fff' onPress={() => handleAddressPress(item)} onLongPress={() => handleLongPress(item)}>
               <View>
