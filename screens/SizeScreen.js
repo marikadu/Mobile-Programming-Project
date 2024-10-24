@@ -1,10 +1,9 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
-import { addPizza, fetchAllPizza, deletePizza } from '../database/db';  
-
 
 export default function SizeScreen({ route, navigation }) {
+    // Options for sizes
     const options = [
         { label: 'Small (d~15)', value: 'Small' },
         { label: 'Medium (d~22)', value: 'Medium' },

@@ -1,19 +1,19 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-// import { saveOrder } from '../database/Old_db';
+// Images for the different doughs
 import originalDough from '../assets/pizza_pngs/dough_og.png';
 import glutenFreeDough from '../assets/pizza_pngs/dough_gluten_free.png';
 import wholeWheatDough from '../assets/pizza_pngs/dough_whole_wheat.png';
 
-// dough options array with the images
+// Dough options array with the images
 const doughOptions = [
-  { label: 'Original Dough', value:'Original', image: originalDough }, // fix the arrow placing - Marika
+  { label: 'Original Dough', value:'Original', image: originalDough },
   { label: 'Gluten-Free Dough', value:'Gluten-free', image: glutenFreeDough },
   { label: 'Wholewheat Dough', value:'Wholewheat', image: wholeWheatDough },
 ];
 
-export default function DoughScreen({ route, navigation }) {
-    // tracking the current dough visible, the starting index of 0 for the Original Dough
+export default function DoughScreen({ navigation }) {
+    // Tracking the current dough visible, the starting index of 0 for the Original Dough
     const [selectedDough, setSelectedDough] = useState(0);
     const [selectedDoughImage, setSelectedDoughImage] = useState(doughOptions[0].image); // Used for saving the current image
     const [doughIndex, setDoughIndex] = useState(0); // Store the index for navigation
@@ -26,24 +26,16 @@ export default function DoughScreen({ route, navigation }) {
                 toppings: null, // This will be updated in ToppingsScreen
                 size: null // This will be updated in SizeScreen
             };
-
-            // saveOrder(orderData)
-            //     .then(() => {
-            //         console.log('Dough saved:', orderData);
-            //     })
-            //     .catch((error) => {
-            //         console.error('Error saving dough:', error);
-            //     });
         });
 
         return unsubscribe; // Cleanup the listener
-    }, [navigation, selectedDough]); // Re-run effect if selectedSauce changes
+    }, [navigation, selectedDough]); // Re-run effect if selectedDough changes
 
     useEffect(() => {
         navigation.setParams({ selectedDough, selectedDoughImage });
     }, [selectedDough, selectedDoughImage, navigation]);
 
-    //   function for the left arrow -> array goes backward 
+    //   Function for the left arrow -> array goes backwards 
     //   (from Original to Wholewheat)
     //   (from Wholewheat to Gluten-free)
     //   (from Gluten-free to Original)
@@ -57,7 +49,7 @@ export default function DoughScreen({ route, navigation }) {
       });
     };
 
-    // function for the right arrow -> array goes forward
+    // Function for the right arrow -> array goes forward
     // (from the Original to Gluten-free)
     // (from Gluten-free to Wholewheat)
     // (from Wholewheat to Original)
