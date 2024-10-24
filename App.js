@@ -138,7 +138,7 @@ const HomeStackScreen = () => {
         <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} options={{ title: 'Creating a pizza', headerRight: null }}/>
         <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
-        <Stack.Screen name="Menu" component={MenuScreen} />
+        <Stack.Screen name="Menu" component={MenuScreen} options={{ headerRight: null }} />
         <Stack.Screen name="Settings" component={SettingsScreen}  />
         <Stack.Screen name="Address" component={AddressScreen} options={{ headerRight: null }} />
         <Stack.Screen name="PastOrders" component={PastOrdersScreen}/>
