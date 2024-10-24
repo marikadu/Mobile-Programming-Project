@@ -23,9 +23,9 @@ const client = new MongoClient(uri, {
 
 // Sample pizza menu
 const pizzaMenu = [
-    { "type": "Pepperoni", "price": "12.90", "description": "Original dough, With sauce, Cheese, Pepperoni", "image": "https://drive.google.com/file/d/1WWeIFrzqphTJA44XH5KNWBYsVYKgyPkI/view?usp=sharing" },
-    { "type": "Bianca", "price": "10.90", "description": "Original dough, No sauce, Cheese", "image": "https://drive.google.com/file/d/1aeADPzJYcgqykD2R0bgAPz80vYqeH5OD/view?usp=sharing" },
-    { "type": "Mushrooms", "price": "11.90", "description": "Original dough, With sauce, Cheese, Mushrooms", "image": "https://drive.google.com/file/d/1KUS9Aq_E_Kp30QdYIbkzHe4V70lPzQGK/view?usp=sharing" }
+    { "type": "Pepperoni", "price": "12.90", "description": "Original dough, With sauce, Cheese, Pepperoni", "image": "https://i.imgur.com/PYLeI0H.png" },
+    { "type": "Bianca", "price": "10.90", "description": "Original dough, No sauce, Cheese", "image": "https://i.imgur.com/Hr2TLQx.png" },
+    { "type": "Mushrooms", "price": "11.90", "description": "Original dough, With sauce, Cheese, Mushrooms", "image": "https://i.imgur.com/yCarHXC.png" }
 ];
 
 app.use("/html", express.static('views'));
