@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
     listStyle: {
-        flex: 10,
+        flex: 6,
         width: '80%',
         alignSelf: 'center',
     },
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#E04A2B',
         marginLeft: 10,
+        marginBottom: 20,
     },
     pizzaContainer: {
         width: 200,

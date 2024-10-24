@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#E04A2B',
         marginLeft: 10,
+        marginBottom: 10,
     },
     pizzaContainer: {
         marginTop: 40,
