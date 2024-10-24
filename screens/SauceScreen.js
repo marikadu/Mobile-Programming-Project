@@ -111,16 +111,19 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         position: 'relative', // for the absolute position for the toppings
+        bottom: 60,
     },
     doughImage: {
         position: 'absolute',
         width: '100%',
         height: '100%',
+        bottom: 60,
     },
     sauceImage: {
         position: 'absolute',
         width: '100%',
         height: '100%',
+        bottom: 60,
     },
 });
 

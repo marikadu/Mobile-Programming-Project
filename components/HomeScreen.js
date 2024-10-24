@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import { Text, View, FlatList, Image, StyleSheet, TouchableHighlight, } from 'react-native';
 import PizzaList from './PizzaList'; // Import the reusable PizzaList component
 
+import logo_full3 from '../assets/logos/logo_full3.png';
+
 // Import the DATABASE
 import { fetchAllPizza } from '../database/db';
 
@@ -69,7 +71,9 @@ const HomeScreen = (props) =>{
     /// ////////////////END OF THE IMPLEMENTATION HERE ///////////////////
 
     return (
+
       <View style={styles.screenContainer}>
+        <Image source={logo_full3} style={styles.logoImage} />
         
         <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center', }}>
 
@@ -124,6 +128,12 @@ const HomeScreen = (props) =>{
       backgroundColor:"#fff", // covers the grey background
       padding: 10
     },
+    logoImage:{
+      height:80,
+      width:300,
+      alignSelf: 'center',
+      // bottom: 30,
+    },
     pizzaImage:{
       height:100,
       width:100,
@@ -141,13 +151,6 @@ const HomeScreen = (props) =>{
       height:'100%',
       width:'100%'
     },
-    navbuttonstyle:{
-      flex:2,
-      flexDirection:"row",
-      backgroundColor:"#def",
-      alignItems:"center",
-      justifyContent:"space-around",    
-    },
     listItemStyle:{
       borderWidth: 2,
       borderColor:"#CD6524",
@@ -164,6 +167,7 @@ const HomeScreen = (props) =>{
       width:260,
     },
     flatliststyle:{
+      flex: 1,
       width:'100%',
       backgroundColor:'#FFFFFF',
     },
@@ -209,15 +213,12 @@ const HomeScreen = (props) =>{
       alignItems: 'center',
     },
     text: {
-      //flex:1,
       fontSize: 20,
       fontWeight: 'bold',
       color: '#CD6524',
       right: 100,
       paddingTop: 20,
       paddingBottom: 10,
-      // textAlign: 'center',
-      // alignItems: 'left',
       justifyContent: 'flex-end',
     },
   });

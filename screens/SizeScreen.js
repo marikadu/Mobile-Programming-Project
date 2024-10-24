@@ -111,34 +111,19 @@ const styles = StyleSheet.create({
         position: 'absolute',
         width: '100%',
         height: '100%',
+        top: 150,
     },
     sauceImage: {
         position: 'absolute',
         width: '100%',
         height: '100%',
+        top: 150,
     },
     toppingImage: {
         position: 'absolute', // absolute position to allow stacking of the toppings
         width: '100%',
         height: '100%',
+        top: 150,
     },
-    button: {
-        margin: 20,
-        paddingTop: 10,
-        width: 250,
-        height: 56,
-        backgroundColor: '#F58C41',
-        borderRadius: 40,
-        alignSelf: "center",
-        top: 20,
-      },
-      buttonText: {
-        flex: 1,
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#fff',
-        textAlign: 'center',
-        alignItems: 'center',
-      },
 });
 

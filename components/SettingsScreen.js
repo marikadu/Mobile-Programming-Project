@@ -21,7 +21,7 @@ export const SettingsScreen=(props)=>{
       <View style={[styles.screenContainer, { backgroundColor: darkMode ? '#1c1b1b' : '#fff' }]}>
         <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
 
-        <Image source={darkMode ? logo_full_darkmode : logo_full} style={styles.pizzaImage} />
+        <Image source={darkMode ? logo_full_darkmode : logo_full} style={styles.logoImage} />
 
         <TouchableHighlight
           style={styles.button}
@@ -77,7 +77,7 @@ export const SettingsScreen=(props)=>{
       flex:1,
       backgroundColor:"#fff", // covers the grey background
     },
-    pizzaImage:{
+    logoImage:{
       height:210,
       width:280,
       bottom: 30,

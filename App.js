@@ -242,17 +242,12 @@ async function readAllPizza() {
 readAllPizza(); 
   }, []);
 
-   
- // 
-
   const [pizzaList, setPizzaList] = useState([]); // List of pizzas
 //  fetchAllPizza(); // Fetch all the pizzas from the database
 
 pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING 
   console.log('PizzaList:', pizzaList); // DEBUGGING
 // deletePizza(3); // DEBUGGING
-
-
 
   // tracking the end of the timer
   const [timerExpired, setTimerExpired] = useState(false);
@@ -263,8 +258,6 @@ pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING
     // make it so that it stays in the Order tab navigation
     navigation.navigate('Order', { screen: 'Feedback' });
   };
-
-
 
   return (
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>

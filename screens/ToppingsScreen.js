@@ -157,16 +157,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
+    bottom: 60,
   },
   sauceImage: {
     position: 'absolute',
     width: '100%',
     height: '100%',
+    bottom: 60,
   },
   toppingImage: {
     position: 'absolute', // absolute position to allow stacking of the toppings
     width: '100%',
     height: '100%',
+    bottom: 60,
   },
 });
 

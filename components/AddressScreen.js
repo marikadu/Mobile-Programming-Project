@@ -1,6 +1,5 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, TextInput, Modal, Alert, KeyboardAvoidingView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableHighlight, TextInput, Modal, Alert, KeyboardAvoidingView } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { addAddress, updateAddress, deleteAddress, fetchAllAddress } from '../database/db'; 
 
 const targetURL = "https://pepperonipals.lm.r.appspot.com";
 // const targetURL = 'http://10.0.2.2:8080'
@@ -31,15 +30,6 @@ export default function AddressScreen( route, navigation ) {
         postcode: newPostcode,
     };
 
-  //   addAddress(newAddress).then(() => {
-  //       Alert.alert("Address Saved", "Your address has been added!"); // "Alert.alert()"" instead of "alert" to also change the title of the alert window
-  //       readAllAddresses();  // Refresh the list after adding a new address
-  //       clearInputFields();  // Clear form after saving
-  //   }).catch((error) => {
-  //       console.error('Error saving order:', err);
-  //       alert('Failed to save the address. Please try again.');
-  //   });
-
       addAddress(newAddress).then(() => {
         Alert.alert("Address Saved", "Your address has been added!"); // "Alert.alert()"" instead of "alert" to also change the title of the alert window
         readAllAddresses();  // Refresh the list after adding a new address
@@ -48,8 +38,6 @@ export default function AddressScreen( route, navigation ) {
         console.error('Error saving order:', error);
         alert('Failed to save the address. Please try again.');
     });
-
-  // addAddress(newAddress);
   };
 
   async function addAddress(newAddress) {
@@ -60,9 +48,6 @@ export default function AddressScreen( route, navigation ) {
         headers: {
           'Content-Type': 'application/json',
         },
-        // body: JSON.stringify({
-        //   addressLine1: newAddressLine1, addressLine2: newAddressLine2, city: newCity, postcode: newPostcode,
-        // }),
         body: JSON.stringify(newAddress),
       },
     );
@@ -71,49 +56,6 @@ export default function AddressScreen( route, navigation ) {
     console.log(responseData);
     setAddressList(addressList => [...addressList, responseData]);
   }
-
-  // async function addAddress(newAddress) {
-  //   try {
-  //     const response = await fetch(targetURL + '/addoneaddress', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(newAddress),
-  //     });
-  
-  //     if (!response.ok) {
-  //       throw new Error(`Server responded with status ${response.status}`);
-  //     }
-  
-  //     const responseData = await response.json();
-  //     console.log('Address added successfully:', responseData);
-  
-  //     setAddressList((prevList) => [...prevList, responseData]);
-  //   } catch (error) {
-  //     console.error('Error adding address:', error);
-  //     Alert.alert('Failed to save the address. Please try again.');
-  //   }
-  // }
-  
-
-
-  // Function to update the address in DB
-  // const updateAddressInDb = () => {
-  //   if (updateId) {
-  //     updateAddress(updateId, newAddressLine1, newAddressLine2, newCity, newPostcode)
-  //       .then(() => {
-  //         Alert.alert('Address Updated', 'Address updated successfully!');
-  //         readAllAddresses();  // Refresh the address list
-  //         clearInputFields();  // Clear the form after updating
-  //         setUpdateId(null);   // Reset update mode
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error updating address:', error);
-  //         alert('Failed to update the address. Please try again.');
-  //       });
-  //   }
-  // };
 
   // UPDATE Address in mongoDB FUNCTION
   const updateAddressInDb = async () => {
@@ -136,7 +78,6 @@ export default function AddressScreen( route, navigation ) {
         },
       );
       setUpdateId(null); // Reset the update ID after updating
-      // setFish({breed: 'breed', weight: 0, length: 0}); // Reset the input fields
       setAddressLine1(''); // Reset the input fields
       setAddressLine2(''); // Reset the input fields
       setCity(''); // Reset the input fields
@@ -190,16 +131,6 @@ export default function AddressScreen( route, navigation ) {
     setDeleteModalVisible(false);  // Hide the modal
     setSelectedAddress(null);  // Clear the selected address
   };
-
-  // async function readAllAddresses() {
-  //   try {
-  //     const dbResult = await fetchAllAddress();  // Wait for the result
-  //     console.log("Fetched addresses:", dbResult);
-  //     setAddressList(dbResult);  // Set the fetched addresses to state
-  //   } catch (err) {
-  //     console.error("Error fetching addresses: ", err);
-  //   }
-  // }
 
   // READING Address Data from MongoDB
   const readAllAddresses = async () => {
@@ -280,7 +211,6 @@ export default function AddressScreen( route, navigation ) {
         <TouchableHighlight
           style={styles.button}
           onPress={updateId ? updateAddressInDb : saveAddress}  // Change handler based on updateId
-          // onPress={updateId ? updateAddressInDb : addAddress}  // Change handler based on updateId
           underlayColor='#EC863D' // colour when pressed the "button"
         >
           <Text style={[styles.buttonText]}>
@@ -363,13 +293,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF9F2',
     borderRadius: 20,
     margin: 10,
-    // width: '80%',
     alignSelf: 'center',
     alignItems: 'center',
-    // width: 500,
   },
   text: {
-    // flex: 1,
     color: '#CD6524',
     fontSize: 24,
     fontWeight: 'bold',
@@ -401,7 +328,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   listStyle: {
-    // flex: 9,
     alignItems: 'center',
     width: '100%',
   },
@@ -413,10 +339,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFE8D8',
     width: '80%',
     borderRadius: 10,
-    // fontWeight: 'bold',
     textAlign: 'center',
     alignSelf: 'center',
-    // justifyContent: 'flex-end',
   },
   itemText: {
     color: '#CD6524',
