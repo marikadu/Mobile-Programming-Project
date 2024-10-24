@@ -23,9 +23,9 @@ const client = new MongoClient(uri, {
 
 // Sample pizza menu
 const pizzaMenu = [
-    { "type": "Pepperoni", "price": "12.90", "description": "Original dough, With sauce, Cheese, Pepperoni", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMDbvohJ2KYuQP5TT_h3XQhhnr7mPVx2e1AnI0l7EjWV9OnlcStMF2Ar2BksfV8tdRGBc&usqp=CAU" },
-    { "type": "Bianca", "price": "10.90", "description": "Original dough, No sauce, Cheese", "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrMuL0UO0MhQV9CPDA-R15yfak1TqP0JkrWcFauigPPY0t88d5WXdmjdYAOli9yRYWiXI&usqp=CAU" },
-    { "type": "Mushrooms", "price": "11.90", "description": "Original dough, With sauce, Cheese, Mushrooms", "image": "https://www.shutterstock.com/image-photo/delicious-savory-porcini-mushroom-pizza-260nw-2484910843.jpg" }
+    { "type": "Pepperoni", "price": "12.90", "description": "Original dough, With sauce, Cheese, Pepperoni", "image": "https://i.imgur.com/PYLeI0H.png" },
+    { "type": "Bianca", "price": "10.90", "description": "Original dough, No sauce, Cheese", "image": "https://i.imgur.com/Hr2TLQx.png" },
+    { "type": "Mushrooms", "price": "11.90", "description": "Original dough, With sauce, Cheese, Mushrooms", "image": "https://i.imgur.com/yCarHXC.png" }
 ];
 
 app.use("/html", express.static('views'));

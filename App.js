@@ -16,6 +16,7 @@ import HomeScreen from './components/HomeScreen';
 import AddressScreen from './components/AddressScreen';
 import PastOrdersScreen from './components/PastOrdersScreen';
 import FeedbackScreen from './components/FeedbackScreen';
+import AboutUsScreen from './components/AboutUs.js';
 import { DetailsScreen } from './components/DetailsScreen.js';
 import { ImageScreen } from './components/ImageScreen.js';
 import { LogoTitle } from './components/LogoTitle.js';
@@ -141,6 +142,7 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Settings" component={SettingsScreen}  />
         <Stack.Screen name="Address" component={AddressScreen} options={{ headerRight: null }} />
         <Stack.Screen name="PastOrders" component={PastOrdersScreen}/>
+        <Stack.Screen name="AboutUs" component={AboutUsScreen} options={{ title: 'About us', headerRight: null }}/>
       </Stack.Navigator>
   )
 }
