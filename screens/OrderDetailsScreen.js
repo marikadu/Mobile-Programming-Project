@@ -1,18 +1,8 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import React, { useState, useEffect } from 'react';
 // import { saveOrder } from '../database/db';
 import { addPizza, fetchAllPizza, deletePizza } from '../database/db';
 
-// importing images for the pizza creation
-import originalDough from '../assets/pizza_pngs/dough_og.png';
-import glutenFreeDough from '../assets/pizza_pngs/dough_gluten_free.png';
-import wholeWheatDough from '../assets/pizza_pngs/dough_whole_wheat.png';
-import sauceImg from '../assets/pizza_pngs/sauce.png';
-import cheeseImg from '../assets/pizza_pngs/topping_cheese.png';
-import tomatoImg from '../assets/pizza_pngs/topping_tomato.png';
-import basilImg from '../assets/pizza_pngs/topping_basil.png';
-import pepperoniImg from '../assets/pizza_pngs/topping_pepperoni.png';
-import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
 
 export default function OrderDetailsScreen({ route, navigation }) {
   // Receive the sauce, toppings, and dough data from previous screens
@@ -20,22 +10,26 @@ export default function OrderDetailsScreen({ route, navigation }) {
   // const [selectedSize, setSelectedSize] = useState('Small');
   const [initialTime, setInitialTime] = useState(30 * 60); // 30 minutes in seconds, resets the Timer for every new pizza ordered
 
+  // creating a custom Modal that mimics Alert window's behaviour
+  // because the Alert cannot be directly customisible, according to our research
+  const [isAlertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [pendingNavigation, setPendingNavigation] = useState(null); // for the navigation to the Timer Screen
+
   // price depending on the size of the pizza
   // const pizzaPrice = selectedSize === 'Small' ? 10 : selectedSize === 'Medium' ? 15 : 20;
 
   // if we were to add drinks, snacks, the calculation would be here
-  // but since there is only pizza, the total price is the pizza price
-  // const totalPrice = pizzaPrice;
-
 
   // join toppings together to add into the description
   const joinToppings = (toppings) => {
     // if no toppings, says no toppings
-    if (!toppings || toppings.length === 0) return 'No toppings'; 
+    if (!toppings || toppings.length === 0) return 'No toppings';
     return toppings.join(', ');
   };
 
-  // hardcoded pizza for now, passed new pizza should be here
+  // passed new pizza combination
   const pizzaList = [
     {
       id: 1,
@@ -45,7 +39,7 @@ export default function OrderDetailsScreen({ route, navigation }) {
       description: `${selectedDough || 'Original'}, ${selectedSauce || 'With Sauce'}, ${joinToppings(selectedToppings)}, ${selectedSize || 'Small'}`,
       // image: selectedToppingImages[0] || pepperoniImg,  // Set a default image if no topping image is provided
     },
-  ];  
+  ];
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -70,6 +64,28 @@ export default function OrderDetailsScreen({ route, navigation }) {
     setSelectedSize(value);
   }
 
+  // custom alert properties
+  const showAlert = (title, message) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertVisible(true);
+    setPendingNavigation(() => handleAlertConfirm); // for the navigation to the TimerScreen after the ok button is pressed
+  };
+
+  // handle navigation after alert confirmation
+  const navigateTo = () => {
+    navigation.navigate('Order', { screen: 'Timer', params: { initialTime } });
+  };
+
+  const handleAlertConfirm = () => { // when ok button is pressed
+    setAlertVisible(false); // hide the alert
+    if (pendingNavigation) {
+      pendingNavigation(); // call the function for the navigation
+      navigateTo(); // call navigateTo to handle the actual navigation
+      setPendingNavigation(null); // clear the function
+    }
+  };
+
   async function readAllPizzas() {
     try {
       const dbResult = await fetchAllPizza();  // Wait for the result
@@ -92,13 +108,16 @@ export default function OrderDetailsScreen({ route, navigation }) {
     // printSomething({newPizza});
 
     addPizza(newPizza).then(() => {
-      alert("Your order has been submitted!");
+      // alert("Your order has been submitted!"); // OLD alert
+      showAlert("Order submitted", "Your order has been submitted!"); // new alert
       // after sending the pizza, navigate to the timer screen with the default time of 30 minutes
-      navigation.navigate('Order', { screen: 'Timer', params: { initialTime } });
+      // navigation.navigate('Order', { screen: 'Timer', params: { initialTime } });
       // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
       // and after that to Timer
     }).catch((error) => {
       console.error('Error saving order:', error);
+      // this alert is normal, because the "new" alert will redirect to the Timer Screen
+      // so to prevent the user navigating to the Timer Screen if there is an error, the old alert is used!
       alert('Failed to place the order. Please try again.');
     }
     )
@@ -190,6 +209,29 @@ export default function OrderDetailsScreen({ route, navigation }) {
         {/* <Text style={styles.buttonText}> Submit Order {totalPrice}€</Text> */}
         <Text style={styles.buttonText}> Submit Order 13€</Text>
       </TouchableHighlight>
+
+      {/* fake alert window */}
+      <Modal
+        visible={isAlertVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setAlertVisible(false)}
+      >
+        <View style={styles.customAlertBackground}>
+          <View style={styles.customAlertContainer}>
+            <Text style={styles.customAlertTitle}>{alertTitle}</Text>
+            <Text style={styles.customAlertMessage}>{alertMessage}</Text>
+            <TouchableHighlight
+              style={styles.customAlertButton}
+              onPress={handleAlertConfirm}
+              underlayColor="#cc7333"
+            >
+              <Text style={styles.customAlertButtonText}>OK</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
+
     </View>
   );
 }
@@ -266,16 +308,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-},
-sauceImage: {
+  },
+  sauceImage: {
     position: 'absolute',
     width: '100%',
     height: '100%',
   },
   toppingImage: {
-      position: 'absolute', // absolute position to allow stacking of the toppings
-      width: '100%',
-      height: '100%',
+    position: 'absolute', // absolute position to allow stacking of the toppings
+    width: '100%',
+    height: '100%',
   },
   listStyle: {
     flex: 9,
@@ -323,5 +365,43 @@ sauceImage: {
     color: '#fff',
     textAlign: 'center',
     alignItems: 'center',
+  },
+  // fake alert window styling
+  customAlertBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // half transparent background
+  },
+  customAlertContainer: {
+    width: 300,
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    alignItems: 'center',
+    elevation: 10, // shadow behind the window
+  },
+  customAlertTitle: {
+    color: '#CD6524',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  customAlertMessage: {
+    color: '#CD6524',
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  customAlertButton: {
+    backgroundColor: '#F58C41',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  customAlertButtonText: {
+    fontSize: 18,
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
