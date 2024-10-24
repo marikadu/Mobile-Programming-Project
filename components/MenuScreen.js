@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity, TextInput } from 'react-native';
-
-// Import the component
-import NavButtons from './NavButtons.js';
-
+import { Alert, View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
 
 const targetURL = "https://pepperonipals.lm.r.appspot.com";
+// https://pepperonipals.lm.r.appspot.com/readmenu
+// https://pepperonipals.lm.r.appspot.com/readalladdresses
 
 export const MenuScreen = (props) => {
   const [newPizza, setPizza] = useState("");
