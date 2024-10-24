@@ -4,10 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Custom icon for header
 import './gesture-handler';
-// import HomeScreen from './screens/HomeScreen';
 import DoughScreen from './screens/DoughScreen';
 import DoughScreen_db from './components/screens/DoughScreen_db.js';
-// import CreatePizzaScreen from './components/screens/CreatePizzaScreen.js';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
 import SizeScreen from './screens/SizeScreen';
@@ -24,18 +22,9 @@ import { LogoTitle } from './components/LogoTitle.js';
 import { MenuScreen } from './components/MenuScreen.js';
 import { SettingsScreen } from './components/SettingsScreen.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import { getDBConnection, createTables, saveOrder, fetchOrders } from './database/Old_db.js';
 import {CreatePizzaScreen} from './components/screens/CreatePizzaScreen.js';
-
 // IMPORT DATABASE FUNCTIONS
 import {init, addPizza, updatePizza, deletePizza, fetchAllPizza} from './database/db.js';
-//  // Initialize the Pizza Database
-//  init().then(() => {
-//   console.log('Database Creation Succeeded!');
-// }).catch((err) => {
-//   console.log('Database Creation Failed!' + err);
-// })
-//  // 
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -62,7 +51,7 @@ const HeaderRightButton = ({ navigation }) => {
   const selectedToppings = getRouteParams(navigation, 'Toppings', { selectedToppings: [], selectedToppingImages: '0' });
   const selectedSize = getRouteParams(navigation, 'Size', { selectedSize: 'Small' });
 
-  // handles navigation
+  // Handles navigation for pizza creation
   const handleNavigation = () => {
     switch (currentRoute) {
       case "Dough":
@@ -87,8 +76,6 @@ const HeaderRightButton = ({ navigation }) => {
     }
   };
 
-  
-
   return (
     <TouchableOpacity onPress={handleNavigation} style={{ paddingRight: 15 }}>
       <Ionicons name="chevron-forward" size={24} color="#E04A2B" />
@@ -110,7 +97,7 @@ const HomeStackScreen = () => {
   return (
 
     <Stack.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeScreen"
 
       // tab navigation with the arrows
       screenOptions={({ navigation}) => {
@@ -133,12 +120,11 @@ const HomeStackScreen = () => {
         headerLeft: () => <HeaderLeftButton navigation={navigation} />, // Left arrow component
         };
       }}>
-        {/* <Stack.Screen name="PepperoniPals" component={PepperoniPalsView} options={({route}) => ({title: route.params?.name ? route.params.name : "Pepperoni_PAPIiii"})} /> */}
         <Stack.Screen
-          name="Home"
+          name="HomeScreen"
           component={HomeScreen}
           options={({ route }) => ({
-            title: route.params?.name ? route.params.name : "Home",
+            title: route.params?.name ? route.params.name : "HomeScreen",
             headerShown: false, // header with arrows is not shown when on HomeScreen
           })}
         />
@@ -149,9 +135,7 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} options={{ title: 'Creating a pizza', headerRight: null }}/>
-        {/* <Stack.Screen name="Timer" component={TimerScreen} options={{ title: 'Creating a pizza' }}/>   */}
         <Stack.Screen name="Details" component={DetailsScreen}  />
-        {/* Notice how the IMAGE PAGE has the logo of the elephant from ./assets/misc.png */}
         <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen}  />
@@ -210,11 +194,6 @@ export default function App({ navigation }) {
   const [darkMode, setDarkMode] = useState(false); // as default the dark mode is turned off
 
   useEffect(() => {
-  //   // Initialize database and create tables
-  //   getDBConnection()
-  //     .then(() => createTables()) // Wait for the tables to be created
-  //     .then(() => console.log('Tables created successfully'))
-  //     .catch((error) => console.error('Error creating tables:', error));
   // Initialize the Pizza Database
  init().then(() => {
   console.log('Database Creation Succeeded!');
@@ -223,8 +202,6 @@ export default function App({ navigation }) {
 })
 
 // DOWNLOAD THE DATA FROM MONGODB HERE
-
-
 // Fetch all the pizzas from the database
 async function readAllPizza() {
   try {
@@ -242,17 +219,12 @@ async function readAllPizza() {
 readAllPizza(); 
   }, []);
 
-   
- // 
-
   const [pizzaList, setPizzaList] = useState([]); // List of pizzas
 //  fetchAllPizza(); // Fetch all the pizzas from the database
 
 pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING 
   console.log('PizzaList:', pizzaList); // DEBUGGING
-// deletePizza(3); // DEBUGGING
-
-
+  // deletePizza(3); // DEBUGGING
 
   // tracking the end of the timer
   const [timerExpired, setTimerExpired] = useState(false);
@@ -296,12 +268,11 @@ pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING
             // tabBarLabel: '',
             headerShown: false, // Hide the header
           })}
-          initialRouteName='Home' // Setting the initial route to Home
+          initialRouteName='HomeScreen' // Setting the initial route to HomeScreen
         >
           <Tab.Screen name="Settings" component={SettingsScreen} />
           <Tab.Screen name="Home" component={HomeStackScreen} />
           <Tab.Screen name="Order" component={OrderStackScreen} />
-
 
         </Tab.Navigator>
       </NavigationContainer>
