@@ -1,7 +1,6 @@
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
-// import { saveOrder } from '../database/Old_db';
 import sauceImg from '../assets/pizza_pngs/sauce.png';
 
 export default function SauceScreen({ route, navigation }) {
@@ -22,14 +21,6 @@ export default function SauceScreen({ route, navigation }) {
                 toppings: null, // This will be updated in ToppingsScreen
                 size: null // This will be updated in SizeScreen
             };
-
-            // saveOrder(orderData)
-            //     .then(() => {
-            //         console.log('Sauce saved:', orderData);
-            //     })
-            //     .catch((error) => {
-            //         console.error('Error saving sauce:', error);
-            //     });
         });
 
         return unsubscribe; // Cleanup the listener
@@ -93,7 +84,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
     listStyle: {
-        flex: 10,
+        flex: 6,
         width: '80%',
         alignSelf: 'center',
     },
@@ -106,6 +97,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#E04A2B',
         marginLeft: 10,
+        marginBottom: 20,
     },
     pizzaContainer: {
         width: 200,

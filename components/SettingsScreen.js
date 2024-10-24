@@ -90,7 +90,7 @@ export const SettingsScreen=(props)=>{
     },
     buttonText: {
       flex:3,
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: 'bold',
       color: '#F58C41',
       textAlign: 'center',

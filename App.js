@@ -257,17 +257,16 @@ pizzaList.forEach((pizza) => {console.log( pizza.dough)}); // DEBUGGING
               }
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: darkMode ? '#F58C41' : '#E04A2B', // Change active color
-            tabBarInactiveTintColor: darkMode ? '#b0b0b0' : 'gray', // Change inactive color
+            tabBarActiveTintColor: darkMode ? '#F58C41' : '#E04A2B', // change active color
+            tabBarInactiveTintColor: darkMode ? '#b0b0b0' : 'gray', // change inactive color
             tabBarStyle: {
-              backgroundColor: darkMode ? '#333' : '#fff', // Tab bar background color
-              borderTopColor: darkMode ? '#444' : '#ddd', // Tab bar border color
+              backgroundColor: darkMode ? '#333' : '#fff', // tab bar background color
+              borderTopColor: darkMode ? '#444' : '#ddd', // tab bar border color
             },
-            tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // Show badge if timer expired
-            // tabBarLabel: '',
-            headerShown: false, // Hide the header
+            tabBarBadge: route.name === 'Order' && timerExpired ? '' : undefined, // show badge if timer expired
+            headerShown: false, // hide the hader
           })}
-          initialRouteName='HomeScreen' // Setting the initial route to HomeScreen
+          initialRouteName='Home' // setting the initial route to Home, HomeScreen after the app is loaded
         >
           <Tab.Screen name="Settings" component={SettingsScreen} />
           <Tab.Screen name="Home" component={HomeStackScreen} />
