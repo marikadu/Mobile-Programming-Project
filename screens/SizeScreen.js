@@ -1,7 +1,6 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
-// import { saveOrder, printSomething } from '../database/Old_db';
 import { addPizza, fetchAllPizza, deletePizza } from '../database/db';  
 
 
