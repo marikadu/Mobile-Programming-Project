@@ -35,7 +35,7 @@ export const SettingsScreen=(props)=>{
         <TouchableHighlight
           style={styles.button}
           underlayColor='#fff'
-          onPress={() => props.navigation.navigate("Address")} 
+          onPress={() => props.navigation.navigate('Home', { screen: 'Address' })}
           >
           <Text style={[styles.buttonText, { color: darkMode ? '#ffc399' : '#F58C41' }]}>Address Details</Text>
         </TouchableHighlight>

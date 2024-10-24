@@ -135,11 +135,11 @@ const HomeStackScreen = () => {
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} options={{ title: 'Creating a pizza', headerRight: null }}/>
-        <Stack.Screen name="Details" component={DetailsScreen}  />
+        <Stack.Screen name="Details" component={DetailsScreen} />
         <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen}  />
-        <Stack.Screen name="Address" component={AddressScreen}/>
+        <Stack.Screen name="Address" component={AddressScreen} options={{ headerRight: null }} />
         <Stack.Screen name="PastOrders" component={PastOrdersScreen}/>
       </Stack.Navigator>
   )
