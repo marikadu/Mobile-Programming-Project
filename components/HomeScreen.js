@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Button, Text, View, FlatList, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { Text, View, FlatList, Image, StyleSheet, TouchableHighlight, } from 'react-native';
 import PizzaList from './PizzaList'; // Import the reusable PizzaList component
 
 // Import the DATABASE
@@ -71,7 +71,7 @@ const HomeScreen = (props) =>{
     return (
       <View style={styles.screenContainer}>
         
-        <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flex: 8, alignItems: 'center', justifyContent: 'center', }}>
 
         {/* button had to go because it cannot be customised everyone say bye bye button */}
         {/* <Button color="#F58C41"
@@ -111,7 +111,7 @@ const HomeScreen = (props) =>{
               style={styles.image} resizeMode='cover'/>
           </View>  */}
 
-          <Text style={[styles.text]}>Past Orders</Text>
+          <Text style={[styles.text]}>Past Orders: </Text>
           <PizzaList navigation={props.navigation} />
         </View>
       </View>
@@ -122,6 +122,7 @@ const HomeScreen = (props) =>{
     screenContainer:{
       flex:1,
       backgroundColor:"#fff", // covers the grey background
+      padding: 10
     },
     pizzaImage:{
       height:100,
@@ -211,7 +212,7 @@ const HomeScreen = (props) =>{
       //flex:1,
       fontSize: 20,
       fontWeight: 'bold',
-      color: '#000',
+      color: '#CD6524',
       right: 100,
       paddingTop: 20,
       paddingBottom: 10,

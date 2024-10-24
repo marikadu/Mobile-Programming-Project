@@ -22,8 +22,8 @@ export default function PastOrdersScreen({ navigation }) {
       <TouchableHighlight
         style={styles.button}
         onPress={() => navigation.navigate('Dough')}
-        underlayColor="#EC863D"
-      >
+        underlayColor="#EC863D">
+          
         <Text style={[styles.buttonText]}>Order a new Pizza</Text>
       </TouchableHighlight>
     </View>

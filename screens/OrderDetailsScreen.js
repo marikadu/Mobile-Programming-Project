@@ -92,7 +92,7 @@ export default function OrderDetailsScreen({ route, navigation }) {
     // printSomething({newPizza});
 
     addPizza(newPizza).then(() => {
-      alert("Your pizza has been added to the database!");
+      alert("Your order has been submitted!");
       // after sending the pizza, navigate to the timer screen with the default time of 30 minutes
       navigation.navigate('Order', { screen: 'Timer', params: { initialTime } });
       // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
@@ -103,7 +103,6 @@ export default function OrderDetailsScreen({ route, navigation }) {
     }
     )
   };
-
 
   // hardcoded address and payment details
   const addressDetails = {
@@ -121,11 +120,9 @@ export default function OrderDetailsScreen({ route, navigation }) {
         <View style={styles.listItemStyle}>
           <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
           <View style={styles.itemContainer}>
-            {/* <Image source={item.item.image} style={styles.pizzaImage} /> */}
 
             <View style={styles.pizzaContainer}>
               <Image source={selectedDoughImage} style={styles.doughImage} />
-              {/* sauce and toppings don't render for some reason */}
               <Image source={selectedSauceImage} style={styles.sauceImage} />
 
               {/* render each selected topping image */}
@@ -306,7 +303,7 @@ sauceImage: {
   descriptionText: {
     flex: 1,
     color: '#CD6524',
-    fontSize: 16,
+    fontSize: 18,
   },
   button: {
     flex: 1,
