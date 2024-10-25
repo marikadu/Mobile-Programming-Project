@@ -88,16 +88,16 @@ const HomeScreen = (props) =>{
           onPress={() => props.navigation.navigate("Dough")} 
           underlayColor='#EC863D' // colour when pressed the "button"
           >
-          <Text style={[styles.buttonText]}>Create Your Pizza</Text>
+          <Text style={[styles.buttonText]}>Create New Pizza</Text>
         </TouchableHighlight>
 
         {/* <Button onPress={()=> readAllPizza()} title="REFRESH FAVORITES"/>  */}
 
+          {/* see menu button */}
         <TouchableHighlight
           style={styles.button}
           onPress={() => props.navigation.navigate("Menu")} 
-          underlayColor='#EC863D' // colour when pressed the "button"
-          >
+          underlayColor='#EC863D'>
           <Text style={[styles.buttonText]}>See Menu</Text>
         </TouchableHighlight>
 

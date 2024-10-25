@@ -220,7 +220,7 @@ export default function AddressScreen(route, navigation) {
   };
 
   return (
-    <View style={{ flex: 1 }} backgroundColor="#fff">
+    <View style={styles.screenContainer} backgroundColor="#fff">
       <View style={styles.listStyle}>
         {renderAddress()}
 
@@ -319,7 +319,7 @@ export default function AddressScreen(route, navigation) {
 
 const styles = StyleSheet.create({
   screenContainer: {
-    // flex:1,
+    flex:1,
     backgroundColor: "#fff", // covers the grey background
   },
   text: {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, addListener } from 'react-native';
+import { View, Text, StyleSheet, addListener, TouchableHighlight } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import Animated, { useSharedValue, useAnimatedProps, withTiming, Easing } from 'react-native-reanimated';
 
@@ -20,13 +20,14 @@ export default function TimerScreen({ route, navigation, onTimerEnd, onTabPress 
       timer = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000); // updates every second
-    // when timer runs out, the timer stops
+      // when timer runs out, the timer stops
     } else if (timeLeft <= 0) {
       clearInterval(timer);
       onTimerEnd();
       navigation.navigate("Feedback"); // navigate to FeedbackScreen when timer runs out
     }
 
+    // more details
     // https://medium.com/@garethdavisrogers/using-setinterval-and-clearinterval-with-react-hooks-7fcf26dc8fdb
     return () => clearInterval(timer); // cleanup the interval on unmount
   }, [timeLeft]);
@@ -59,19 +60,8 @@ export default function TimerScreen({ route, navigation, onTimerEnd, onTabPress 
     };
   });
 
-// creating a listener for the badge to disappear when the user pressed to go to Timer Screen
-// doesnt work
-// useEffect(() => {
-//   const unsubscribe = navigation.addListener('focus', () => {
-// when pressed, the icon removes
-//     onTabPress();
-//   });
-
-//   return unsubscribe;
-// }, [navigation]);
-
   // skipping the timer to 3 seconds for faster testing
-  // so no need to wait for 30 minutes all the time
+  // so no need to wait for 30 minutes
   const skipToThreeSeconds = () => {
     setTimeLeft(3);
   };
@@ -85,7 +75,7 @@ export default function TimerScreen({ route, navigation, onTimerEnd, onTabPress 
         <Text style={styles.textMessage}>Your pizza will arrive soon</Text>
       </View>
       <View style={styles.timerWrapper}>
-        <Svg
+        <Svg // circumference is created in SVG format for better quality
           height={radius * 2 + strokeWidth * 2}
           width={radius * 2 + strokeWidth * 2}
           viewBox={`0 0 ${radius * 2 + strokeWidth * 2} ${radius * 2 + strokeWidth * 2}`}
@@ -122,8 +112,15 @@ export default function TimerScreen({ route, navigation, onTimerEnd, onTabPress 
         {/* timer text */}
         <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
       </View>
-      {/* skip to 00:03 button for testing */}
-      <Button title="Skip to 00:03" onPress={skipToThreeSeconds} />
+
+      {/* skip to 00:03 button for testing and debugging */}
+      <TouchableHighlight
+        style={styles.button}
+        onPress={skipToThreeSeconds}
+        underlayColor="#558ce6">
+        <Text style={styles.buttonText}>Skip to 00:03</Text>
+      </TouchableHighlight>
+
     </View>
   );
 }
@@ -149,6 +146,25 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#CD6524',
+  },
+  button: {
+    flex: 0.3, // height also depends on flex
+    backgroundColor: '#5a97fa',
+    margin: 10,
+    width: 170,
+    height: 10,
+    borderRadius: 40,
+    alignSelf: "center",
+    position: 'relative',
+  },
+  buttonText: {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingTop: 11,
+    color: '#fff',
+    textAlign: 'center',
+    alignItems: 'center',
   },
   textMessage: {
     justifyContent: 'center',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableHighlight } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import Animated, { useSharedValue, useAnimatedProps, withTiming, Easing } from 'react-native-reanimated';
 
@@ -104,6 +104,15 @@ export default function TimerScreen({ route, navigation }) {
       </View>
       {/* skip to 00:03 button for testing */}
       <Button title="Skip to 00:03" onPress={skipToThreeSeconds} />
+
+      <TouchableHighlight
+          style={styles.button}
+          onPress={skipToThreeSeconds}
+          underlayColor="#558ce6">
+          <Text style={styles.buttonText}>Read Menu</Text>
+        </TouchableHighlight>
+
+
     </View>
   );
 }

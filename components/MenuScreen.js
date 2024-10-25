@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
+import { Alert, View, Text, Button, StyleSheet, Image, FlatList, TouchableOpacity, TouchableHighlight } from 'react-native';
 
 const targetURL = "https://pepperonipals.lm.r.appspot.com";
 // https://pepperonipals.lm.r.appspot.com/readmenu
 // https://pepperonipals.lm.r.appspot.com/readalladdresses
+
+// !!!!!!!!!!! kinda important: if you click/press the pizza without the long press,
+// it gives an error "TypeError: Cannot read property 'toString' of undefined"
+// idk why or how, maybe bacause we don't have the details screen of the
+// specific pizza from the menu?
+// doesn't really ruin much, but maybe the feature of clicking the pizza
+// should be removed here, and only leave the feature of long-pressing
 
 export const MenuScreen = (props) => {
   const [newPizza, setPizza] = useState("");
@@ -115,17 +122,25 @@ export const MenuScreen = (props) => {
     );
   }
   return (
-    <View style={{ flex: 1 }}>
-      <Button
-          style={styles.buttonStyle}
-          title="Read Menu"
+    <View style={styles.screenContainer}>
+
+        {/* read menu from the MongoDB button */}
+        <TouchableHighlight
+          style={styles.button}
           onPress={()=> fetchAllPizza()}
-        />
-        <Button
-          style={styles.buttonStyle}
-          title="RESET Menu"
+          underlayColor="#558ce6">
+          <Text style={styles.buttonText}>Read Menu</Text>
+        </TouchableHighlight>
+
+        {/* refresh the menu button */}
+        <TouchableHighlight
+          style={styles.button}
           onPress={()=> refreshPizzaMenu()}
-        />
+          underlayColor="#558ce6">
+          <Text style={styles.buttonText}>Refresh Menu</Text>
+        </TouchableHighlight>
+
+
       <View style={styles.listStyle}>
         <FlatList style={styles.flatliststyle}
           data={pizzaList}
@@ -133,18 +148,32 @@ export const MenuScreen = (props) => {
           // keyExtractor={(item) => item.item._id}  // Use _id as the unique key
         />
       </View>
-      {/* <NavButtons params={props} /> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  navbuttonstyle: {
-    flex: 2,
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "space-around",
+  screenContainer: {
+    flex:1,
+    backgroundColor: "#fff", // covers the grey background
+  },
+  button: {
+    flex: 0.8, // height also depends on flex
+    backgroundColor: '#5a97fa',
+    margin: 10,
+    width: 220,
+    borderRadius: 40,
+    alignSelf: "center",
+    position: 'relative',
+  },
+  buttonText: {
+    flex: 1,
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingTop: 10,
+    color: '#fff',
+    textAlign: 'center',
+    alignItems: 'center',
   },
   imageContainer: {
     height: 200,
