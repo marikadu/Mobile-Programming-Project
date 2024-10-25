@@ -2,6 +2,17 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Pepperoni Pals Pizza Ordering App
 
+-	The main goal of the app is to help the restaurant “Pepperoni Pals” with their business by developing the mobile application for the restaurant. We believe that by creating the following application, the restaurant will have more customers due to the creative approach of the app, at the same time providing the customers the opportunity to order a custom pizza just by using the app on their smartphone.
+-	Another goal of the Pepperoni Pals app is to help customers/ users order their pizzas easily (Just by clicking their available toppings). 
+
+## Features:
+-	Customising the pizza: the app has multiple screens with pizza creation steps, starting by choosing the dough, then the sauce, and then additional pizza toppings. When the topping is added, the picture appears to demonstrate the pizza
+-	See the Menu of what the restaurant offers
+-	A timer for the delivery of the pizza
+-	Past orders are stored for easy access so the users can always remember that amazing pizza combo they made previously
+-	Developer buttons for debugging purposes for the non-existant developer account
+
+
 # Getting Started
 
 >**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
