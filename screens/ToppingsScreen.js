@@ -1,8 +1,7 @@
 import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CheckBox from '@react-native-community/checkbox';
-
-// importing images for the pizza creation
+// Importing images for the pizza creation
 import cheeseImg from '../assets/pizza_pngs/topping_cheese.png';
 import tomatoImg from '../assets/pizza_pngs/topping_tomato.png';
 import basilImg from '../assets/pizza_pngs/topping_basil.png';
@@ -10,6 +9,7 @@ import pepperoniImg from '../assets/pizza_pngs/topping_pepperoni.png';
 import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
 
 export default function Toppings({ route, navigation }) {
+  // List of toppings and their images. Order means the image order (layers)
   const [toppingsList, setToppingsList] = useState([
     { id: 1, selected: false, title: 'Cheese', image: cheeseImg, order: 1 }, // order is needed for the correct z-index of the image -> better image placing and prettier pizza
     { id: 2, selected: false, title: 'Tomato', image: tomatoImg, order: 3 },
@@ -17,22 +17,22 @@ export default function Toppings({ route, navigation }) {
     { id: 4, selected: false, title: 'Pepperoni', image: pepperoniImg, order: 2 },
     { id: 5, selected: false, title: 'Mushrooms', image: mushroomsImg, order: 4 },
   ]);
-
-  const { selectedDough, selectedDoughImage, selectedSauce, selectedSauceImage } = route.params;
+  
+  const { selectedDough, selectedDoughImage, selectedSauce, selectedSauceImage } = route.params; // Passing previous parameters
   const [selectedToppings, setSelectedToppings] = useState([]);
 
   useEffect(() => {
     const orderData = {
-      dough: selectedDough,
-      sauce: selectedSauce,
-      toppings: {
-        cheese: toppingsList.find(t => t.title === 'Cheese').selected,
-        tomato: toppingsList.find(t => t.title === 'Tomato').selected,
-        basil: toppingsList.find(t => t.title === 'Basil').selected,
-        pepperoni: toppingsList.find(t => t.title === 'Pepperoni').selected,
-        mushrooms: toppingsList.find(t => t.title === 'Mushrooms').selected
-      },
-      size: null // This will be updated in SizeScreen
+        dough: selectedDough,
+        sauce: selectedSauce,
+        toppings: {
+          cheese: toppingsList.find(t => t.title === 'Cheese').selected,
+          tomato: toppingsList.find(t => t.title === 'Tomato').selected,
+          basil: toppingsList.find(t => t.title === 'Basil').selected,
+          pepperoni: toppingsList.find(t => t.title === 'Pepperoni').selected,
+          mushrooms: toppingsList.find(t => t.title === 'Mushrooms').selected
+        },
+        size: null // This will be updated in SizeScreen
     };
 
     // / Collect selected toppings and their images, and through nav params get the information to next screens
@@ -43,15 +43,15 @@ export default function Toppings({ route, navigation }) {
 
   }, [navigation, toppingsList]); // Run effect if toppingsList changes (includes selection changes)
 
-  const renderTopping = ({ item }) => {
+  const renderTopping=({ item })=>{
     return (
       <View style={styles.toppingItem}>
-        <CheckBox
-          value={item.selected}
-          onValueChange={() => setSelection(item.id)}
-          tintColors={{ true: '#E04A2B', false: '#E04A2B' }} // Checkbox colors
-        />
-        <Text style={styles.itemText}>{item.title}</Text>
+          <CheckBox
+              value={item.selected}
+              onValueChange={() => setSelection(item.id)}
+              tintColors={{ true: '#E04A2B', false: '#E04A2B' }} // Checkbox colors
+          />
+          <Text style={styles.itemText}>{item.title}</Text>
       </View>
     );
   };
@@ -69,7 +69,7 @@ export default function Toppings({ route, navigation }) {
     );
   };
 
-  // rendering the images based on the selection from the user in a layered order
+  // Rendering the images based on the selection from the user in a layered order
   const renderSelectedImages = () => {
     return toppingsList
       .filter((topping) => topping.selected) // Only show selected toppings
@@ -90,9 +90,10 @@ export default function Toppings({ route, navigation }) {
         <FlatList
           data={toppingsList}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={renderTopping} />
+          renderItem={renderTopping}
+        />
       </View>
-
+          
       {/* render the images of selected toppings, toppings are layered in a specified order */}
       <View style={styles.pizzaContainer}>
         <Image source={selectedDoughImage} style={styles.doughImage} />

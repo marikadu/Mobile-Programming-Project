@@ -6,12 +6,13 @@ import RadioForm from 'react-native-simple-radio-button';
 import sauceImg from '../assets/pizza_pngs/sauce.png';
 
 export default function SauceScreen({ route, navigation }) {
+    // Options for the sauces, including the sauce image
     const sauceOptions = [
         { label: 'Add sauce', value: 'With sauce', image: sauceImg },
         { label: 'No sauce', value: 'With no sauce' }
     ];
 
-    const { selectedDough, selectedDoughImage } = route.params;
+    const { selectedDough, selectedDoughImage } = route.params; // Passing previous parameters
     const [selectedSauce, setSelectedSauce] = useState('With sauce');
     const [selectedSauceImage, setSelectedSauceImage] = useState(sauceOptions[0].value); // Used for saving the current image
 
@@ -58,7 +59,6 @@ export default function SauceScreen({ route, navigation }) {
                     <Image source={sauceImg} style={styles.sauceImage} />
                 )}
             </View>
-
         </View>
     );
 }
@@ -81,11 +81,6 @@ const styles = StyleSheet.create({
         flex: 6,
         width: '80%',
         alignSelf: 'center',
-    },
-    toppingItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 5,
     },
     itemText: {
         fontSize: 18,

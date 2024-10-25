@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
 
 export default function SizeScreen({ route, navigation }) {
+    // Options for sizes
     const options = [
         { label: 'Small (d~15)', value: 'Small' }, // d = diameter
         { label: 'Medium (d~22)', value: 'Medium' },
