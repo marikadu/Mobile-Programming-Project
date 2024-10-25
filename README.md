@@ -10,7 +10,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 -	See the Menu of what the restaurant offers
 -	A timer for the delivery of the pizza
 -	Past orders are stored for easy access so the users can always remember that amazing pizza combo they made previously
--	Developer buttons for debugging purposes for the non-existant developer account
+-	Developer buttons for debugging purposes for the non-existent developer account
 
 
 
