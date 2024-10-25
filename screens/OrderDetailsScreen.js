@@ -1,13 +1,11 @@
 import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import React, { useState, useEffect } from 'react';
-// import { saveOrder } from '../database/db';
 import { addPizza, fetchAllPizza, deletePizza } from '../database/db';
 
 
 export default function OrderDetailsScreen({ route, navigation }) {
   // Receive the sauce, toppings, and dough data from previous screens
   const { selectedDough, selectedDoughImage, selectedSauce, selectedSauceImage, selectedToppings, selectedToppingImages, selectedSize } = route.params;
-  // const [selectedSize, setSelectedSize] = useState('Small');
   const [initialTime, setInitialTime] = useState(30 * 60); // 30 minutes in seconds, resets the Timer for every new pizza ordered
 
   // creating a custom Modal that mimics Alert window's behaviour
@@ -34,10 +32,8 @@ export default function OrderDetailsScreen({ route, navigation }) {
     {
       id: 1,
       type: 'Custom Pizza',
-      // price: pizzaPrice,
-      price: 13,
+      price: 13, // hardcoded price
       description: `${selectedDough || 'Original'}, ${selectedSauce || 'With Sauce'}, ${joinToppings(selectedToppings)}, ${selectedSize || 'Small'}`,
-      // image: selectedToppingImages[0] || pepperoniImg,  // Set a default image if no topping image is provided
     },
   ];
 
@@ -60,7 +56,6 @@ export default function OrderDetailsScreen({ route, navigation }) {
   };
 
   setSelected = (value) => {
-    // console.log(value);
     setSelectedSize(value);
   }
 
@@ -86,16 +81,6 @@ export default function OrderDetailsScreen({ route, navigation }) {
     }
   };
 
-  async function readAllPizzas() {
-    try {
-      const dbResult = await fetchAllPizza();  // Wait for the result
-      console.log("Fetched pizzas:", dbResult);
-      setPastOrdersList(dbResult);  // Set the fetched addresses to state
-    } catch (err) {
-      console.error("Error fetching addresses: ", err);
-    }
-  };
-
   // Function to submit the final order
   const submitOrder = () => {
     const newPizza = {
@@ -105,20 +90,13 @@ export default function OrderDetailsScreen({ route, navigation }) {
       size: selectedSize,
     };
 
-    // printSomething({newPizza});
-
     addPizza(newPizza).then(() => {
       // alert("Your order has been submitted!"); // OLD alert
       showAlert("Order submitted", "Your order has been submitted!"); // new alert
-      // after sending the pizza, navigate to the timer screen with the default time of 30 minutes
-      // navigation.navigate('Order', { screen: 'Timer', params: { initialTime } });
-      // make it so that it first navigates to the Order details of this specific pizza (OrderDetailsScreen), 
-      // and after that to Timer
     }).catch((error) => {
       console.error('Error saving order:', error);
-      // this alert is normal, because the "new" alert will redirect to the Timer Screen
+      alert('Failed to place the order. Please try again.'); // this alert is normal, because the "new" alert will redirect to the Timer Screen
       // so to prevent the user navigating to the Timer Screen if there is an error, the old alert is used!
-      alert('Failed to place the order. Please try again.');
     }
     )
   };
@@ -128,9 +106,6 @@ export default function OrderDetailsScreen({ route, navigation }) {
     address: 'Red Str. 89 1. floor',
     paymentMethod: 'Card ending in 1234',
   };
-
-  // calculating the total price
-  // const totalPrice = pizzaList.reduce((total, pizza) => total + pizza.price, 0);
 
   // render pizza
   const renderPizza = (item) => {
@@ -164,7 +139,6 @@ export default function OrderDetailsScreen({ route, navigation }) {
     return (
       <View style={styles.orderTotalContainerStyle}>
         <Text style={styles.orderTotalStyle}>Order Total:</Text>
-        {/* <Text style={styles.orderTotalStyle}>{totalPrice}€</Text> */}
         <Text style={styles.orderTotalStyle}>13€</Text>
       </View>
     );
@@ -176,7 +150,7 @@ export default function OrderDetailsScreen({ route, navigation }) {
       <View>
         <Text style={styles.text}> Address Details:</Text>
         <TouchableHighlight style={styles.orderItemStyle} underlayColor='#EC863D'>
-          {/* make it so that on press the address can be changed */}
+          {/* the address could've been changed when pressed */}
           <Text style={styles.itemText}>{addressDetails.address}</Text>
         </TouchableHighlight>
         <Text style={styles.text}> Payment Method:</Text>
@@ -206,7 +180,6 @@ export default function OrderDetailsScreen({ route, navigation }) {
         onPress={submitOrder}
         underlayColor='#EC863D' // colour when pressed the "button"
       >
-        {/* <Text style={styles.buttonText}> Submit Order {totalPrice}€</Text> */}
         <Text style={styles.buttonText}> Submit Order 13€</Text>
       </TouchableHighlight>
 
@@ -231,15 +204,11 @@ export default function OrderDetailsScreen({ route, navigation }) {
           </View>
         </View>
       </Modal>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    backgroundColor: "#fff",
-  },
   listItemStyle: {
     flex: 1,
     borderWidth: 2,
@@ -252,7 +221,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   orderTotalContainerStyle: {
-    // flex: 1,
     padding: 5,
     justifyContent: 'space-around',
     paddingLeft: 20,
@@ -270,7 +238,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   text: {
-    // flex: 1,
     color: '#CD6524',
     fontSize: 20,
     fontWeight: 'bold',

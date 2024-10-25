@@ -1,13 +1,15 @@
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
+
+// importing sauce image
 import sauceImg from '../assets/pizza_pngs/sauce.png';
 
 export default function SauceScreen({ route, navigation }) {
     const sauceOptions = [
-        {label: 'Add sauce', value: 'With sauce', image: sauceImg },
-        {label: 'No sauce', value: 'With no sauce' }
-      ];
+        { label: 'Add sauce', value: 'With sauce', image: sauceImg },
+        { label: 'No sauce', value: 'With no sauce' }
+    ];
 
     const { selectedDough, selectedDoughImage } = route.params;
     const [selectedSauce, setSelectedSauce] = useState('With sauce');
@@ -25,7 +27,7 @@ export default function SauceScreen({ route, navigation }) {
 
         return unsubscribe; // Cleanup the listener
     }, [navigation, selectedSauce]); // Re-run effect if selectedSauce changes
-    
+
     setSelected = (value) => {
         selectedOption = sauceOptions.find(options => options.value === value);
         setSelectedSauce(value);
@@ -33,31 +35,31 @@ export default function SauceScreen({ route, navigation }) {
         console.log('Sauce selected:', value);
         navigation.setParams({ selectedSauce: value, selectedSauceImage: selectedOption.image }); // Update navigation params with selectedSauce and image
     }
-    
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Choose the sauce</Text>
-                <View style={styles.listStyle}>
-                    <RadioForm
-                        radio_props={sauceOptions.map(option => ({ label: option.label, value: option.value }))}
-                        initial={0}
-                        onPress={(value) => setSelected(value)}
-                        buttonColor={'#E04A2B'}
-                        labelColor={'#E04A2B'}
-                        selectedButtonColor={'#E04A2B'}
-                        buttonSize={15}
-                        labelStyle={styles.itemText}
-                    />
-                </View>
-                <View style={styles.pizzaContainer}>
-                    <Image source={selectedDoughImage} style={styles.doughImage} />
-                    {/* render the image when the sauce is selected */}
-                    {selectedSauce === "With sauce" && (
+            <View style={styles.listStyle}>
+                <RadioForm
+                    radio_props={sauceOptions.map(option => ({ label: option.label, value: option.value }))}
+                    initial={0}
+                    onPress={(value) => setSelected(value)}
+                    buttonColor={'#E04A2B'}
+                    labelColor={'#E04A2B'}
+                    selectedButtonColor={'#E04A2B'}
+                    buttonSize={15}
+                    labelStyle={styles.itemText}
+                />
+            </View>
+            <View style={styles.pizzaContainer}>
+                <Image source={selectedDoughImage} style={styles.doughImage} />
+                {/* render the image when the sauce is selected */}
+                {selectedSauce === "With sauce" && (
                     <Image source={sauceImg} style={styles.sauceImage} />
                 )}
-                </View>
-                
-    </View>
+            </View>
+
+        </View>
     );
 }
 
@@ -74,14 +76,6 @@ const styles = StyleSheet.create({
         color: '#ba3d23',
         fontWeight: 'bold',
         marginTop: 20,
-    },
-    listItemStyle: {
-        borderWidth: 1,
-        borderColor: "blue",
-        padding: 5,
-        backgroundColor: "#abc",
-        width: "80%",
-        alignSelf: "center",
     },
     listStyle: {
         flex: 6,

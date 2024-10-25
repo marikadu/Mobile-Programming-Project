@@ -1,12 +1,10 @@
 import { View, Text, StyleSheet, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import RadioForm from 'react-native-simple-radio-button';
-import { addPizza, fetchAllPizza, deletePizza } from '../database/db';  
-
 
 export default function SizeScreen({ route, navigation }) {
     const options = [
-        { label: 'Small (d~15)', value: 'Small' },
+        { label: 'Small (d~15)', value: 'Small' }, // d = diameter
         { label: 'Medium (d~22)', value: 'Medium' },
         { label: 'Large (d~30)', value: 'Large' }
     ];
@@ -75,14 +73,6 @@ const styles = StyleSheet.create({
         color: '#ba3d23',
         fontWeight: 'bold',
         marginTop: 20,
-    },
-    listItemStyle: {
-        borderWidth: 1,
-        borderColor: "blue",
-        padding: 5,
-        backgroundColor: "#abc",
-        width: "80%",
-        alignSelf: "center",
     },
     listStyle: {
         flex: 10,

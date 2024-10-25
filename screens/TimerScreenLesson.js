@@ -3,6 +3,10 @@ import { View, Text, StyleSheet, Button, TouchableHighlight } from 'react-native
 import Svg, { Circle } from 'react-native-svg';
 import Animated, { useSharedValue, useAnimatedProps, withTiming, Easing } from 'react-native-reanimated';
 
+// !! this code file is for the Lesson and Power Point presentation
+// on the 10th of October
+// has less functionality to just show the Timer and the Animation
+
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function TimerScreen({ route, navigation }) {

@@ -189,7 +189,7 @@ const OrderStackScreen = ({ navigation }) => {
 };
 
 
-// dark mode
+// dark mode, works only for the Settings Screen and Tab Navigation
 export const DarkModeContext = createContext();
 
 export default function App({ navigation }) {
