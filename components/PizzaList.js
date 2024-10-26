@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { fetchAllPizza } from '../database/db';
-import sauceImg from '../assets/pizza_pngs/sauce.png';  // Import sauce image here
-import originalDough from '../assets/pizza_pngs/dough_og.png'; // Add dough imports here
+// Importing the images for all the options
+import sauceImg from '../assets/pizza_pngs/sauce.png';
+import originalDough from '../assets/pizza_pngs/dough_og.png';
 import glutenFreeDough from '../assets/pizza_pngs/dough_gluten_free.png';
 import wholeWheatDough from '../assets/pizza_pngs/dough_whole_wheat.png';
 import cheeseImg from '../assets/pizza_pngs/topping_cheese.png';
@@ -15,14 +16,15 @@ import mushroomsImg from '../assets/pizza_pngs/topping_mushrooms.png';
 // PizzaList component
 const PizzaList = ({ navigation }) => {
   const [pizzaList, setPizzaList] = useState([]);
-  const isFocused = useIsFocused(); // Check if the screen is focused
+  const isFocused = useIsFocused(); // Checks if the screen is focused
 
   useEffect(() => {
     if (isFocused) {
-      readAllPizza(); // Fetch pizzas whenever the component is focused
+      readAllPizza(); // Fetches pizzas whenever the component is focused
     }
   }, [isFocused]);
 
+  // Function for reading the pizza from the database
   async function readAllPizza() {
     try {
       const dbResult = await fetchAllPizza();
@@ -32,12 +34,14 @@ const PizzaList = ({ navigation }) => {
     }
   }
 
+  // Map the images for the doughs
   const doughImages = {
     original: originalDough,
     glutenfree: glutenFreeDough,
     wholewheat: wholeWheatDough,
   };
 
+  // Map the images for the toppings
   const toppingImages = {
     cheese: cheeseImg,
     tomato: tomatoImg,
@@ -46,13 +50,14 @@ const PizzaList = ({ navigation }) => {
     mushrooms: mushroomsImg,
   };
 
+  // 
   const getPizzaImage = (pizza) => {
-    const normalizedDough = pizza.dough.toLowerCase().replace(/[\s-]+/g, '');
-    const doughImage = doughImages[normalizedDough];
+    const normalizedDough = pizza.dough.toLowerCase().replace(/[\s-]+/g, ''); // Removes the spaces and dashes, and changes the text to lowercase for dough
+    const doughImage = doughImages[normalizedDough];                          // (since values of the dough has such things and needs to be normalized)
     const toppingImagesArray = pizza.toppings.map((topping) =>
       toppingImages[topping.toLowerCase()]
     );
-    const sauceImage = pizza.sauce === 'With sauce' ? sauceImg : null;
+    const sauceImage = pizza.sauce === 'With sauce' ? sauceImg : null; // If pizza has sauce, get the sauce image
 
     return {
       doughImage,
@@ -61,17 +66,19 @@ const PizzaList = ({ navigation }) => {
     };
   };
 
+  // Render all the images together and put the pizza's details together
   const renderPizza = ({ item }) => {
     const { doughImage, toppingImagesArray, sauceImage } = getPizzaImage(item);
 
     return (
         <View style={styles.listItemStyle}>
           <Text style={styles.itemText}>
-            {item.size} {item.dough.toLowerCase()} pizza {item.sauce.toLowerCase()}.
+            {item.size} {item.dough.toLowerCase()} pizza {item.sauce.toLowerCase()}. {/* pizza's details for size, dough, and sauce */}
           </Text>
 
           <View style={styles.itemContainer}>
             <View style={styles.pizzaContainer}>
+              {/* render the dough image and sauce image (if exists) */}
               {doughImage && <Image source={doughImage} style={styles.doughImage} />}
               {sauceImage && <Image source={sauceImage} style={styles.sauceImage} />}
 
@@ -83,7 +90,7 @@ const PizzaList = ({ navigation }) => {
 
             <View style={styles.textContainer}>
               <Text style={styles.descriptionText}>
-                Toppings: {item.toppings.join(', ').toLowerCase()}
+                Toppings: {item.toppings.join(', ').toLowerCase()} {/* pizza's details for selected toppings */}
               </Text>
             </View>
           </View>
@@ -91,7 +98,7 @@ const PizzaList = ({ navigation }) => {
     );
   };
 
-
+  // Return a pizza list, IF there are any pizzas in the list
   return pizzaList.length > 0 ? (
     <View style={{flex: 1, padding: 10, }} backgroundColor="#fff">
       <View style={styles.listStyle}>
@@ -103,24 +110,13 @@ const PizzaList = ({ navigation }) => {
         />
       </View>
     </View>
-  ) : (
+  ) : ( // If there are no pizzas, display below text --- Conditional rendering
     <Text style={styles.textNoOrdersFound}>No past orders found. Would you like to order a pizza?</Text>
   );
 };
 
 const styles = StyleSheet.create({
-  text: {
-    // flex: 1,
-    color: '#CD6524',
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    justifyContent: 'flex-end',
-    marginTop: 20,
-    marginBottom: 20,
-  },
   textNoOrdersFound: {
-    // flex: 1,
     color: '#CD6524',
     fontSize: 20,
     fontWeight: 'bold',
@@ -154,22 +150,10 @@ const styles = StyleSheet.create({
     height: 'auto',
     alignSelf: 'center',
   },
-  orderItemStyle: {
-    borderWidth: 2,
-    borderColor: '#F58C41',
-    padding: 10,
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    margin: 10,
-    paddingLeft: 40,
-    paddingRight: 40,
-    alignSelf: 'center',
-    height: 'auto',
-  },
   pizzaContainer: {
     width: 100,
     height: 100,
-    position: 'relative', // for the absolute position for the toppings
+    position: 'relative', // For the absolute position for the toppings
   },
   doughImage: {
     position: 'absolute',
@@ -182,7 +166,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   toppingImage: {
-    position: 'absolute', // absolute position to allow stacking of the toppings
+    position: 'absolute', // Absolute position to allow stacking of the toppings
     width: '100%',
     height: '100%',
   },
@@ -200,7 +184,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   flatliststyle: {
-    width: '100%', // makes it the whole page and grey-ish lines from the sides disappear!
+    width: '100%', // Makes it the whole page and grey-ish lines from the sides disappear
     backgroundColor: '#FFFFFF',
   },
   itemContainer: {
@@ -219,25 +203,6 @@ const styles = StyleSheet.create({
     color: '#CD6524',
     fontSize: 18,
     height: 'auto',
-  },
-  button: {
-    flex: 1,
-    margin: 20,
-    paddingTop: 10,
-    width: 250,
-    height: 56,
-    backgroundColor: '#F58C41',
-    borderRadius: 40,
-    alignSelf: "center",
-  },
-  buttonText: {
-    top: 8,
-    flex: 1,
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-    textAlign: 'center',
-    alignItems: 'center',
   },
 });
 
