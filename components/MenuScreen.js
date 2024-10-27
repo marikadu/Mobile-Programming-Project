@@ -93,21 +93,14 @@ export const MenuScreen = (props) => {
 
   useEffect(() => {
     if (isLoading) {
-      // deletePizza('67180d81a0a571d9106d8b78');  // Delete pizza data when the component is loaded
       fetchAllPizza();  // Fetch pizza data when the component is loaded
       setLoading(false);
     }
   }, [isLoading]);
 
-  const selectItemToUpdate = (id) => {
-    setUpdateId(id);
-    setPizza(pizzaList[id].type);
-    props.navigation.navigate("Details", { pizza: pizzaList[id] });
-  }
-
   const renderPizza = (item) => {
     return (
-      <TouchableOpacity activeOpacity={0.8} onLongPress={() => deletePizza(item.item._id)} onPress={() => selectItemToUpdate(item.index)}>
+      <TouchableOpacity activeOpacity={0.8} onLongPress={() => deletePizza(item.item._id)}>
         <View style={styles.listItemStyle}>
           <Text style={styles.itemText}>{item.item.type} {item.item.price}€</Text>
           <View style={styles.itemContainer}>

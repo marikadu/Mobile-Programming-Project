@@ -5,7 +5,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Custom icon for header
 import './gesture-handler';
 import DoughScreen from './screens/DoughScreen';
-import DoughScreen_db from './components/screens/DoughScreen_db.js';
 import SauceScreen from './screens/SauceScreen';
 import ToppingsScreen from './screens/ToppingsScreen';
 import SizeScreen from './screens/SizeScreen';
@@ -17,13 +16,9 @@ import AddressScreen from './components/AddressScreen';
 import PastOrdersScreen from './components/PastOrdersScreen';
 import FeedbackScreen from './components/FeedbackScreen';
 import AboutUsScreen from './components/AboutUs.js';
-import { DetailsScreen } from './components/DetailsScreen.js';
-import { ImageScreen } from './components/ImageScreen.js';
-import { LogoTitle } from './components/LogoTitle.js';
 import { MenuScreen } from './components/MenuScreen.js';
 import { SettingsScreen } from './components/SettingsScreen.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {CreatePizzaScreen} from './components/screens/CreatePizzaScreen.js';
 // IMPORT DATABASE FUNCTIONS
 import {init, addPizza, updatePizza, deletePizza, fetchAllPizza} from './database/db.js';
 
@@ -130,14 +125,10 @@ const HomeStackScreen = () => {
           })}
         />
         <Stack.Screen name="Dough" component={DoughScreen} options={{ title: 'Creating a pizza' }}/>
-        <Stack.Screen name = "db_DoughScreen" component={DoughScreen_db} options={{ title: 'Pick your DOUGH' }}/>
-        <Stack.Screen name = "CreatePizza" component={CreatePizzaScreen} options={{ title: 'Create Your Pizza' }}/>
         <Stack.Screen name="Sauce" component={SauceScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Toppings" component={ToppingsScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="Size" component={SizeScreen} options={{ title: 'Creating a pizza' }}/>
         <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} options={{ title: 'Creating a pizza', headerRight: null }}/>
-        <Stack.Screen name="Details" component={DetailsScreen} />
-        <Stack.Screen name="Image" component={ImageScreen} options={{headerTitle: (props) => <LogoTitle {...props} />}} />
         <Stack.Screen name="Menu" component={MenuScreen} options={{ headerRight: null }} />
         <Stack.Screen name="Settings" component={SettingsScreen}  />
         <Stack.Screen name="Address" component={AddressScreen} options={{ headerRight: null }} />
@@ -182,7 +173,6 @@ const OrderStackScreen = ({ navigation }) => {
       <Stack.Screen name="Timer" options={{ title: 'Waiting for the delivery', headerLeft: null, headerBackVisible: false, }}>
         {props => <TimerScreen {...props} onTimerEnd={handleTimerEnd} />}
       </Stack.Screen>
-      <Stack.Screen name="Details" component={DetailsScreen} />
       <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ title: 'Leave Feedback', headerLeft: null, headerBackVisible: false, }} />
     </Stack.Navigator>
   );
