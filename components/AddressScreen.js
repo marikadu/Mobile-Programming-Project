@@ -1,11 +1,10 @@
-import { View, Text, FlatList, StyleSheet, TouchableHighlight, TextInput, Modal, Alert, KeyboardAvoidingView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableHighlight, TextInput, Modal, KeyboardAvoidingView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 
 const targetURL = "https://pepperonipals.lm.r.appspot.com";
 // const targetURL = 'http://10.0.2.2:8080'
 
-export default function AddressScreen(route, navigation) {
-  const [text, setText] = useState('');
+export default function AddressScreen() {
   const [newAddressLine1, setAddressLine1] = useState('');
   const [newAddressLine2, setAddressLine2] = useState('');
   const [newCity, setCity] = useState('');
@@ -15,12 +14,11 @@ export default function AddressScreen(route, navigation) {
   const [selectedAddress, setSelectedAddress] = useState(null);  // Store selected address for deletion
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);  // Control the modal visibility
 
-  // creating a custom Modal that mimics Alert window's behaviour
-  // because the Alert cannot be directly customisible, according to our research
+  // Creating a custom Modal that mimics Alert window's behaviour
+  // Because the Alert cannot be directly customisible, according to our research
   const [isAlertVisible, setAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
-
 
   // Fetch addresses when the component mounts
   useEffect(() => {
@@ -39,7 +37,7 @@ export default function AddressScreen(route, navigation) {
 
     addAddress(newAddress).then(() => {
       // Alert.alert("Address Saved", "Your address has been added!"); // "Alert.alert()"" instead of "alert" to also change the title of the alert window
-      // custom alert window, above is the old and original one ^
+      // Custom alert window, above is the old and original one ^
       showAlert("Address Saved", "Your address has been added!");
 
       readAllAddresses();  // Refresh the list after adding a new address
@@ -50,6 +48,7 @@ export default function AddressScreen(route, navigation) {
     });
   };
 
+  // Add an address to MongoDB
   async function addAddress(newAddress) {
     const response = await fetch(
       targetURL + '/addoneaddress',
@@ -67,7 +66,7 @@ export default function AddressScreen(route, navigation) {
     setAddressList(addressList => [...addressList, responseData]);
   }
 
-  // UPDATE Address in mongoDB FUNCTION
+  // Update address in MongoDB
   const updateAddressInDb = async () => {
     console.log('Update id: ' + updateId);
     if (!updateId) return; // If no item is selected to update, return
@@ -88,9 +87,9 @@ export default function AddressScreen(route, navigation) {
       );
       setUpdateId(null); // Reset the update ID after updating
       setAddressLine1(''); // Reset the input fields
-      setAddressLine2(''); // Reset the input fields
-      setCity(''); // Reset the input fields
-      setPostcode(''); // Reset the input fields
+      setAddressLine2('');
+      setCity('');
+      setPostcode('');
 
       // Reload the list
       let json = await response.json();
@@ -100,24 +99,22 @@ export default function AddressScreen(route, navigation) {
     }
   };
 
-  // Function to delete address from DB
+  // Function to confirm the deletion of an address
   const confirmDeleteAddress = () => {
     if (selectedAddress) {
-      // deleteAddress(selectedAddress.id).then(() => {
       deleteOneAddress(selectedAddress._id).then(() => {
-        // alert("Address deleted successfully."); // OLD alert
-        showAlert("Address deleted", "Address deleted successfully."); // new alert
+        showAlert("Address deleted", "Address deleted successfully."); // New alert using modal
         readAllAddresses();  // Refresh the list after deleting
         setDeleteModalVisible(false);  // Hide the modal
         setSelectedAddress(null);  // Clear the selected address
       }).catch((error) => {
         console.error('Error deleting address:', error);
-        showAlert("Error", "Failed to delete the address. Please try again."); // new alert
+        showAlert("Error", "Failed to delete the address. Please try again.");
       });
     }
   };
 
-  // Delete Address from MongoDB
+  // Delete an address from MongoDB
   const deleteOneAddress = async id => {
     console.log('Delete id: ' + id);
     try {
@@ -134,17 +131,14 @@ export default function AddressScreen(route, navigation) {
     }
   };
 
-
-
   // Function to cancel deletion
   const cancelDelete = () => {
     setDeleteModalVisible(false);  // Hide the modal
     setSelectedAddress(null);  // Clear the selected address
   };
 
-  // READING Address Data from MongoDB
+  // Reading the address data from MongoDB
   const readAllAddresses = async () => {
-
     try {
       let response = await fetch(
         // 'http://10.0.2.2:8080/readmenu', // FROM MONGODB OR GOOGLE CLOUD
@@ -183,14 +177,14 @@ export default function AddressScreen(route, navigation) {
     setUpdateId(null);  // Exit update mode
   };
 
-  // custom alert proterties
+  // Custom alert proterties
   const showAlert = (title, message) => {
     setAlertTitle(title);
     setAlertMessage(message);
     setAlertVisible(true);
   };
 
-  // Display the Address details
+  // Display the address details
   const renderAddress = () => {
     return (
       <View>
@@ -222,16 +216,17 @@ export default function AddressScreen(route, navigation) {
   return (
     <View style={styles.screenContainer} backgroundColor="#fff">
       <View style={styles.listStyle}>
+        {/* render the address list */}
         {renderAddress()}
 
-        {/* Save or Update Address button */}
+        {/* save or update address button */}
         <TouchableHighlight
           style={styles.button}
           onPress={updateId ? updateAddressInDb : saveAddress}  // Change handler based on updateId
-          underlayColor='#EC863D' // colour when pressed the "button"
+          underlayColor='#EC863D' // Colour when the "button" is pressed
         >
           <Text style={[styles.buttonText]}>
-            {updateId ? 'Update Address' : 'Save Address'}  {/* Change button text */}
+            {updateId ? 'Update Address' : 'Save Address'}  {/* change button text whether its time to save or update */}
           </Text>
         </TouchableHighlight>
       </View>
@@ -244,9 +239,7 @@ export default function AddressScreen(route, navigation) {
         {/* Address List */}
         <FlatList
           data={addressList}
-          // keyExtractor={(item) => item._id.toString()}
           keyExtractor={(item) => (item._id ? item._id.toString() : Math.random().toString())}
-          // keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <TouchableHighlight underlayColor='#fff' onPress={() => handleAddressPress(item)} onLongPress={() => handleLongPress(item)}>
               <View>
@@ -257,7 +250,7 @@ export default function AddressScreen(route, navigation) {
         />
       </KeyboardAvoidingView>
 
-      {/* Delete Confirmation Modal */}
+      {/* delete confirmation Modal */}
       <Modal
         visible={isDeleteModalVisible}
         transparent={true}
@@ -269,7 +262,7 @@ export default function AddressScreen(route, navigation) {
             <Text style={styles.modalTitle}>Delete Address</Text>
             <Text style={styles.modalMessage}>Are you sure you want to delete this address?</Text>
 
-            {/* Confirmation Buttons */}
+            {/* confirmation buttons */}
             <View style={styles.modalButtons}>
               <TouchableHighlight
                 style={styles.modalButtonDelete}
@@ -312,7 +305,6 @@ export default function AddressScreen(route, navigation) {
           </View>
         </View>
       </Modal>
-
     </View>
   );
 }
@@ -374,26 +366,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
   },
-  container: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  addressList: {
-    fontSize: 24,
-    fontWeight: 'bold',
-
-  }, // modal styling
+  // Modal styling
   modalBackground: {
     flex: 1,
     justifyContent: 'center',
@@ -438,7 +411,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  // custom alert window styling
+  // Custom alert window styling
   customAlertBackground: {
     flex: 1,
     justifyContent: 'center',
